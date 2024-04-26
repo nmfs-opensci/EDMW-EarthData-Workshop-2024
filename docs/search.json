@@ -4,7 +4,7 @@
     "href": "team.html#organizers-and-instructors",
     "title": "Our Team",
     "section": "Organizers and Instructors",
-    "text": "Organizers and Instructors\n\n\n\nDr. Eli Holmes\n\n\nNOAA Fisheries\nwebpage • GitHub • ORCID",
+    "text": "Organizers and Instructors\n\n\nEli Holmes\n\n\nNOAA Fisheries\nwebpage • GitHub • ORCID\n\n\nSunny Hospital\n\n\nMatt Grossi\n\n\nEmily Markowitz\n\n\n\n\nMore\n\n\nMore\n\n\nMore\n\n\nMore",
     "crumbs": [
       "Welcome",
       "Our Team"
@@ -554,20 +554,6 @@
     "title": "Data",
     "section": "",
     "text": "Indian Ocean and Bay of Bengal Data\nStudents will learn how to access remote-sensing data in the cloud (meaning on-line), but we have also prepared an “analysis ready” data set for students. This will be available on a shared drive and we will introduce the students to the techniques for accessing large datasets without loading them into memory.\n\n\nBounding box\n\nlatitude: -12deg to 32deg\nlongitude: 42deg to 102deg\ngrid: 0.25 deg\ncenters: 0, 0.25, 0.5., 0.75\n\n\n\nDatasets: ERA5\n\nu wind\nv wind\nwind speed\nwind direction\nair temperature @ 2m\nsea surface temperature\n\n\n\nCopernicus\n\nsea level anomaly\nchlorophyll concentration\n\n\n\nSRTM30_PLUS\n\nBathymetry\n\nReferences\n\nhttps://topex.ucsd.edu/WWW_html/srtm30_plus.html\nhttps://coastwatch.pfeg.noaa.gov/erddap/griddap/usgsCeSrtm30v6.html\n\n\n\n1-km MUR SST\n\nsea surface temperature"
-  },
-  {
-    "objectID": "content/XX-further-resources.html#notebooks-and-hackweeks-with-tutorials",
-    "href": "content/XX-further-resources.html#notebooks-and-hackweeks-with-tutorials",
-    "title": "Additional resources",
-    "section": "Notebooks and hackweeks with tutorials",
-    "text": "Notebooks and hackweeks with tutorials\n\nPangeo at Ocean Sciences 2020\nNASA Openscapes EarthData Cloud Book\nNASA Openscapes 2021 Hackweek\nOceanHackWeek\nICESat-2 2023 eScience Institute, University of Washington website\nPO.DAAC Github Repository\nNASA MAAP Notebooks Click the GitHub link in top right to get to the Jupyter Notebooks\nUW eScience Geoscience Hackweek"
-  },
-  {
-    "objectID": "content/XX-further-resources.html#how-to",
-    "href": "content/XX-further-resources.html#how-to",
-    "title": "Additional resources",
-    "section": "How to",
-    "text": "How to\n\nNASA Earthdata: How to Cloud\nUSGS Eyes on Earth Podcast: Satellites and Cloud Computing - with Aaron Friesz (LP DAAC!)\nPO.DAAC Cloud Data Page\nPO.DAAC Earthdata Webinar (Aug 2021): Surfing Ocean Data in the Cloud - The Beginner’s Guide to PO.DAAC in the NASA Earthdata Cloud\nNASA Earthdata Cloud Primer helpful tutorials for how to set up your own EC2 cloud instance in AWS, attach storage, move files back and forth, and more.\nSetting up Jupyter Notebooks in a user EC2 instance in AWS - blog post for setting up jupyter notebooks in an EC2 instance in AWS. (Builds on the Cloud Primer tutorials, which are missing that next step)\nRunning the NASA Cloud Workshop notebooks with mybinder.org - by Eli Holmes, 2021 Cloud Hackathon Participant who then set up working in Binder"
   },
   {
     "objectID": "content/03-git-rstudio.html#what-is-git-and-github",
@@ -1207,20 +1193,6 @@
     "text": "Slides"
   },
   {
-    "objectID": "content/XX-r-and-python-resources.html#programming-in-r",
-    "href": "content/XX-r-and-python-resources.html#programming-in-r",
-    "title": "R and Python Resources",
-    "section": "Programming in R",
-    "text": "Programming in R\nThe following give a basic intro to R and RStudio.\n\nW3Schools Basic R\nBasics of R and installing RStudio\nYouTube: R for Beginners\n\n\nBeyond the basics of R\n\nSoftware Carpentry Novice R\nSoftware Carpentry Intro to R\nFor a longer free course, CodeAcademy has a good Intro to R. Note this is 20 hours. You do NOT need to do this whole course before the hackweek!\nIf you know the basics of R but have never done modeling, then you can start with this 2.5 hour course that covers basic linear regression with R and plotting with ggplot2:\nOne of the best free R courses is Coursera’s Learn R. You can see the lectures for free. Make sure to click AUDIT when it asks you to sign up for a 7-day trial. You do not need to sign up for anything to go through the material."
-  },
-  {
-    "objectID": "content/XX-r-and-python-resources.html#programming-in-python",
-    "href": "content/XX-r-and-python-resources.html#programming-in-python",
-    "title": "R and Python Resources",
-    "section": "Programming in Python",
-    "text": "Programming in Python\nSwitch to Jupyter Notebook for an introduction to programming in Python\n\nVariables (and mathematical operations)\nData Structures (list, tuple, dict)\nFlow Control using loops (for, while)\nConditionals (if, else, elif)\nFunctions\nErrors and Exceptions (understanding and handling errors)\nUsing modules (libraries, packages)\n\npandas: high-performance, easy-to-use data structures and data analysis tools\nrioxarray: based on the rasterio package for working with rasters and xarray\n\n\n\nBeyond the basics in Python\n\nSelf-paced lesson on Programming with Python from Software Carpentry\nDetailed self-paced lesson on Fundamentals of Geospatial Raster and Vector Data with Python from Data Carpentry"
-  },
-  {
     "objectID": "content/earthdata.html#overview",
     "href": "content/earthdata.html#overview",
     "title": "Earthdata Login",
@@ -1322,11 +1294,21 @@
     ]
   },
   {
-    "objectID": "index.html#links",
-    "href": "index.html#links",
+    "objectID": "index.html#topics",
+    "href": "index.html#topics",
     "title": "EDMW 2024 - Workshop 3B",
-    "section": "Links",
-    "text": "Links\n\nGitHub repo: https://github.com/nmfs-opensci/https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024\nJupyterHub: https://dhub.opensci.live/ Make sure to choose the EDMW image (which will be the default).\nDiscussions: https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/discussions",
+    "section": "Topics",
+    "text": "Topics\n\nIntroduction to working with earth data in the cloud and NASA Earth Data\nOrientation on our JupyterHub\nTutorial 1: Searching for resources in NASA Earth Data\nTutorial 2: Points and shapefiles\nTutorial 3: Subsetting your earth data with in a region (shapefile)\nTutorial 4: Getting values at points (along a track or transect)",
+    "crumbs": [
+      "Welcome"
+    ]
+  },
+  {
+    "objectID": "index.html#resources",
+    "href": "index.html#resources",
+    "title": "EDMW 2024 - Workshop 3B",
+    "section": "Resources",
+    "text": "Resources\n\nCoastWatch GitHub organization for many more training modules for working with satellite data in Python and R\nNASA EarthData Cloudbook for many tutorials on using satellite data in Python and R and NASA Earth Data",
     "crumbs": [
       "Welcome"
     ]

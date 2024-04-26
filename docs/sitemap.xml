@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/team.html</loc>
-    <lastmod>2024-04-26T14:29:59.590Z</lastmod>
+    <lastmod>2024-04-26T15:10:11.290Z</lastmod>
   </url>
   <url>
     <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/setup.html</loc>
@@ -61,10 +61,6 @@
     <lastmod>2024-04-26T14:29:58.425Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/XX-further-resources.html</loc>
-    <lastmod>2024-04-26T14:29:58.425Z</lastmod>
-  </url>
-  <url>
     <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/03-git-rstudio.html</loc>
     <lastmod>2024-04-26T14:29:58.363Z</lastmod>
   </url>
@@ -117,10 +113,6 @@
     <lastmod>2024-04-26T14:29:58.363Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/XX-r-and-python-resources.html</loc>
-    <lastmod>2024-04-26T14:29:58.425Z</lastmod>
-  </url>
-  <url>
     <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/earthdata.html</loc>
     <lastmod>2024-04-26T14:29:58.425Z</lastmod>
   </url>
@@ -134,7 +126,7 @@
   </url>
   <url>
     <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/index.html</loc>
-    <lastmod>2024-04-26T14:37:48.375Z</lastmod>
+    <lastmod>2024-04-26T15:05:24.016Z</lastmod>
   </url>
   <url>
     <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/projects/hackathon-projects.html</loc>

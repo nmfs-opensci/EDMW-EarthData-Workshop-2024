@@ -31,7 +31,7 @@ title: Our Team
 <div class="columns-4">
 
 <div>
-### Dr. Eli Holmes
+### Eli Holmes
 
 <img src="images/Eli.png" alt="Eli Holmes" style="width:75%; ; border-radius: 50%;">
 
@@ -44,3 +44,42 @@ title: Our Team
 [webpage](https://eeholmes.github.io/) &#x2022;  [GitHub](https://github.com/eeholmes)  &#x2022; [ORCID](https://orcid.org/0000-0001-9128-8393)
 </div>
 
+
+<div>
+### Sunny Hospital
+
+</div>
+
+<div>
+### Matt Grossi
+
+</div>
+
+<div>
+### Emily Markowitz
+
+</div>
+</div>
+
+<div class="columns-4">
+
+<div>
+### More
+
+</div>
+
+<div>
+### More
+
+</div>
+
+<div>
+### More
+
+</div>
+
+<div>
+### More
+
+</div>
+</div>

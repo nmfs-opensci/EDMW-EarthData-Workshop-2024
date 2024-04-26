@@ -7,10 +7,19 @@ Welcome to the NOAA Fisheries workshop focused on geospatial analysis using ocea
 
 This session will also introduce to working with JupyterHubs. We will use both Jupyter Lab (Python) and RStudio (R) within our JupyterHub. Go to [set-up](setup.html) for the basic orientation and how to get on the JupyterHub.
 
+## Topics
+
+* Introduction to working with earth data in the cloud and NASA Earth Data
+* Orientation on our JupyterHub
+* Tutorial 1: Searching for resources in NASA Earth Data
+* Tutorial 2: Points and shapefiles
+* Tutorial 3: Subsetting your earth data with in a region (shapefile)
+* Tutorial 4: Getting values at points (along a track or transect)
+
 ![](images/banner-small.png)
 
-## Links
+## Resources
 
-* GitHub repo: <https://github.com/nmfs-opensci/https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024>
-* JupyterHub: <https://dhub.opensci.live/> Make sure to choose the EDMW image (which will be the default).
-* Discussions: <https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/discussions>
+* [CoastWatch GitHub organization](https://github.com/coastwatch-training) for many more training modules for working with satellite data in Python and R
+* [NASA EarthData Cloudbook](https://nasa-openscapes.github.io/earthdata-cloud-cookbook/) for many tutorials on using satellite data in Python and R and NASA Earth Data
+
