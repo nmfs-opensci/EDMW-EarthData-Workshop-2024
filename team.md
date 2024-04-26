@@ -47,6 +47,12 @@ title: Our Team
 
 <div>
 ### Sunny Hospital
+<img src="images/Sunny.jpeg" alt="Sunny Hospital" style="width:75%; ; border-radius: 50%;">
+
+
+[NOAA CoastWatch PolarWatch](https://polarwatch.noaa.gov/)
+
+[GitHub](https://github.com/shospital) 
 
 </div>
 
