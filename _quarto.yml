@@ -10,10 +10,10 @@ execute:
   
 website:
   page-navigation: true  
-  title: "2024 NOAA HackDays"
+  title: "2024 EDMW Workshop 3B"
   favicon: "images/favicon-16x16.png"
-  site-url: https://nmfs-opensci.github.io/NOAAHackDays-2024
-  repo-url: https://github.com/nmfs-opensci/NOAAHackDays-2024
+  site-url: https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024
+  repo-url: https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024
   repo-actions: [edit, issue, source]
   
   page-footer: <img src="https://github.com/nmfs-opensci/assets/blob/main/logo/nmfs-opensci-logo2.png?raw=true" alt="NMFS Open Science logo" style="width:150px"><br />NMFS Open Science (2023)
@@ -32,7 +32,6 @@ website:
         contents:
           - overview.md
           - team.md
-#          - schedule.md
           - setup.md
           - support.md
           - coc.md
@@ -64,34 +63,16 @@ website:
                 href: content/02-rstudio.qmd
               - text: Quarto
                 href: content/02-quarto.qmd
-              - text: Programming with AI
-                href: content/03-ai.md
               - text: Loading data in R
                 href: r-tutorials/03-r-read-in-data.qmd
-              - text: Plotting with ggplot2
-                href: r-tutorials/04-r-ggplot2.qmd
               - text: Maps!
                 href: r-tutorials/05-r-geospatial.qmd
-          - section: "Marine SDMs"
+          - section: "Earth Data in R"
             contents:
-              - text: Lab Setup
-                href: r-tutorials/Lab-setup.qmd
-              - text: SDM 1
-                href: r-tutorials/SDM-lab1.qmd
-              - text: robis
-                href: r-tutorials/SDM-lab-robis.qmd
-              - text: spocc
-                href: r-tutorials/SDM-lab-spocc.qmd
-              - text: MaxEnt SDM
-                href: r-tutorials/Turtle_maxnet.qmd
-      - section: "Projects"
-        contents:
-          - projects/index.md
-          - projects/hackathon-projects.md
-#      - section: "Further Resources"
-#        contents:
-#          - content/XX-r-and-python-resources.md
-#          - content/XX-further-resources.md
+              - text: Searching & subsetting
+              - text: Getting the data
+              - text: Extract in a boundary
+              - text: Extract on a transect
       - section: "Python Tutorials"
         contents:
           - section: "Data Access"
@@ -105,17 +86,7 @@ website:
             contents:
               - python-notebooks/02_Using_Data.ipynb
               - python-notebooks/02_Graphing_Data.ipynb
-              - python-notebooks/02_Zarr_Access_netCDF.ipynb
-              - python-notebooks/02_Xarray_hvplot.ipynb
               - python-notebooks/02_Xarray_hvplot.ipynb              
-          - section: "Machine Learning"
-            contents:
-          - section: "Applications"
-            contents:
-          - section: "IO Zarr Database"
-            contents:
-              - python-notebooks/04_Combining_Data.ipynb
-              - python-notebooks/04_Appending_Data.ipynb
       - text: <img width=100px>
       - text: <img src="/images/noaa_emblem_logo-2022.png" width=100px>
         href: https://fisheries.noaa.gov
@@ -127,11 +98,11 @@ website:
         href: https://dhub.opensci.live/
         text: "JupyterHub"
       - icon: wechat
-        href: https://github.com/nmfs-opensci/NOAAHackDays-2024/discussions
+        href: https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/discussions
         text: "Discussions"
-#      - icon: slack
-#        href: https://app.slack.com/client/T05PV2USY56/C05P7QP47UL
-#        text: "Slack"
+      - icon: github
+        href: https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024
+        text: "Repo"
       - icon: globe
         href: https://github.com/nmfs-opensci
         text: "GH org"

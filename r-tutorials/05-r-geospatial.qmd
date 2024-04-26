@@ -345,18 +345,3 @@ Make some maps using mapview of your own data, data in the "r-tutorials/data" di
 Try the layer feature to change the base map.
 
 
-## Advanced programmers
-
-Try using customizing mapview to create some pretty maps of the tide guage data!
-
-Here are some ideas
-
-* https://www.paulamoraga.com/book-spatial/making-maps-with-r.html#mapview
-* Articles tab here https://r-spatial.github.io/mapview/index.html
-* This shows a nicer example of maps with ggplot https://r-spatial.org/r/2018/10/25/ggplot2-sf.html. 
-* Here are some examples of maps I made in R. Can you adapt the globe example to show India and add the tide guage points? https://eeholmes.github.io/30Maps/
-
-
-
-
-

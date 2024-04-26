@@ -1,1 +1,1 @@
-Sitemap: https://nmfs-opensci.github.io/NOAAHackDays-2024/sitemap.xml
+Sitemap: https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/sitemap.xml

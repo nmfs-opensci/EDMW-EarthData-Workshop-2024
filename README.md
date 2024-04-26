@@ -1,22 +1,20 @@
 
-## NOAA HackDays 2024: Integrating Earth Data into Science Workflows
+## EDMW 2024 - Workshop 3B: Introduction to using earth data in the cloud for scientific workflows
 
 ### Overview
 
-The the era of big data in the earth sciences is here and learning how to effectively use oceanographic remote-sensing data, both in the cloud and on your computer, is a core skill for modern fisheries science and management. Learning how to access cloud-based data, visualize these data, use these data in models, and use the tools of modern reproducible and collaborative science is the main goal of these hackday events. Through these events, participants will gain experience with assessing remote-sensing data in the cloud, R and RStudio, Python and Jupyter notebooks, and collaborating with Git and GitHub. 
+Earth science data is increasingly available from the cloud and due to the size of many of these dataset (Tb and Pb in some cases), data workflows are transitioning to workflows that involve programmatic access with either cloud-native analysis or server-side processing . In this workshop, participants will take part in hands-on tutorials on working with earth data in the cloud with Python and/or R using a JupyterHub (cloud computing platform) provisioned for geospatial analysis. Participants will learn the basics of searching cloud resources via SpatioTemporal Asset Catalogs (STAC) and NASA Earth Data via Common Metadata Repository (CMR). Participants will go through tutorials to learn how to incorporate earth data into their science projects via cloud-native and server-side workflows. Participants will also be exposed to the Python and R suite of geospatial packages for gridded and other spatial data.
 
 ### Aims and Objectives
 
-* Learn how to discover and use oceanographic remote-sensing data for species distribution modeling and other fisheries applications
+* Learn how to discover and use oceanographic remote-sensing data in NASA Earth Data
 * Familiarize participants with using remote-sensing data in R and Python with code. 
-* Obtain hands-on experience in using remote-sensing data for various science applications.
-* Learn by working together on a group project. 
+* Obtain hands-on experience in using remote-sensing data for two science applications.
+* Learn by doing and running through examples yourself. 
 
 ### What to expect
 
-* What is a hack event? See the [description of hackweeks](https://escience.washington.edu/using-data-science/hackweeks/) on the University of Washington eScience institute website:
-
-*A hackweek is a participant-driven workshop that blends data science education, community building, and project work over a short period of time (one to two weeks). The events are highly immersive and allow participants to work directly with data science professionals to co-shape projects and educational outcomes. Hackweeks often help individuals and teams engage more effectively in open and reproducible science.* - eScience Institute, University of Washington
+* We will have short introductions and then will work through tutorials together. You are encouraged to adapt the code to create output and examples for your own data and areas of interest.
 
 * All tutorials and examples are developed openly and will be publicly available during and following the event. Participants will strengthen their practice of open science, using open source code and collaborating on their projects with course peers.
 
