@@ -1,0 +1,154 @@
+project: 
+  type: website
+  output-dir: docs
+  render:
+    - "*.*"
+    - "!nasa-tutorials/*.ipynb"
+
+execute:
+  freeze: auto
+  
+website:
+  page-navigation: true  
+  title: "2024 NOAA HackDays"
+  favicon: "images/favicon-16x16.png"
+  site-url: https://nmfs-opensci.github.io/NOAAHackDays-2024
+  repo-url: https://github.com/nmfs-opensci/NOAAHackDays-2024
+  repo-actions: [edit, issue, source]
+  
+  page-footer: <img src="https://github.com/nmfs-opensci/assets/blob/main/logo/nmfs-opensci-logo2.png?raw=true" alt="NMFS Open Science logo" style="width:150px"><br />NMFS Open Science (2023)
+ 
+  sidebar:
+    logo: https://github.com/nmfs-opensci/assets/blob/main/logo/nmfs-opensci-logo2.png?raw=true
+    pinned: true
+    align: center
+    
+    style: "docked"
+    collapse-level: 1
+    toc-expand: false
+    contents:
+      - section: "Welcome"
+        href: index.md
+        contents:
+          - overview.md
+          - team.md
+#          - schedule.md
+          - setup.md
+          - support.md
+          - coc.md
+      - section: "Tutorials"
+        contents:
+          - section: "Welcome"
+            contents:
+              - text: Welcome
+                href: content/01-welcome.md
+              - text: Geoscience cloud tools
+                href: content/01-intro-to-cloud-geoscience.qmd
+              - text: Jupyter hubs
+                href: content/01-intro-to-jupyterhub.qmd
+          - section: "Geospatial Analysis in R"
+            contents:
+              - text: Welcome
+                href: content/01-welcome.md
+          - section: "Git and GitHub Basics"
+            contents:
+              - text: GitHub 1
+                href: content/01-github.md
+              - text: GitHub 2
+                href: content/02-github-2.md
+              - text: Git in RStudio
+                href: content/03-git-rstudio.md
+          - section: "R and RStudio Basics"
+            contents:
+              - text: RStudio
+                href: content/02-rstudio.qmd
+              - text: Quarto
+                href: content/02-quarto.qmd
+              - text: Programming with AI
+                href: content/03-ai.md
+              - text: Loading data in R
+                href: r-tutorials/03-r-read-in-data.qmd
+              - text: Plotting with ggplot2
+                href: r-tutorials/04-r-ggplot2.qmd
+              - text: Maps!
+                href: r-tutorials/05-r-geospatial.qmd
+          - section: "Marine SDMs"
+            contents:
+              - text: Lab Setup
+                href: r-tutorials/Lab-setup.qmd
+              - text: SDM 1
+                href: r-tutorials/SDM-lab1.qmd
+              - text: robis
+                href: r-tutorials/SDM-lab-robis.qmd
+              - text: spocc
+                href: r-tutorials/SDM-lab-spocc.qmd
+              - text: MaxEnt SDM
+                href: r-tutorials/Turtle_maxnet.qmd
+      - section: "Projects"
+        contents:
+          - projects/index.md
+          - projects/hackathon-projects.md
+#      - section: "Further Resources"
+#        contents:
+#          - content/XX-r-and-python-resources.md
+#          - content/XX-further-resources.md
+      - section: "Python Tutorials"
+        contents:
+          - section: "Data Access"
+            contents:
+              - python-notebooks/00_NASA_Earthdata_Authentication.ipynb
+              - python-notebooks/01_earthaccess_Downloader.ipynb
+              - python-notebooks/01_ERA5_S3_Downloader.ipynb
+              - python-notebooks/01_ERDDAP_Downloader.ipynb
+              - python-notebooks/01_MOTU_Downloader.ipynb
+          - section: "Using Data"
+            contents:
+              - python-notebooks/02_Using_Data.ipynb
+              - python-notebooks/02_Graphing_Data.ipynb
+              - python-notebooks/02_Zarr_Access_netCDF.ipynb
+              - python-notebooks/02_Xarray_hvplot.ipynb
+              - python-notebooks/02_Xarray_hvplot.ipynb              
+          - section: "Machine Learning"
+            contents:
+          - section: "Applications"
+            contents:
+          - section: "IO Zarr Database"
+            contents:
+              - python-notebooks/04_Combining_Data.ipynb
+              - python-notebooks/04_Appending_Data.ipynb
+      - text: <img width=100px>
+      - text: <img src="/images/noaa_emblem_logo-2022.png" width=100px>
+        href: https://fisheries.noaa.gov
+  navbar:
+    background: primary
+    search: true
+    right: 
+      - icon: server
+        href: https://dhub.opensci.live/
+        text: "JupyterHub"
+      - icon: wechat
+        href: https://github.com/nmfs-opensci/NOAAHackDays-2024/discussions
+        text: "Discussions"
+#      - icon: slack
+#        href: https://app.slack.com/client/T05PV2USY56/C05P7QP47UL
+#        text: "Slack"
+      - icon: globe
+        href: https://github.com/nmfs-opensci
+        text: "GH org"
+
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: [cosmo, theme-dark.scss]
+    code-background: true
+    code-copy: true
+    css: styles.css
+    toc: true
+    toc-depth: 2
+    include-before-body: translate.html
+
+filters:
+  - include-files.lua
+  - quarto

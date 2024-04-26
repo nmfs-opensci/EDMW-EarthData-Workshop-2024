@@ -1,0 +1,100 @@
+---
+title: SDM lab 1 - Downloading species data with robis
+---
+
+Here we download from OBIS using the robis package.
+
+## Set up
+
+```{r}
+here::i_am("r-tutorials/SDM-lab-robis.qmd")
+dir_data <- here::here("r-tutorials", "data")
+```
+
+
+```{r}
+library(ggplot2)
+library(sf)
+library("rnaturalearth")
+library("rnaturalearthdata")
+library(raster)
+library(tidyverse)
+library(robis)
+```
+
+## Create a bounding box
+
+```{r}
+bbox <- sf::st_bbox(c(xmin = 41.875, xmax = 65.125, ymax = -0.125, ymin = 32.125), 
+                          crs = sf::st_crs(4326))
+```
+
+Creates a sf object with a sfs_POLYGON from which we can get a polygon string. We also use this for cropping with the raster package, while we will need bbox for cropping with the stars package.
+```{r}
+extent_polygon <-  bbox %>% sf::st_as_sfc() %>% st_sf()
+```
+
+Then for the robis package we need a bounding box string.
+```{r}
+wkt_geometry <- extent_polygon$geometry %>% st_as_text()
+```
+
+Make a map of our region so we know we have the right area.
+```{r}
+world <- rnaturalearth::ne_countries(scale = "medium", returnclass = "sf")
+ggplot(data = world) + geom_sf() +
+  geom_sf(data = extent_polygon, color = "red", fill=NA)
+```
+
+## Get occurrence data from robis
+
+We will download data for four sea turtles found in the Arabian sea and save to one file. We will use the `occurrence()` function in the robis package.
+
+```{r eval = FALSE}
+spp <- c("Chelonia mydas", "Caretta caretta", "Eretmochelys imbricata", "Lepidochelys olivacea", "Natator depressus", "Dermochelys coriacea")
+
+obs <- robis::occurrence(spp, startdate = as.Date("2000-01-01"), geometry = wkt_geometry)
+```
+
+This has many columns that we don't need. We reduced to fewer columns.
+```{r eval = FALSE}
+cols.to.use <- c("occurrenceID", "scientificName", 
+                 "dateIdentified", "eventDate", 
+                 "decimalLatitude", "decimalLongitude", "coordinateUncertaintyInMeters",
+                 "individualCount","lifeStage", "sex",
+                 "bathymetry",  "shoredistance", "sst", "sss")
+obs <- obs[,cols.to.use]
+```
+
+We also added a cleaner date with YYYY-MM-DD format.
+```{r eval = FALSE}
+obs$date <- as.Date(obs$eventDate)
+```
+
+## Save our data
+
+Set up the file names
+```{r eval = FALSE}
+dir_data <- here::here("data")
+fil <- here::here("data", "io-sea-turtles.csv")
+readr::write_csv(obs, file=fil)
+```
+
+Later we can reload our data as
+```{r}
+fil <- here::here("r-tutorials", "data", "io-sea-turtles.csv")
+obs <- read.csv(fil)
+```
+
+
+### Clean the data
+
+Select species.
+```{r, warning=F}
+# subset the occurrences to include just those in the water
+obs <- obs %>% 
+  subset(bathymetry > 0 & shoredistance > 0 & coordinateUncertaintyInMeters < 200)
+
+# seeing how often each species occurs
+table(obs$scientificName) 
+```

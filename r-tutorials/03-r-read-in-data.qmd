@@ -1,0 +1,426 @@
+---
+title: R - Read in data
+---
+::: {.callout-note icon=false}
+
+## Goals for today
+
+* Read in a csv or Excel file and create a "data.frame"
+* Get column names and select a column
+* Get size of the data frame
+* Find the class of the data frame
+* Save the data frame
+* Read in some occurence data from robis
+* Ask ChatGPT how to plot
+* Ask ChatGPT how to clean up the date
+
+:::
+
+## Syntax tips
+
+`xyz::fun()` means function `fun()` in the `xyz` package. I will often use this when I don't want to call `library()` to load the whole `xyz` package. Why? Because remembering to call `library()` slows me down and when I forget I get errors. Instead I tend to load the major packages (like `library(tidyverse)` and `library(sf)`) for which I need many functions.
+
+## File not found
+
+The top error for new users is "File not found." You know they file is there, but R says "File not found."  File locations are relative to your current location. **Your current location if you are in a Quarto or Rmarkdown file is the folder with that file!** This means that code that works on the command line, fails in a Quarto or RMarkdown document. Oh no!
+
+Try this in the Quarto document versus in the Console tab.
+```{r eval=FALSE}
+getwd()
+```
+
+This means that a normal file location can break:
+
+
+* `.` Current location
+* `..` Back one folder
+* `folder name` Enter this folder
+* `~` Home directory
+
+```
+./data/myfile.csv
+```
+means current location > data folder > myfile.csv in that folder. But if your current location changes, that code breaks.
+
+
+### Solution 1 - full file path
+
+Always use the full file path:
+
+```
+~/r-tutorials/data/myfile.csv
+```
+Home > r-tutorials folder > data folder > myfile.csv
+
+This works until you move the `r-tutorials` folder somewhere else.
+
+### Solution 2: the here package
+
+This is the what experienced R users use. `here()` is the location of the base of your project. As long as you are in an RStudio project, it will return the base of that project.
+
+This is what mine shows (I am on my laptop). It is the same inside a Quarto document, at the console and in scripts.
+```{r}
+here::i_am("r-tutorials/03-r-read-in-data.qmd")
+here::here()
+```
+
+Now to specify a data file, I use
+```{r}
+fil <- here::here("r-tutorials", "data", "myfile.csv")
+fil
+```
+This fully specifies the file location.
+
+### Don't use `setwd()`
+
+This changes your working directory and although it seems to help in the short-run, it causes all kinds of problems later.
+
+
+## Import a csv file
+
+We will use the Import Dataset widget in the Environment tab.
+
+1. Click the Environment tag and then Import Dataset
+2. Choose "From Text (readr)"
+3. Browse to `obis_seamap_green.csv` in the `data` folder.
+4. You should now see a preview of the data.
+
+![](./img/R-import-widget.png)
+
+Ok first thing we see is that we have 2 lines at the top of our data file. Put 2 in the Skip box to skip past those. Now the data and column headers should look right.
+
+Notice that it also shows us the R code. We can copy that and run it directly if we wanted. But we can also just click the Import button.
+
+### R Code
+
+The import box helpfully shows us the R code to use. But this will break inside a Quarto file because the file path is wrong. This works in the Console or a script but not in a Quarto or RMarkdown file.
+
+```
+library(readr)
+obis_seamap_green <- read_csv("r-tutorials/data/obis_seamap_green.csv", 
+    skip = 2)
+```
+
+Let's make this code more robust:
+
+```{r}
+library(readr)
+fil <- here::here("r-tutorials", "data", "obis_seamap_green.csv")
+obis_seamap_green <- read_csv(fil, 
+    skip = 2)
+```
+
+### Show the data
+
+```{r}
+obis_seamap_green
+```
+
+## Get the columns
+
+Column names.
+
+```{r}
+colnames(obis_seamap_green)
+```
+
+We select a column with `$` like so. Notice how RStudio suggest the names.
+```{r}
+obis_seamap_green$date_time
+```
+
+Let's get one value.
+```{r}
+obis_seamap_green$date_time[1]
+```
+
+## Get the size
+
+```{r}
+dim(obis_seamap_green)
+```
+
+Let's make it a bit smaller. Select the first 500 rows because it takes a long time to plot otherwise.
+
+```{r}
+obis_seamap_green <- obis_seamap_green[1:500,]
+```
+
+## Look at the top of the file
+
+```{r}
+head(obis_seamap_green)
+```
+
+## Let's load new data from robis
+
+Specify a bounding box.
+```{r message=FALSE}
+library(dplyr)
+library(sf)
+extent_polygon <- sf::st_bbox(c(xmin = 41.875, xmax = 65.125, 
+                            ymax = -0.125, ymin = 32.125), 
+                          #Assign reference system
+                          crs = sf::st_crs(4326)) %>% st_as_sfc()
+pol_geometry <- sf::st_as_text(extent_polygon[[1]])
+pol_geometry
+```
+
+Let's get some sharks and rays data. Sharks and rays in Bay of Bengal [ref1](https://www.tbsnews.net/environment/nature/studying-sharks-and-rays-bay-bengal-340471) [ref2](https://www.researchgate.net/publication/276460309_Sharks_and_rays_fisheries_of_the_Bay_of_Bengal_at_the_landing_centers_of_Chittagong_and_Cox's_Bazar_Bangladesh) [ref3](https://www.researchgate.net/publication/276460309_Sharks_and_rays_fisheries_of_the_Bay_of_Bengal_at_the_landing_centers_of_Chittagong_and_Cox's_Bazar_Bangladesh)
+
+```{r}
+fil <- here::here("r-tutorials", "data", "sharks.csv")
+if(!exists(fil)){
+sharks <- c("Scoliodon laticaudus", "Sphrna lewin", "Rhizoprionodon acutus", "Chiloscyllium indicum", "Galeocerdo cuvier", "Carcharhinus melanopterus", "Carcharhinus falciformis", "Rhizoprionodon acutus", "Carcharhinus leucas", "Carcharhinus  sorrah")
+obs <- robis::occurrence(sharks, geometry = pol_geometry)
+readr::write_csv(obs, file=here::here("r-tutorials", "data", "sharks.csv"))
+}else{
+  obs <- readr::read_csv(fil)
+}
+```
+
+Now we can explore what kind of shark data we have for these species found in the Bay of Bengal study.
+
+```{r}
+library(mapview)
+require(dplyr)
+library(sf)
+obs_sf <- obs[1:100,] %>% as_tibble() %>% 
+  st_as_sf(coords = c("decimalLongitude", "decimalLatitude"), crs = 4326)
+mapview(obs_sf, col.regions = "gray") + mapview(extent_polygon)
+```
+
+## Ask ChatGPT
+
+When you are starting to code, you will not know how to do things. Obviously I can tell you but that won't help you when I am not here. Instead I'll have you ask a bot because the bot will be here when I am not. Also this is how people code now that AI is here to be our personal coding assistant.
+
+Open <https://chat.openai.com/> and login. It's free.
+
+Paste this into the Chat box.
+
+```
+I have a data.frame named obis_seamap_green with columns scientific, latitude, longitude, and platform. How do I make a histogram of the platform types? Only show the code. I want to use tidyverse.
+```
+
+ChatGPT returns this (or something similar)
+
+```{r}
+library(tidyverse)
+
+obis_seamap_green %>%
+  ggplot(aes(x = platform)) +
+  geom_bar() +
+  labs(title = "Histogram of Platform Types", x = "Platform Type", y = "Frequency")
+```
+
+Hmm that look weird? How many platform types are there? Let's ask ChatGPT.
+
+```
+How do I find out the values for platform in my file
+```
+
+ChatGPT will return something like
+```{r}
+unique_platforms <- unique(obis_seamap_green$platform)
+```
+and we have to type 
+```{r}
+unique_platforms
+```
+to see the values. Oh, there is only one value.
+
+## Make a map
+
+Let's get ChatGPT to help us map our points.
+
+"how can I make a map with my latitude longitude values on it"
+    ChatGPT will most likely show you ggplot2 code like so
+
+```{r}
+# Install and load necessary packages (if not already installed)
+# install.packages("ggplot2")
+# install.packages("maps")
+library(ggplot2)
+library(maps)
+
+# Assuming your data frame is named "obis_seamap_green"
+# Replace "latitude" and "longitude" with your actual column names
+
+# Create a basic map
+world_map <- map_data("world")
+
+# Plot latitude and longitude points on the map
+ggplot(obis_seamap_green, aes(x = longitude, y = latitude)) +
+  geom_polygon(data = world_map, aes(x = long, y = lat, group = group), fill = "white", color = "black") +
+  geom_point() +
+  labs(title = "Map of Latitude and Longitude Points")
+```
+
+* Tell ChatGPT: "The map is the whole world and my points are in one small region. How can I fix that?"
+
+```{r}
+# Assuming your data frame is named "obis_seamap_green"
+# Replace "latitude" and "longitude" with your actual column names
+
+# Define the latitude and longitude limits for your region of interest
+# Adjust the values accordingly to zoom in on your specific region
+lat_limit <- c(min(obis_seamap_green$latitude), max(obis_seamap_green$latitude))
+lon_limit <- c(min(obis_seamap_green$longitude), max(obis_seamap_green$longitude))
+
+# Create a map focused on your region of interest
+ggplot(obis_seamap_green, aes(x = longitude, y = latitude)) +
+  geom_polygon(data = world_map, aes(x = long, y = lat, group = group), fill = "white", color = "black") +
+  geom_point() +
+  labs(title = "Map of Latitude and Longitude Points") +
+  xlim(lon_limit) + ylim(lat_limit)
+```
+
+* That looks terrible! At this point, you could describe the problem to ChatGPT and it will help you. But better yet, is to know about the mapview package. 
+
+* Ask ChatGPT: "Can I use mapview?"
+
+```{r eval=FALSE}
+# Install and load the mapview package (if not already installed)
+# install.packages("mapview")
+library(mapview)
+
+# Assuming your data frame is named "obis_seamap_green"
+# Replace "latitude" and "longitude" with your actual column names
+
+# Create a map view
+mapview(obis_seamap_green, zcol = NULL, map.types = "OpenStreetMap")
+```
+
+* It doesn't work! Tell ChatGPT: "I get an error that says Either convert obis_seamap_green to a spatial object or provide xcol and ycol.
+oops! Arguments xcol and/or ycol are missing!" It apologizes and gives you a fix.
+
+
+```{r}
+# Install and load the required packages (if not already installed)
+# install.packages("mapview")
+# install.packages("sf")
+library(mapview)
+library(sf)
+
+# Assuming your data frame is named "obis_seamap_green"
+# Replace "latitude" and "longitude" with your actual column names
+
+# Convert your data frame to a spatial object
+obis_seamap_sf <- st_as_sf(obis_seamap_green, coords = c("longitude", "latitude"))
+
+# Create a map view
+mapview(obis_seamap_sf)
+```
+
+* Tell ChatGPT: "Better! But the land is not shown"
+
+```{r}
+# Assuming your data frame is named "obis_seamap_green"
+# Replace "latitude" and "longitude" with your actual column names
+library(mapview)
+library(sf)
+
+# Convert your data frame to a spatial object
+obis_seamap_sf <- st_as_sf(obis_seamap_green, coords = c("longitude", "latitude"))
+
+# Create a map view with Esri.WorldImagery basemap
+mapview(obis_seamap_sf, map.types = "Esri.WorldImagery")
+```
+
+* Tell ChatGPT: "I get another warning writing: substituting ENGCRS["Undefined Cartesian SRS with unknown unit"] for missing CRS]". It gives us a fix.
+
+```{r}
+# Assuming your data frame is named "obis_seamap_green"
+# Replace "latitude" and "longitude" with your actual column names
+library(mapview)
+library(sf)
+
+# Convert your data frame to a spatial object and set the CRS explicitly
+obis_seamap_sf <- st_as_sf(obis_seamap_green, coords = c("longitude", "latitude"), crs = 4326)
+
+# Create a map view with Esri.WorldImagery basemap
+mapview(obis_seamap_sf, map.types = "Esri.WorldImagery")
+```
+
+## Clean up the date
+
+It is common that the date columns are in different formats and we need to change to a format that R will understand.
+
+```{r}
+obis_seamap_green$date_time[1]
+```
+
+I don't have about the time, I just want date in a standard format. Let's ask ChatGPT.
+
+* "My date_time column looks like this "5/16/16 6:54". I need a date column in a standard format."
+
+```{r eval=FALSE}
+# Assuming your data frame is named "obis_seamap_green"
+# Replace "date_time" with your actual column name
+library(mapview)
+library(sf)
+
+# Convert the date_time column to a standard date format
+obis_seamap_green$date <- as.Date(obis_seamap_green$date_time, format = "%m/%d/%y %H:%M")
+
+# Remove the original date_time column if needed
+obis_seamap_green <- obis_seamap_green[, !names(obis_seamap_green) %in% "date_time"]
+```
+
+Let's check if it worked.
+
+```{r}
+obis_seamap_green$date[1]
+class(obis_seamap_green$date)
+```
+
+## Save the data frame
+
+Many times we do a bit of work on our data by cleaning up an such. Once we are done, we should save our data so we can load it in easily later.
+
+First we make a R script that shows how we created our data. We do this to be nice to our "future" selves. Create a R script and save in the data folder as `create-obis-seamap-green.R`.
+```
+library(readr)
+obis_seamap_green <- read_csv("data/obis_seamap_green.csv", 
+    skip = 2)
+obis_seamap_green$date <- as.Date(obis_seamap_green$date_time, format = "%m/%d/%y %H:%M")
+
+# Remove the original date_time column if needed
+obis_seamap_green <- obis_seamap_green[, !names(obis_seamap_green) %in% "date_time"]
+```
+
+Now that we have recorded how we made our file, we save our data to a file.
+
+```{r}
+save(obis_seamap_green, file="data/obis_seamap_green.RData")
+```
+
+Next time we want to load these data we can run
+```{r}
+load("data/obis_seamap_green.RData")
+```
+
+
+
+## Summary
+
+1. You learned how to import csv and Excel files using the Import widget. Tip: use NA for missing values!
+
+2. You learned how to interact with ChatGPT as your personal coding helper. Tip: We are using tidyverse so let it know that you want that. Use "only show code" if you don't want all the narrative.
+
+3. In order to work with ChatGPT, you need to be able to tell it what your data look like. Core commands you need to know:
+
+    * Class `class(object)`
+    * Column names `colnames(object)`
+    * Size `dim(object)`
+    
+    Use these commands to learn what to tell ChatGPT.
+    
+4. You learned how to ask ChatGPT to help you plot and how to tell it what the problems are so it can help you. You learned about the mapview R package. ChatGPT knows about it, but rarely will it suggest it on it's own.
+
+5. You made a (boring) plot with the ggplot2 plotting package. This is part of the tidyverse. It is 2023, we use ggplot2 for plotting not base R (`plot()`). We will cover much more plotting with ggplot2 in another tutorial.
+
+## Your turn!
+
+Import some of the other files in the `data` directory.
+

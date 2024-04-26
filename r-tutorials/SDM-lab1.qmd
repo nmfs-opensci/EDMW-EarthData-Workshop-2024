@@ -1,0 +1,28 @@
+---
+title: Species Distribution Modeling
+---
+
+Save the files to your own folder to work though the examples **or** follow along but don't save.
+
+## Topics
+
+[OHW marine SDM tutorial](https://oceanhackweek.org/tutorials_marine_sdm/)
+
+### Download occurence data.
+
+* `shared/2023-Hackbook/r-tutorials/SDM-lab-spocc.qmd`
+* `shared/2023-Hackbook/r-tutorials/SDM-lab-robis.qmd`
+
+### Download sdmpredictors data
+
+* [The spreadsheet with all the variables](https://docs.google.com/spreadsheets/d/1-DZ5_oR7BQU4tr5CNtWMiL5a0jsVghZlKBXoTrLQh6g/edit?usp=sharing)
+
+* `shared/tutorials-marine-sdm/tutorial/Steps_occ_env.Rmd`
+
+
+### Full example
+
+* `shared/tutorials-marine-sdm/SDM/Turtle_maxnet.Rmd`
+
+
+

@@ -1,0 +1,51 @@
+---
+title: Geoscience in the Cloud
+---
+
+::: {.callout-note icon=false}
+
+## Goals
+
+ * Get an introduction to some of the jargon
+ * Understand the difference between cloud versus on-premise
+ * Understand the difference between working on data natively in the cloud versus downloading
+ * Learn some of the major community groups in "big data Geoscience"
+ * Learn some of the major tools (in 2023)
+
+:::
+
+## Open infrastructure for geoscience
+
+Let's start by watch a short video by James Colliander, founder of 2i2c which supports many community JupyterHubs to increase open access to cloud computing. 
+
+{{< video https://www.youtube.com/watch?v=9itR-_EXa5c >}}
+
+## Why are we using a cloud environment?
+
+"Anyone working with large-scale Earth System data today faces the same general problems:
+
+ * The data we want to work with are huge (typical analyses involve several TB at least)
+ * The data we need are produced and distributed by many different organizations (NASA, NOAA, ESGF, Copernicus, etc.)
+ * We want to apply a wide range of different analysis methodologies to the data, from simple statistics to signal processing to machine learning.
+
+The community is waking up to the idea that we can’t simply expect scientists to download all this data to their personal computers for processing."
+
+*Ryan Abernathey, Pangeo Project.*
+
+![Download-based workflow. From Abernathey, Ryan (2020): Data Access Modes in Science](https://s3-eu-west-1.amazonaws.com/pfigshare-u-previews/22017009/preview.jpg)
+
+![](https://training.galaxyproject.org/training-material/topics/climate/images/pangeo-ecosystem-2020.png)
+
+[Pangeo](https://pangeo.io/index.html) [Link to tutorial on Pangeo ecosystem](https://training.galaxyproject.org/training-material/topics/climate/tutorials/pangeo-notebook/slides.html#1)
+
+
+## Cloud optimized geospatial data
+
+* [Methods for Generating and Testing Cloud-Optimized Geospatial Formats](https://developmentseed.org/cloud-optimized-geospatial-formats-guide/)
+
+## References
+
+* [Closed Platforms vs. Open Architectures for Cloud-Native Earth System Analytics](https://medium.com/pangeo/closed-platforms-vs-open-architectures-for-cloud-native-earth-system-analytics-1ad88708ebb6)
+* [Why Jupyter is data scientists’ computational notebook of choice](https://www.nature.com/articles/d41586-018-07196-1)
+* [NASA MAAP Project](https://docs.maap-project.org/en/latest/getting_started/about_maap.html)
+
