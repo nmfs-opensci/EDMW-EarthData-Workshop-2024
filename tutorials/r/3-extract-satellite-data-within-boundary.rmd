@@ -2,11 +2,7 @@
 title: Extract data within a boundary
 author: NOAA CoastWatch
 date: August 22, 2023
-output:
-  md_document:
-    variant: gfm
 ---
-history | Updated August 2023    
 
 ```{r setup, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(

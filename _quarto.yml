@@ -33,7 +33,6 @@ website:
           - overview.md
           - team.md
           - setup.md
-          - support.md
           - coc.md
       - section: "Tutorials"
         contents:

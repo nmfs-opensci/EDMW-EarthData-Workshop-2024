@@ -470,11 +470,7 @@
     "href": "support.html#thank-you-for-inspiration-and-content",
     "title": "Acknowledgements",
     "section": "Thank you for inspiration and content!",
-    "text": "Thank you for inspiration and content!\nThank you to the open science community that has created software, teaching resources, and workflows that we have been able to build off of and be inspired by. These include: NASA Openscapes • OceanHackWeek • SnowEx Hackweek • eScience Institute, University of Washington • ICESat-2 Hackweek • Project Jupyter • Pangeo Project • CryoCloud",
-    "crumbs": [
-      "Welcome",
-      "Acknowledgements"
-    ]
+    "text": "Thank you for inspiration and content!\nThank you to the open science community that has created software, teaching resources, and workflows that we have been able to build off of and be inspired by. These include: NASA Openscapes • OceanHackWeek • SnowEx Hackweek • eScience Institute, University of Washington • ICESat-2 Hackweek • Project Jupyter • Pangeo Project • CryoCloud"
   },
   {
     "objectID": "schedule.html",
@@ -494,11 +490,11 @@
     ]
   },
   {
-    "objectID": "index.html#topics",
-    "href": "index.html#topics",
+    "objectID": "index.html#topics-for-may-15-2024",
+    "href": "index.html#topics-for-may-15-2024",
     "title": "EDMW 2024 - Workshop 3B",
-    "section": "Topics",
-    "text": "Topics\n\nIntroduction to working with earth data in the cloud and NASA Earth Data\nOrientation on our JupyterHub\nTutorial 1: Searching for resources in NASA Earth Data\nTutorial 2: Points and shapefiles\nTutorial 3: Subsetting your earth data with in a region (shapefile)\nTutorial 4: Getting values at points (along a track or transect)",
+    "section": "Topics for May 15, 2024",
+    "text": "Topics for May 15, 2024\n\nIntroduction to working with earth data in the cloud and NASA Earth Data\nOrientation on our JupyterHub\nTutorial 1: Searching for resources in NASA Earth Data\nTutorial 2: Points and shapefiles\nTutorial 3: Subsetting your earth data with in a region (shapefile)\nTutorial 4: Getting values at points (along a track or transect)",
     "crumbs": [
       "Welcome"
     ]
@@ -509,6 +505,16 @@
     "title": "EDMW 2024 - Workshop 3B",
     "section": "Resources",
     "text": "Resources\n\nCoastWatch GitHub organization for many more training modules for working with satellite data in Python and R\nNASA EarthData Cloudbook for many tutorials on using satellite data in Python and R and NASA Earth Data",
+    "crumbs": [
+      "Welcome"
+    ]
+  },
+  {
+    "objectID": "index.html#thank-you-for-inspiration-and-content",
+    "href": "index.html#thank-you-for-inspiration-and-content",
+    "title": "EDMW 2024 - Workshop 3B",
+    "section": "Thank you for inspiration and content!",
+    "text": "Thank you for inspiration and content!\nThank you to the open science community that has created software, teaching resources, and workflows that we have been able to build off of and be inspired by. These include: NASA Openscapes • OceanHackWeek • SnowEx Hackweek • eScience Institute, University of Washington • ICESat-2 Hackweek • Project Jupyter • Pangeo Project • CryoCloud",
     "crumbs": [
       "Welcome"
     ]
@@ -1184,11 +1190,11 @@
     ]
   },
   {
-    "objectID": "setup.html#user-accounts",
-    "href": "setup.html#user-accounts",
+    "objectID": "setup.html",
+    "href": "setup.html",
     "title": "Set-up",
-    "section": "User accounts",
-    "text": "User accounts\n\nGitHub username\n\nCreate a GitHub account (if you don’t already have one) at https://github.com. Advice for choosing a GitHub username: this is a professional username that you will use in work settings. GitHub accounts are not anonymous; this is for sharing work. Using your real name is common.\nRemember your username and password; you will need to be logged in during the course!\nHere is a video showing the whole process\n\nEarthdata Login account\n\nCreate an Earthdata Login account (if you don’t already have one) at https://urs.earthdata.nasa.gov\nRemember your username and password; you will need to be logged in during the course!",
+    "section": "",
+    "text": "To work on the JupyterHub for the workshop:",
     "crumbs": [
       "Welcome",
       "Set-up"
