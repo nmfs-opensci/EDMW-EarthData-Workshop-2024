@@ -1,0 +1,11 @@
+---
+title: Subset and Plot
+format:
+  html:
+    code-fold: true
+---
+
+
+## Summary
+
+Need to make a R version of the Python code.

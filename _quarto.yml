@@ -3,7 +3,7 @@ project:
   output-dir: docs
   render:
     - "*.*"
-    - "!nasa-tutorials/*.ipynb"
+    - "!tutorials/python-notebooks/*.ipynb"
 
 execute:
   freeze: auto
@@ -42,51 +42,29 @@ website:
               - text: Welcome
                 href: content/01-welcome.md
               - text: Geoscience cloud tools
-                href: content/01-intro-to-cloud-geoscience.qmd
+                href: content/01-intro-to-cloud.qmd
               - text: Jupyter hubs
                 href: content/01-intro-to-jupyterhub.qmd
-          - section: "Geospatial Analysis in R"
+          - section: "Tutorials in R"
             contents:
-              - text: Welcome
-                href: content/01-welcome.md
-          - section: "Git and GitHub Basics"
+              - text: Tutorial 1
+                href: tutorials/r/1-earthdatalogin.qmd
+              - text: Tutorial 2
+                href: tutorials/r/2-subset-and-plot.qmd
+              - text: Tutorial 3
+                href: tutorials/r/3-extract-satellite-data-within-boundary.rmd
+              - text: Tutorial 4
+                href: tutorials/r/4-matchup-satellite-data-to-track-locations.rmd
+          - section: "Tutorials in Python"
             contents:
-              - text: GitHub 1
-                href: content/01-github.md
-              - text: GitHub 2
-                href: content/02-github-2.md
-              - text: Git in RStudio
-                href: content/03-git-rstudio.md
-          - section: "R and RStudio Basics"
-            contents:
-              - text: RStudio
-                href: content/02-rstudio.qmd
-              - text: Quarto
-                href: content/02-quarto.qmd
-              - text: Loading data in R
-                href: r-tutorials/03-r-read-in-data.qmd
-              - text: Maps!
-                href: r-tutorials/05-r-geospatial.qmd
-          - section: "Earth Data in R"
-            contents:
-              - text: Searching & subsetting
-              - text: Getting the data
-              - text: Extract in a boundary
-              - text: Extract on a transect
-      - section: "Python Tutorials"
-        contents:
-          - section: "Data Access"
-            contents:
-              - python-notebooks/00_NASA_Earthdata_Authentication.ipynb
-              - python-notebooks/01_earthaccess_Downloader.ipynb
-              - python-notebooks/01_ERA5_S3_Downloader.ipynb
-              - python-notebooks/01_ERDDAP_Downloader.ipynb
-              - python-notebooks/01_MOTU_Downloader.ipynb
-          - section: "Using Data"
-            contents:
-              - python-notebooks/02_Using_Data.ipynb
-              - python-notebooks/02_Graphing_Data.ipynb
-              - python-notebooks/02_Xarray_hvplot.ipynb              
+              - text: Tutorial 1
+                href: tutorials/python/1-earthaccess.ipynb
+              - text: Tutorial 2
+                href: tutorials/python/2-subset-and-plot.ipynb
+              - text: Tutorial 3
+                href: tutorials/python/3-extract-satellite-data-within-boundary.ipynb
+              - text: Tutorial 4
+                href: tutorials/python/4-matchup-satellite-data-to-track-locations.ipynb
       - text: <img width=100px>
       - text: <img src="/images/noaa_emblem_logo-2022.png" width=100px>
         href: https://fisheries.noaa.gov

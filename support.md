@@ -14,5 +14,4 @@ Thank you to the open science community that has created software, teaching reso
 [Pangeo Project](https://pangeo.io/) &bullet; 
 [CryoCloud](https://cryointhecloud.com/)
 <br/><br/>
-<img src="images/ohw.png" width="100px" style="float: left; padding-right: 10px"> Thanks to [OceanHackWeek](https://oceanhackweek.org/) for content, inspiration, and the opportunity to test out ideas. 
 

@@ -1,0 +1,121 @@
+---
+title: "Intro to earthdatalogin"
+author: Carl Boettiger (UC Berkeley)
+---
+
+This is the "[Data Cubes with STAC](https://boettiger-lab.github.io/earthdatalogin/articles/gdalcubes-stac-cog.html)" vignette from [earthdataaccess package](https://boettiger-lab.github.io/earthdatalogin).
+
+High-resolution satellites generate many snapshot images each with a limited field of view or spatial extent.  In order to see a larger area in space, and/or observe changes across space and time, we need to assemble these many snapshots into a mosaic or "data cube" that we can analyze as a cohesive whole. 
+
+
+[EARTHDATA STAC CATALOGS](https://radiantearth.github.io/stac-browser/#/external/cmr.earthdata.nasa.gov/stac/)
+
+## Install earthdatalogin
+
+Install earthdatalogin and update terra
+
+```{r eval=FALSE}
+install.packages("earthdatalogin")
+install.packages("terra")
+```
+
+## Basic Use
+
+First let's get [NASA Earth Data Login](https://urs.earthdata.nasa.gov/) (EDL) authentication out of the way. For cloud data from almost any other STAC catalog (NOAA, USGS, Planetary Computer, etc), authentication is either unnecessary or already provided by the STAC API, but NASA EDL is special. 
+
+```{r}
+library(earthdatalogin)
+# Authenticate
+edl_netrc()
+```
+
+Get data.
+```{r}
+library(terra)
+url <- "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSL30.020/HLS.L30.T56JKT.2023246T235950.v2.0/HLS.L30.T56JKT.2023246T235950.v2.0.SAA.tif"
+ras <- terra::rast(url, vsi=TRUE)
+```
+This is a boring and weird example. The plot is correct.
+```{r}
+plot(ras)
+```
+
+
+## Searching and Subsetting
+
+
+The packages we want
+```{r}
+library(rstac)
+library(gdalcubes)
+gdalcubes_options(parallel = TRUE) 
+```
+
+
+### EDL Authentication
+
+As usual, we can handle this with `edl_netrc()`.  Because the `gdalcubes` package doesn't respect global environmental variables, we use a helper utility to export those into its configuration as well.
+
+```{r}
+library(earthdatalogin)
+edl_netrc()
+with_gdalcubes()
+```
+
+### Search via STAC
+
+We will now use the `rstac` package to search one or more NASA collections for data that falls into our desired bounding box of space and time. NASA has a CMR option for searching that is more stable but this example is using STAC which is a more universal option.
+
+
+```{r}
+bbox <- c(xmin=-123, ymin=37.25, xmax=-122.0, ymax=38.25) 
+start <- "2021-12-01"
+end <- "2022-01-31"
+
+# Find all assets from the desired catalog:
+items <- stac("https://cmr.earthdata.nasa.gov/stac/LPCLOUD") |> 
+  stac_search(collections = "HLSL30.v2.0",
+              bbox = bbox,
+              datetime = paste(start,end, sep = "/")) |>
+  post_request() |>
+  items_fetch() |>
+  items_filter(filter_fn = \(x) {x[["eo:cloud_cover"]] < 20})
+```
+
+
+Note that 98 features have matched our search criteria! Each feature represents a 'snapshot' image taken by the satellite as it passes by (this is a harmonized product so actually there's quite a lot of post-processing.)  Each feature thus shares the same bounding box, projection, and timestamp, but may consist of many different 'assets', different files representing the different spectral bands on the satellite camera instrument.  Each feature can potentially include quite extensive metadata about the feature, including details of instrument itself or from post-processing, such as cloud cover.  Unfortunately, Earth Data's STAC metadata tends to be quite sparse. 
+
+
+### Building a Data Cube
+
+```{r}
+# Desired data cube shape & resolution
+v = cube_view(srs = "EPSG:4326",
+              extent = list(t0 = as.character(start), 
+                            t1 = as.character(end),
+                            left = bbox[1], right = bbox[3],
+                            top = bbox[4], bottom = bbox[2]),
+              nx = 512, ny = 512, dt = "P1M")
+```
+
+RGB bands + cloud cover mask
+
+```{r}
+col <- stac_image_collection(items$features, 
+                             asset_names = c("B02", "B03", "B04", "Fmask"))
+```
+
+Use a cloud mask. See [HLS User Guide](https://lpdaac.usgs.gov/documents/1326/HLS_User_Guide_V2.pdf).
+
+```{r}
+cloud_mask <- image_mask("Fmask", values=1)
+```
+
+### Plot
+
+This takes awhile. So far we have not downloaded anything. We have been working with metadata about the files. Now we do the work which involves server-side subsetting and some operations. We download on the part that we need.
+```{r}
+raster_cube(col, v, mask=cloud_mask) |>
+  select_bands(c("B02","B03", "B04")) |>
+  plot(rgb=3:1)
+```
