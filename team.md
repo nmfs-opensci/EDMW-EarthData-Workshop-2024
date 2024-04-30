@@ -64,6 +64,14 @@ title: Our Team
 <div>
 ### Emily Markowitz
 
+### Emily Markowitz
+
+<img src="images/Em.png" alt="Emily Markowitz" style="width:75%; ; border-radius: 50%;">
+
+[NOAA Fisheries](https://www.fisheries.noaa.gov/)
+
+[webpage](https://emilyhmarkowitz.github.io/emilyhmarkowitz) &#x2022;  [GitHub](https://github.com/EmilyMarkowitz-NOAA) &#x2022; [NOAA](https://www.fisheries.noaa.gov/contact/emily-markowitz) &#x2022; [ORCID](https://orcid.org/0000-0001-5757-4230)
+
 </div>
 </div>
 
