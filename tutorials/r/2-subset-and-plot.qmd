@@ -25,9 +25,15 @@ results <- edl_search(
 )
 ```
 
-## Crop one image
+`results` is a vector of urls pointing to our netCDF files in the cloud.
+```{r}
+results[1:3]
+```
+Each netCDF file is ca 670Mb.
 
-What is different here is that I did not download the file or load it into memory.
+## Crop and plot one image
+
+Each MUR SST netCDF file is large so I do not want to download. Instead I will use `terra::rast()` to do subset the data on the server side.
 
 ```{r}
 library(terra)
@@ -59,7 +65,7 @@ r <- terra::rast(results[1], vsi=TRUE)
 
 Based on: https://boettiger-lab.github.io/nasa-topst-env-justice/tutorials/R/2-earthdata.html
 
-Unfortunately these netcdf files lack appropriate metadata (projection, extent) that GDAL expects. We can provide this manually using the GDAL VRT mechanism:
+Unfortunately these netCDF files lack appropriate metadata (projection, extent) that GDAL expects. We can provide this manually using the GDAL VRT mechanism:
 ```{r}
 vrt <- function(url) {
   prefix <-  "vrt://NETCDF:/vsicurl/"

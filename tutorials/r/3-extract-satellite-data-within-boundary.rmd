@@ -26,42 +26,20 @@ In this tutorial we will learn how to download a timeseries of SST satellite dat
 -   Plotting a time-series of mean SST 
 
 ## Datasets used
-__NOAA Geo-polar Blended Analysis Sea-Surface Temperature, Global, Monthly, 5km, 2019-Present__    
-The NOAA geo-polar blended SST is a high resolution satellite-based gap-free sea surface temperature (SST) product that combines SST data from US, Japanese and European geostationary infrared imagers, and low-earth orbiting infrared (U.S. and European) SST data, into a single product. We will use the monthly composite.
-https://coastwatch.pfeg.noaa.gov/erddap/griddap/NOAA_DHW_monthly
+__GHRSST Level 4 AVHRR_OI Global Blended Sea Surface Temperature Analysis (GDS2) from NCEI__    
+This NOAA blended SST is a moderate resolution satellite-based gap-free sea surface temperature (SST) product. We will use the daily data.
+https://cmr.earthdata.nasa.gov/search/concepts/C2036881712-POCLOUD.html
 
 __Longhurst Marine Provinces__  
 The dataset represents the division of the world oceans into provinces as defined by Longhurst (1995; 1998; 2006). This division has been based on the prevailing role of physical forcing as a regulator of phytoplankton distribution. The Longhurst Marine Provinces dataset is available online (https://www.marineregions.org/downloads.php) and within the shapes folder associated with this repository. For this tutorial we will use the Gulf Stream province (ProvCode: GFST)  
 
 ![../images/longhurst.png](../images/longhurst.png)
 
-## Install packages and load libraries
-```{r install,message=FALSE,warning=FALSE}
-pkges = installed.packages()[,"Package"]
-# Function to check if pkgs are installed, install missing pkgs, and load
-pkgTest <- function(x)
-{
-  if (!require(x,character.only = TRUE))
-  {
-    install.packages(x,dep=TRUE,repos='http://cran.us.r-project.org')
-    if(!require(x,character.only = TRUE)) stop(x, " :Package not found")
-  }
-}
+## Load packages
 
-# create list of required packages
-list.of.packages <- c("ncdf4", "rerddap","plotdap", "parsedate", 
-                      "sp", "ggplot2", "RColorBrewer", "sf", 
-                      "reshape2", "maps", "mapdata", 
-                      "jsonlite", "rerddapXtracto")
-
-# Run install and load function
-for (pk in list.of.packages) {
-  pkgTest(pk)
-}
-
-# create list of installed packages
-pkges = installed.packages()[,"Package"]
-
+```{r}
+library(sf)
+library(rerddapXtracto)
 ```
 
 ## Load boundary coordinates 
@@ -87,64 +65,67 @@ ycoord <- st_coordinates(GFST)[,2]
 
 ```
 
-## Select the satellite dataset  
+## Get a vector of urls to our nc files
 
-We will load the sea surface temperature data from the geo-polar blended SST satellite data product hosted on the CoastWatch ERDDAP. The dataset ID for this data product is **nesdisBLENDEDsstDNDaily**.
-
-We will use the *info* function from the **rerddap** package to first obtain information about the dataset of interest, then we will import the data.
-
-```{r dataInfo}
-
-# Set ERDDAP URL
-erd_url = "http://coastwatch.pfeg.noaa.gov/erddap/"
-
-# Obtain data info using the erddap url and dataset ID
-dataInfo <- rerddap::info('NOAA_DHW_monthly',url=erd_url)  
-
-# Examine the metadata dataset info
-dataInfo
+```{r}
+edl_netrc()
+with_gdalcubes()
 ```
 
-## Set the options for the polygon data extract
-Using the **rxtractogon** function, we will import the satellite data from erddap.
-The **rxtractogon** function takes the variable(s) of interest and the coordinates as input. 
+```{r}
+short_name <- 'AVHRR_OI-NCEI-L4-GLOB-v2.1'
+bbox <- c(xmin=min(xcoord), ymin=min(ycoord), xmax=max(xcoord), ymax=max(ycoord)) 
+tbox <- c("2020-01-16", "2020-12-16")
 
-* For the coordinates: determine the range of x, y, z, and time.
-* time coordinate: select the entire year of 2020
-
-```{r options}
-# set the parameter to extract
-parameter <- 'sea_surface_temperature'
-# set the time range
-tcoord <- c("2020-01-16", "2020-12-16")
-
-# We already extracted the xcoord (longitude) and ycoord (latitude) from the shapefiles 
-# The dummy code below is just a placeholder indicating it is necessary to define what the longitude and latitude vectors are that make up the boundary of the polygon.
-xcoord <- xcoord
-ycoord <- ycoord
- 
+results <- edl_search(
+    short_name = short_name,
+    version = "2.1",
+    temporal = tbox,
+    bounding_box = paste(bbox,collapse=",")
+)
 ```
-## Extract data and mask it using rxtractogon  
-* the **rxtractogon** function automatically extracts data from the satellite dataset and masks out any data outside the polygon boundary.  
-* List the data
-```{r octogon}
-## Request the data
-satdata <- rxtractogon(dataInfo, parameter=parameter, xcoord=xcoord, ycoord=ycoord,tcoord=tcoord)
 
-## List the returned data
-str(satdata)
+There are `r length(results)` files.
+
+## Crop and plot one image
+
+
+```{r}
+library(terra)
+ras <- terra::rast(results[1], vsi=TRUE)
+e <- ext(c(min(xcoord), max(xcoord),  min(ycoord), max(ycoord) ))
+rc <- crop(ras, e)
 ```
+
+This has the following layers.
+```{r}
+names(rc)
+```
+
+```{r}
+plot(rc[["analysed_sst"]])
+```
+
+## Apply a mask 
+
+Apply mask to a terra raster.
+
+https://rdrr.io/cran/terra/man/mask.html
+
+
+## Create a data cube
+
+We will create a data cube so that we can compute daily means over the polygon.
+
+## Mask the polygon 
 
 
 ### Plot the data
-* Use the plotBBox function in the **rerddapXtracto** package to quickly plot the data
 
-```{r map}
-plotBBox(satdata, plotColor = 'thermal',maxpixels=1000000)
-
-```
 
 ### Plot the mean seasonal temperature for the province
+
+Not sure how to do this part.
 
 ```{r}
 sst_mean=apply(satdata$sea_surface_temperature,3,mean,na.rm=TRUE)
