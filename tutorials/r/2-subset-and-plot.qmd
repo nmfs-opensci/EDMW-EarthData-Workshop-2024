@@ -5,6 +5,14 @@ format:
     code-fold: true
 ---
 
+## Load packages
+
+```{r}
+library(earthdatalogin)
+library(gdalcubes)
+library(terra)
+```
+
 ## Get a vector of urls to our nc files
 
 ```{r}
