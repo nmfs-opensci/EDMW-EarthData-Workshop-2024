@@ -32,7 +32,7 @@ website:
         contents:
           - overview.md
           - team.md
-          - setup.md
+          - setup.qmd
           - coc.md
       - section: "Tutorials"
         contents:
