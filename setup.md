@@ -2,7 +2,9 @@
 title: Set-up
 ---
 
-## User accounts
+To work on the JupyterHub for the workshop:
+
+# User accounts
 
 1. **GitHub username**
     - Create a GitHub account (if you don’t already have one) at <https://github.com>. Advice for choosing a GitHub username: this is a professional username that you will use in work settings. GitHub accounts are not anonymous; this is for sharing work. Using your real name is common.
@@ -22,7 +24,33 @@ Once you have submitted your GitHub username and have been accepted as a member 
 
 * home directory is yours and no one else can see it. To share files, you can connect to a GitHub repository or use the `shared` directory. Everyone can read and write to this directory. Please don't delete content that is not your own.
 
+# Setting up on your computer
 
+Here are instructions for installing on your own computer.
+
+Install the development version of earthdatalogin and update terra.
+
+```
+devtools::install_github("boettiger-lab/earthdatalogin")
+install.packages("terra")
+```
+
+You will need GDAL installed. See these instructions if you do not have it installed:  https://developers.planet.com/docs/integrations/qgis/install-qgis-gdal/
+
+You may need to install `terra` and `sf` from source to get them to use the latest GDAL installation. 
+```
+install.packages("terra", type = "source")
+install.packages("sf", type = "source")
+sf_extSoftVersion()
+```
+
+The environment we are using today is the `py-rocket-geospatial` image. This is part of work on a [Data Science Docker Stack](https://github.com/nmfs-opensci/container-images) for NOAA Fisheries.
+
+
+
+# To push to GitHub
+
+This is optional if you want to save your work.
 
 ## Set up authentication to GitHub
 
@@ -68,34 +96,3 @@ Option b is easiest if you are new to Git and GitHub.
 
 [Full instructions with other ways to do this from R](https://rverse-tutorials.github.io/RWorkflow-NWFSC-2022/set-up.html#Git_from_RStudio_Desktop)
 
-
-
-<!--
-## Install R and RStudio Desktop
-
-We will mainly be using a browser based platform (JupyterHub) for coding and projects. JupyterHub and JupyterLab is a standard platform for "big data geoscience" and working on this platform will prepare you for using the tools and notebooks developed by this research community. However we also want you to be able to run R and RStudio on your own computer.
-
-* R: [https://cran.r-project.org/](https://cran.r-project.org/)
-    - Install the latest version of R that you can for your operating system. Preferably you want version 4.3+ but at the least you need version 4.1.
-    - If you have R already installed, update to the newest version (4.3)
-* RStudio Desktop: [https://posit.co/download/rstudio-desktop/](https://posit.co/download/rstudio-desktop/)
-    - Install the most recent version you can. Update your version if you have an old version installed.
-
-
-## Intro to R courses
-
-If you are unfamiliar with R, these will only take you a 2-3 hours and will make your experience much more worthwhile.
-
-* [W3Schools Basic R](https://www.w3schools.com/r/default.asp)
-
-* [Basics of R and installing RStudio](https://www.udemy.com/course/r-basics/)
-
-* [YouTube: R for Beginners](https://www.youtube.com/watch?v=fDRa82lxzaU)
-
-* For a longer free course, CodeAcademy has a good [Intro to R](https://www.codecademy.com/learn/learn-r). Note this is 20 hours. You do NOT need to do this whole course before the hackweek! 
-
-* If you know the basics of R but have never done modeling, then you can start with this [2.5 hour course](https://www.udemy.com/course/machlearn1) that covers basic linear regression with R and plotting with ggplot2: 
-
-* One of the best free R courses is [Coursera's Learn R](https://www.coursera.org/learn/r-programming). You can see the lectures for free. Make sure to click AUDIT when it asks you to sign up for a 7-day trial. You do not need to sign up for anything to go through the material.
-
--->
