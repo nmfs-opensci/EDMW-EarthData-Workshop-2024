@@ -1,23 +1,30 @@
 ---
 title: "Intro to earthdatalogin"
-author: Carl Boettiger (UC Berkeley)
+author: Eli Holmes
 ---
 
-This is the "[Data Cubes with STAC](https://boettiger-lab.github.io/earthdatalogin/articles/gdalcubes-stac-cog.html)" vignette from [earthdataaccess package](https://boettiger-lab.github.io/earthdatalogin).
+In this tutorial we will learn how to search the NASA Earth Data catalog and download a timeseries of SST satellite data from an NASA Earth Data server using the [earthdatalogin package](https://boettiger-lab.github.io/earthdatalogin).
 
-High-resolution satellites generate many snapshot images each with a limited field of view or spatial extent.  In order to see a larger area in space, and/or observe changes across space and time, we need to assemble these many snapshots into a mosaic or "data cube" that we can analyze as a cohesive whole. 
-
+High-resolution satellites generate many snapshot images each with a limited field of view or spatial extent.  In order to see a larger area in space, and/or observe changes across space and time, we need to assemble these many snapshots into a "data cube" that we can analyze as a cohesive whole. 
 
 [EARTHDATA STAC CATALOGS](https://radiantearth.github.io/stac-browser/#/external/cmr.earthdata.nasa.gov/stac/)
 
 ## Install earthdatalogin
 
-Install earthdatalogin and update terra
+Install the development version o fearthdatalogin and update terra.
 
 ```{r eval=FALSE}
-install.packages("earthdatalogin")
+devtools::install_github("boettiger-lab/earthdatalogin")
 install.packages("terra")
 ```
+
+## Data of interest
+
+
+__GHRSST Level 4 AVHRR_OI Global Blended Sea Surface Temperature Analysis (GDS2) from NCEI__    
+This dataset is a blended (Optimal Interpolation) high resolution satellite-based gap-free sea surface temperature (SST) product that combines SST data from US, Japanese and European geostationary infrared imagers, and low-earth orbiting infrared (U.S. and European) SST data, into a single product. We will use the daily composite.
+
+https://search.earthdata.nasa.gov/search?q=Blended%20Analysis%20Sea-Surface%20Temperature
 
 ## Basic Use
 
@@ -29,23 +36,12 @@ library(earthdatalogin)
 edl_netrc()
 ```
 
-Get data.
-```{r}
-library(terra)
-url <- "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSL30.020/HLS.L30.T56JKT.2023246T235950.v2.0/HLS.L30.T56JKT.2023246T235950.v2.0.SAA.tif"
-ras <- terra::rast(url, vsi=TRUE)
-```
-This is a boring and weird example. The plot is correct.
-```{r}
-plot(ras)
-```
 
-
-## Searching and Subsetting
+## Searching
 
 
 The packages we want
-```{r}
+```{r message=FALSE}
 library(rstac)
 library(gdalcubes)
 gdalcubes_options(parallel = TRUE) 
@@ -68,13 +64,14 @@ We will now use the `rstac` package to search one or more NASA collections for d
 
 
 ```{r}
-bbox <- c(xmin=-123, ymin=37.25, xmax=-122.0, ymax=38.25) 
-start <- "2021-12-01"
-end <- "2022-01-31"
+bbox <- c(xmin=-73.5, ymin=33.5, xmax=-43.5, ymax=43.5) 
+tbox <- c("2020-01-16", "2020-12-16")
+```
 
+```{r}
 # Find all assets from the desired catalog:
-items <- stac("https://cmr.earthdata.nasa.gov/stac/LPCLOUD") |> 
-  stac_search(collections = "HLSL30.v2.0",
+items <- stac("https://cmr.earthdata.nasa.gov/stac/POCLOUD") |> 
+  stac_search(collections = "C2036881712-POCLOUD",
               bbox = bbox,
               datetime = paste(start,end, sep = "/")) |>
   post_request() |>
@@ -82,6 +79,22 @@ items <- stac("https://cmr.earthdata.nasa.gov/stac/LPCLOUD") |>
   items_filter(filter_fn = \(x) {x[["eo:cloud_cover"]] < 20})
 ```
 
+```{r}
+# Find all assets from the desired catalog:
+items <- stac("https://cmr.earthdata.nasa.gov/stac/POCLOUD") |> 
+  stac_search(collections = "C2036881712-POCLOUD",
+              bbox = bbox,
+              datetime = paste(start,end, sep = "/")) |>
+  post_request() |>
+  items_fetch()
+```
+
+```{r}
+edl_search(
+  short_name="AVHRR_OI-NCEI-L4-GLOB-v2.1",
+  temporal = c(start, end)
+)
+```
 
 Note that 98 features have matched our search criteria! Each feature represents a 'snapshot' image taken by the satellite as it passes by (this is a harmonized product so actually there's quite a lot of post-processing.)  Each feature thus shares the same bounding box, projection, and timestamp, but may consist of many different 'assets', different files representing the different spectral bands on the satellite camera instrument.  Each feature can potentially include quite extensive metadata about the feature, including details of instrument itself or from post-processing, such as cloud cover.  Unfortunately, Earth Data's STAC metadata tends to be quite sparse. 
 

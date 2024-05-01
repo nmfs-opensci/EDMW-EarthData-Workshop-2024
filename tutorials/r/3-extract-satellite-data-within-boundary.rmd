@@ -13,7 +13,6 @@ knitr::opts_chunk$set(
 ```
 
 # Extract data within a boundary
-> Update: August 2023  
 
 ## Background
 One use for satellite observations is to supplement in situ sampling of geographical locations where the timespan, frequency measurements, spatial dimensions or remoteness of the locations, make physical sampling impossible or impractical. One drawback is that satellite data are often rectangular, whereas geographical locations can have irregular boundaries. Examples of boundaries include marine protected areas or marine physical, biological, and ecological divisions like the Longhurst Marine Provinces.  
@@ -27,7 +26,7 @@ In this tutorial we will learn how to download a timeseries of SST satellite dat
 -   Plotting a time-series of mean SST 
 
 ## Datasets used
-__NOAA Geo-polar Blended Analysis Sea-Surface Temperature, Global, Monthlyly, 5km, 2019-Present__    
+__NOAA Geo-polar Blended Analysis Sea-Surface Temperature, Global, Monthly, 5km, 2019-Present__    
 The NOAA geo-polar blended SST is a high resolution satellite-based gap-free sea surface temperature (SST) product that combines SST data from US, Japanese and European geostationary infrared imagers, and low-earth orbiting infrared (U.S. and European) SST data, into a single product. We will use the monthly composite.
 https://coastwatch.pfeg.noaa.gov/erddap/griddap/NOAA_DHW_monthly
 
