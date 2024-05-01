@@ -1,8 +1,5 @@
 ---
 title: Earthdatalogin  Search and Discovery
-format:
-  html:
-    code-fold: true
 ---
 
 ## Summary

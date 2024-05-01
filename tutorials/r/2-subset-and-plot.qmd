@@ -1,8 +1,5 @@
 ---
 title: Subset and Plot
-format:
-  html:
-    code-fold: true
 ---
 
 ## Load packages

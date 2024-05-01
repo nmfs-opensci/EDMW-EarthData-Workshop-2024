@@ -4,61 +4,35 @@ title: Set-up
 
 To work on the JupyterHub for the workshop:
 
-# User accounts
+# User Accounts
 
-1. **GitHub username**
-    - Create a GitHub account (if you don’t already have one) at <https://github.com>. Advice for choosing a GitHub username: this is a professional username that you will use in work settings. GitHub accounts are not anonymous; this is for sharing work. Using your real name is common.
-    - Remember your username and password; you will need to be logged in during the course!
-    - Here is [a video](https://www.youtube.com/watch?v=nHXw4mGoqiE) showing the whole process
-1. **Earthdata Login account** 
-    - Create an Earthdata Login account (if you don't already have one) at <https://urs.earthdata.nasa.gov>
-    - Remember your username and password; you will need to be logged in during the course!
-    
-## Get on the JupyterHub
+## GitHub username (required to get on hub)
+
+* Create a GitHub account (if you don’t already have one) at <https://github.com>. Advice for choosing a GitHub username: this is a professional username that you will use in work settings. GitHub accounts are not anonymous; this is for sharing work. Using your real name is common.
+* Write down your username and password; you will need to log in during the course!
+* Here is [a video](https://www.youtube.com/watch?v=nHXw4mGoqiE) showing the whole process
+
+## Get on the JupyterHub (if you want to follow along)
 
 Once you have submitted your GitHub username and have been accepted as a member of the DaskHub team on the nmfs-opensci organization, you can log-into the JupyterHub.
 
 <https://dhub.opensci.live/>
 
-* **Make sure to choose an R image** or else you will not see the RStudio Server button. [Watch a video](https://youtu.be/o99jZWHqKi8) of the login process and basic JupyterHub orientation.
+* **Choose the default Py-R base geospatial image**. [Watch a video](https://youtu.be/o99jZWHqKi8) of the login process and basic JupyterHub orientation.
 
 * home directory is yours and no one else can see it. To share files, you can connect to a GitHub repository or use the `shared` directory. Everyone can read and write to this directory. Please don't delete content that is not your own.
 
-# Setting up on your computer
+## Earthdata Login account (optional)
 
-Here are instructions for installing on your own computer.
+We will be using a public user account, but if you do a lot of work with NASA Earthdata, you should get a login account. 
 
-Install the development version of earthdatalogin and update terra.
+* Create an Earthdata Login account (if you don't already have one) at <https://urs.earthdata.nasa.gov>
+* Write down your username and password; you will need it.
 
-```{r eval=FALSE}
-devtools::install_github("boettiger-lab/earthdatalogin")
-install.packages("terra")
-install.packages("rstac")
-install.packages("gdalcubes")
-install.packages("here")
 
-library("earthdatalogin")
-library("terra")
-library("rstac")
-library("gdalcubes")
-library("here")
-```
+# To push to GitHub (optional)
 
-You will need GDAL installed. See these instructions if you do not have it installed:  https://developers.planet.com/docs/integrations/qgis/install-qgis-gdal/
-
-You may need to install `terra` and `sf` from source to get them to use the latest GDAL installation. 
-
-```{r eval=FALSE}
-install.packages("terra", type = "source")
-install.packages("sf", type = "source")
-sf_extSoftVersion()
-```
-
-The environment we are using today is the `py-rocket-geospatial` image. This is part of work on a [Data Science Docker Stack](https://github.com/nmfs-opensci/container-images) for NOAA Fisheries.
-
-# To push to GitHub
-
-This is optional if you want to save your work.
+This is optional if you want to save your work to GitHub.
 
 ## Set up authentication to GitHub
 

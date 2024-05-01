@@ -33,6 +33,18 @@ website:
           - overview.md
           - team.md
           - setup.qmd
+          - section: Orientation
+            contents:
+            - text: RStudio
+              href: content/02-rstudio.qmd
+            - text: Earthdata login
+              href: content/02-earthdata.md
+            - text: Local set-up
+              href: content/02-local-setup.qmd
+            - text: Git-JupyterLab
+              href: content/02-git-jupyter.md
+            - text: Git-RStudio
+              href: content/02-git-rstudio.md
           - coc.md
       - section: "Tutorials"
         contents:

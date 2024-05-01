@@ -8,6 +8,7 @@ title: Basic Git/GitHub Skills Using RStudio
 
 - Set up Git in the JupyterHub
 - Learn how to use the Git GUI in RStudio
+- Clone GitHub repositories to RStudio = get the repo into RStudio
 - Practice 4 basic Git/GitHub skills: cloning, committing, push/pull
 
 :::
