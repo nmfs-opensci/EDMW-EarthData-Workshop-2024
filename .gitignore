@@ -14,3 +14,4 @@
 /python-notebooks/demonstrated data/
 .DS_Store
 .DS_Store
+*.nc
