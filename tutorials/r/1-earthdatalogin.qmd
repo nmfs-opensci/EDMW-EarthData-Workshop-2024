@@ -1,134 +1,192 @@
 ---
-title: "Intro to earthdatalogin"
-author: Eli Holmes
+title: Earthdatalogin  Search and Discovery
+format:
+  html:
+    code-fold: true
 ---
 
-In this tutorial we will learn how to search the NASA Earth Data catalog and download a timeseries of SST satellite data from an NASA Earth Data server using the [earthdatalogin package](https://boettiger-lab.github.io/earthdatalogin).
+## Summary
 
-High-resolution satellites generate many snapshot images each with a limited field of view or spatial extent.  In order to see a larger area in space, and/or observe changes across space and time, we need to assemble these many snapshots into a "data cube" that we can analyze as a cohesive whole. 
+In this example we will use the `earthdatalogin` R package to search for data collections from NASA Earthdata. `earthdatalogin` is a R package that simplifies data discovery and access to NASA Earth science data by providing an abstraction layer for NASA’s [Common Metadata Repository (CMR) API](https://cmr.earthdata.nasa.gov/search/site/docs/search/api.html) Search API. The library makes searching for data more approachable by using a simpler notation instead of low level HTTP queries. `earthdatalogin` takes the trouble out of Earthdata Login **authentication**, makes **search** easier, and provides a stream-lined way to download or stream search results into R data objects.
 
-[EARTHDATA STAC CATALOGS](https://radiantearth.github.io/stac-browser/#/external/cmr.earthdata.nasa.gov/stac/)
+For more on `earthdatalogin` visit the [`earthdatalogin` GitHub](https://github.com/boettiger-lab/earthdatalogin/) page and/or the [`earthdatalogin` documentation](https://boettiger-lab.github.io/earthdatalogin/) site. Be aware that `earthdatalogin` is under active development. 
 
-## Install earthdatalogin
+## Prerequisites
 
-Install the development version o fearthdatalogin and update terra.
+An Earthdata Login account is required to access data from NASA Earthdata. Please visit <https://urs.earthdata.nasa.gov> to register and manage your Earthdata Login account. This account is free to create and only takes a moment to set up.  
+
+
+## Learning Objectives
+
+1. How to authenticate with `earthdatalogin`
+2. How to use `earthdatalogin` to search for data using spatial and temporal filters
+3. How to explore and work with search results
+
+## Get Started
+
+### Install earthdatalogin
+
+Install the development version of earthdatalogin and update terra.
 
 ```{r eval=FALSE}
 devtools::install_github("boettiger-lab/earthdatalogin")
 install.packages("terra")
 ```
 
-## Data of interest
+You will need GDAL installed. See these instructions if you do not have it installed:  https://developers.planet.com/docs/integrations/qgis/install-qgis-gdal/
+
+You may need to install `terra` and `sf` from source to get them to use the latest GDAL installation. 
+```
+install.packages("terra", type = "source")
+install.packages("sf", type = "source")
+sf_extSoftVersion()
+```
 
 
-__GHRSST Level 4 AVHRR_OI Global Blended Sea Surface Temperature Analysis (GDS2) from NCEI__    
-This dataset is a blended (Optimal Interpolation) high resolution satellite-based gap-free sea surface temperature (SST) product that combines SST data from US, Japanese and European geostationary infrared imagers, and low-earth orbiting infrared (U.S. and European) SST data, into a single product. We will use the daily composite.
+### Import Required Packages  
 
-https://search.earthdata.nasa.gov/search?q=Blended%20Analysis%20Sea-Surface%20Temperature
+```{r}
+library(earthdatalogin)
+library(rstac)
+library(gdalcubes)
+gdalcubes_options(parallel = TRUE) 
+```
 
-## Basic Use
+### Authentication for NASA Earthdata  
 
-First let's get [NASA Earth Data Login](https://urs.earthdata.nasa.gov/) (EDL) authentication out of the way. For cloud data from almost any other STAC catalog (NOAA, USGS, Planetary Computer, etc), authentication is either unnecessary or already provided by the STAC API, but NASA EDL is special. 
+We will start by authenticating using our Earthdata Login credentials. Authentication is not necessarily needed to search for publicly available data collections in Earthdata, but is always needed to download or access data from the NASA Earthdata archives. We can use `edl_netrc()` from the `earthdatalogin` package to create a `.netrc` file that will store our credentials. 
 
+The first time you run authentication use:
+```
+edl_netrc(
+  username = default("user"),
+  password = default("password")
+)
+```
+This will save your `.netrc` file. After this you can run:
+```{r}
+edl_netrc()
+```
+
+Because the `gdalcubes` package, which we need for working with data cubes, doesn't respect global environmental variables, we use a helper utility to export those into its configuration as well.
+
+```{r}
+with_gdalcubes()
+```
+
+### Search for data  
+
+There are multiple keywords we can use to discovery data from collections. The table below contains the `short_name`, `concept_id`, and `doi` for some collections we are interested in for the tutorials today. Each of these can be 
+used to search for data or information related to the collection we are interested in.  
+
+| Shortname | Collection Concept ID | DOI |
+| --- | --- | --- |
+| MUR-JPL-L4-GLOB-v4.1 | C1996881146-POCLOUD | 10.5067/GHGMR-4FJ04 |
+| AVHRR_OI-NCEI-L4-GLOB-v2.1 | C2036881712-POCLOUD | 10.5067/GHAAO-4BC21 |
+
+How can we find the `shortname`, `concept_id`, and `doi` for collections not in the table above?. Let's take a quick detour.
+
+https://search.earthdata.nasa.gov/search
+
+#### Search by text
+
+Let's search for "GHRSST Level 4 MUR Global Foundation Sea Surface Temperature Analysis". Why this? Because we know the type of SST data we are looking for.
+
+[Link to the search](https://search.earthdata.nasa.gov/search?q=GHRSST%20Level%204%20MUR%20Global%20Foundation%20Sea%20Surface%20Temperature%20Analysis)
+
+![](images/SST_Blended_Earthdata_Search.png)
+
+If we hover over the top box, we will see an i with a circle around it. Click that. On this page, you will see the DOI. Now click "View More Info" to get to https://cmr.earthdata.nasa.gov/search/concepts/C1996881146-POCLOUD.html
+
+On that page you will see the "short name". Note the short name was also on the first search page, but was not noted as the short name.
+
+#### Search by short name
+
+```{r}
+short_name <- 'MUR-JPL-L4-GLOB-v4.1'
+```
+
+Let's set some time bounds.
+```{r}
+tbox <- c("2020-01-16", "2020-12-16")
+```
+
+```{r}
+results <- edl_search(
+    short_name = short_name,
+    version = "4.1",
+    temporal = tbox
+)
+```
+
+In this example we used the `short_name` parameter to search from our desired data set. However, there are multiple ways to specify the collection(s) we are interested in. Alternative parameters include:  
+
+- `doi` - request collection by digital object identifier (e.g., `doi` = '10.5067/GHAAO-4BC21')  
+
+**NOTE:** Each Earthdata collect has a unique `concept_id` and `doi`. This is not the case with `short_name`. A **shortname** can be associated with multiple versions of a collection. If multiple versions of a collection are publicaly available, using the `short_name` parameter with return all versions available. It is advised to use the `version` parameter in conjunction with the `short_name` parameter with searching.
+
+We can refine our search by passing more parameters that describe the spatiotemporal domain of our use case. Here, we use the `temporal` parameter to request a date range and the `bounding_box` parameter to request granules that intersect with a bounding box.  
+
+
+
+```{r}
+bbox <- c(xmin=-73.5, ymin=33.5, xmax=-43.5, ymax=43.5) 
+```
+
+
+```{r}
+results <- edl_search(
+    short_name = short_name,
+    version = "4.1",
+    temporal = tbox,
+    bounding_box = paste(bbox,collapse=",")
+)
+```
+
+
+### Working with `earthdatalogin` returns  
+
+Following the search for data, you'll likely take one of two pathways with those results. You may choose to **download** the assets that have been returned to you or you may choose to continue working with the search results within the R environment.  
+
+#### Download `earthdatalogin` results
+
+In some cases you may want to download your assets. `earthdatalogin` makes downloading the data from the search results is very easy using the `edl_download()` function. The MUR SST files are 673Gb file so I would prefer not to download. But you could.
+
+```{r eval=FALSE}
+edl_download(
+    results[1],
+    dest="test.nc"
+)
+```
+
+Let's look at a smaller dataset.
+
+```{r}
+oi <- edl_search(
+    short_name = "AVHRR_OI-NCEI-L4-GLOB-v2.1",
+    version = "2.1",
+    temporal = c("2020-01-16", "2020-01-17")
+)
+```
+
+Let's try plotting this.
 ```{r}
 library(earthdatalogin)
 # Authenticate
 edl_netrc()
 ```
 
-
-## Searching
-
-
-The packages we want
 ```{r message=FALSE}
-library(rstac)
-library(gdalcubes)
-gdalcubes_options(parallel = TRUE) 
+library(terra)
+ras <- terra::rast(oi[1], vsi=TRUE)
+plot(ras)
 ```
 
 
-### EDL Authentication
 
-As usual, we can handle this with `edl_netrc()`.  Because the `gdalcubes` package doesn't respect global environmental variables, we use a helper utility to export those into its configuration as well.
+## Conclusion
 
-```{r}
-library(earthdatalogin)
-edl_netrc()
-with_gdalcubes()
-```
+This concluded tutorial 1. You have worked with data in the cloud without downloading the data!
 
-### Search via STAC
+Next we will learn to subset the data so we can work with bigger datasets in the cloud.
 
-We will now use the `rstac` package to search one or more NASA collections for data that falls into our desired bounding box of space and time. NASA has a CMR option for searching that is more stable but this example is using STAC which is a more universal option.
-
-
-```{r}
-bbox <- c(xmin=-73.5, ymin=33.5, xmax=-43.5, ymax=43.5) 
-tbox <- c("2020-01-16", "2020-12-16")
-```
-
-```{r}
-# Find all assets from the desired catalog:
-items <- stac("https://cmr.earthdata.nasa.gov/stac/POCLOUD") |> 
-  stac_search(collections = "C2036881712-POCLOUD",
-              bbox = bbox,
-              datetime = paste(start,end, sep = "/")) |>
-  post_request() |>
-  items_fetch() |>
-  items_filter(filter_fn = \(x) {x[["eo:cloud_cover"]] < 20})
-```
-
-```{r}
-# Find all assets from the desired catalog:
-items <- stac("https://cmr.earthdata.nasa.gov/stac/POCLOUD") |> 
-  stac_search(collections = "C2036881712-POCLOUD",
-              bbox = bbox,
-              datetime = paste(start,end, sep = "/")) |>
-  post_request() |>
-  items_fetch()
-```
-
-```{r}
-edl_search(
-  short_name="AVHRR_OI-NCEI-L4-GLOB-v2.1",
-  temporal = c(start, end)
-)
-```
-
-Note that 98 features have matched our search criteria! Each feature represents a 'snapshot' image taken by the satellite as it passes by (this is a harmonized product so actually there's quite a lot of post-processing.)  Each feature thus shares the same bounding box, projection, and timestamp, but may consist of many different 'assets', different files representing the different spectral bands on the satellite camera instrument.  Each feature can potentially include quite extensive metadata about the feature, including details of instrument itself or from post-processing, such as cloud cover.  Unfortunately, Earth Data's STAC metadata tends to be quite sparse. 
-
-
-### Building a Data Cube
-
-```{r}
-# Desired data cube shape & resolution
-v = cube_view(srs = "EPSG:4326",
-              extent = list(t0 = as.character(start), 
-                            t1 = as.character(end),
-                            left = bbox[1], right = bbox[3],
-                            top = bbox[4], bottom = bbox[2]),
-              nx = 512, ny = 512, dt = "P1M")
-```
-
-RGB bands + cloud cover mask
-
-```{r}
-col <- stac_image_collection(items$features, 
-                             asset_names = c("B02", "B03", "B04", "Fmask"))
-```
-
-Use a cloud mask. See [HLS User Guide](https://lpdaac.usgs.gov/documents/1326/HLS_User_Guide_V2.pdf).
-
-```{r}
-cloud_mask <- image_mask("Fmask", values=1)
-```
-
-### Plot
-
-This takes awhile. So far we have not downloaded anything. We have been working with metadata about the files. Now we do the work which involves server-side subsetting and some operations. We download on the part that we need.
-```{r}
-raster_cube(col, v, mask=cloud_mask) |>
-  select_bands(c("B02","B03", "B04")) |>
-  plot(rgb=3:1)
-```

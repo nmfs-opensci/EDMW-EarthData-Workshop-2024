@@ -6,6 +6,79 @@ format:
 ---
 
 
-## Summary
+```{r}
+edl_netrc()
+with_gdalcubes()
+```
 
-Need to make a R version of the Python code.
+```{r}
+short_name <- 'MUR-JPL-L4-GLOB-v4.1'
+bbox <- c(xmin=-73.5, ymin=33.5, xmax=-43.5, ymax=43.5) 
+tbox <- c("2020-01-16", "2020-12-16")
+
+results <- edl_search(
+    short_name = short_name,
+    version = "4.1",
+    temporal = tbox,
+    bounding_box = paste(bbox,collapse=",")
+)
+```
+
+## Cropping images
+
+```{r}
+library(terra)
+ras <- terra::rast(results[1], vsi=TRUE)
+e <- ext(c(-75.5, -73.5,  33.5, 35.5 ))
+rc <- crop(ras, e)
+plot(rc[[c(1, 2)]])
+```
+
+## STOP NOT WORKED BELOW YET
+
+#### Explore `earthdatalogin` search response
+
+`results` is a vector of urls to the netCDF files.
+```{r}
+results[1:3]
+```
+Notice it will start with `https:` or `s3:`. The former is a slower from of access while the latter allows faster access, like having a cloud bucket attached as a drive to your browser.
+
+```{r}
+length(results)
+```
+
+```{r}
+r <- terra::rast(results[1], vsi=TRUE)
+```
+
+#### Open results in a data cube
+
+Based on: https://boettiger-lab.github.io/nasa-topst-env-justice/tutorials/R/2-earthdata.html
+
+Unfortunately these netcdf files lack appropriate metadata (projection, extent) that GDAL expects. We can provide this manually using the GDAL VRT mechanism:
+```{r}
+vrt <- function(url) {
+  prefix <-  "vrt://NETCDF:/vsicurl/"
+  suffix <- ":analysed_sst?a_srs=OGC:CRS84&a_ullr=-180,90,180,-90"
+  paste0(prefix, url, suffix)
+}
+
+# date associated with each file
+url_dates <- as.Date(gsub(".*(\\d{8})\\d{6}.*", "\\1", results), format="%Y%m%d")
+```
+
+
+## Conclusions
+
+Some really cool things just happened here! Not only were we able to seamlessly stream our `earthaccess` search results into a `xarray` `dataset` using the `open_mfdataset()` (multi-file) method, but `earthaccess` determined that we were working from within AWS us-west-2 and accessed the data via direct S3 access! We didn't have to create a session or a filesystem to authenticate and connect to the data. `earthaccess` did this for us using the `auth` object we created at the beginning of this tutorial. If we were not working in AWS us-west-2, `earthaccess` would "automagically" switch to accessing the data via the HTTPS endpoints and would again handle the authentication for us.
+
+
+---
+
+## Resources  
+
+- NASA’s [Common Metadata Repository (CMR) API](https://cmr.earthdata.nasa.gov/search/site/docs/search/api.html)   
+- [`earthaccess` repository](https://github.com/nsidc/earthaccess)
+- [`earthaccess` documentation](https://nsidc.github.io/earthaccess/)
+- [Earthdata Search](https://search.earthdata.nasa.gov/search)
