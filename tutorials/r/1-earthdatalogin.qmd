@@ -22,28 +22,10 @@ An Earthdata Login account is required to access data from NASA Earthdata. Pleas
 2. How to use `earthdatalogin` to search for data using spatial and temporal filters
 3. How to explore and work with search results
 
-## Get Started
-
-### Install earthdatalogin
-
-Install the development version of earthdatalogin and update terra.
-
-```{r eval=FALSE}
-devtools::install_github("boettiger-lab/earthdatalogin")
-install.packages("terra")
-```
-
-You will need GDAL installed. See these instructions if you do not have it installed:  https://developers.planet.com/docs/integrations/qgis/install-qgis-gdal/
-
-You may need to install `terra` and `sf` from source to get them to use the latest GDAL installation. 
-```
-install.packages("terra", type = "source")
-install.packages("sf", type = "source")
-sf_extSoftVersion()
-```
-
 
 ### Import Required Packages  
+
+*Note: See the set-up tab (in left nav bar) for instructions on getting set up on your own computer.*
 
 ```{r}
 library(earthdatalogin)
@@ -159,6 +141,9 @@ edl_download(
 )
 ```
 
+#### Work in the cloud
+
+We do not have to download the data to work with it or at least not until we need to compute with it or plot it.
 Let's look at a smaller dataset.
 
 ```{r}
@@ -169,7 +154,7 @@ oi <- edl_search(
 )
 ```
 
-Let's try plotting this.
+Let's try plotting this. I am going to authenticate again just to make sure my token did not expire.
 ```{r}
 library(earthdatalogin)
 # Authenticate
@@ -186,7 +171,7 @@ plot(ras)
 
 ## Conclusion
 
-This concluded tutorial 1. You have worked with data in the cloud without downloading the data!
+This concludes tutorial 1. You have worked with remote-sensing data in the cloud and plotted it. 
 
-Next we will learn to subset the data so we can work with bigger datasets in the cloud.
+Next we will learn to subset the data so we can work with bigger datasets in the cloud without downloading the whole dataset.
 

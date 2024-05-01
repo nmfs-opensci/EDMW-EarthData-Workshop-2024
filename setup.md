@@ -24,6 +24,30 @@ Once you have submitted your GitHub username and have been accepted as a member 
 
 * home directory is yours and no one else can see it. To share files, you can connect to a GitHub repository or use the `shared` directory. Everyone can read and write to this directory. Please don't delete content that is not your own.
 
+# Setting up on your computer
+
+Here are instructions for installing on your own computer.
+
+Install the development version of earthdatalogin and update terra.
+
+```{r eval=FALSE}
+devtools::install_github("boettiger-lab/earthdatalogin")
+install.packages("terra")
+```
+
+You will need GDAL installed. See these instructions if you do not have it installed:  https://developers.planet.com/docs/integrations/qgis/install-qgis-gdal/
+
+You may need to install `terra` and `sf` from source to get them to use the latest GDAL installation. 
+```
+install.packages("terra", type = "source")
+install.packages("sf", type = "source")
+sf_extSoftVersion()
+```
+
+The environment we are using today is the `py-rocket-geospatial` image. This is part of work on a [Data Science Docker Stack](https://github.com/nmfs-opensci/container-images) for NOAA Fisheries.
+
+
+
 # To push to GitHub
 
 This is optional if you want to save your work.
