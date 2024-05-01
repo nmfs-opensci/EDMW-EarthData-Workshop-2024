@@ -501,7 +501,7 @@
   {
     "objectID": "tutorials/python/1-earthaccess.html#summary",
     "href": "tutorials/python/1-earthaccess.html#summary",
-    "title": "Data discovery with earthaccess",
+    "title": "Earthdata Search and Discovery",
     "section": "Summary",
     "text": "Summary\nIn this example we will use the earthaccess library to search for data collections from NASA Earthdata. earthaccess is a Python library that simplifies data discovery and access to NASA Earth science data by providing an abstraction layer for NASA’s Common Metadata Repository (CMR) API Search API. The library makes searching for data more approachable by using a simpler notation instead of low level HTTP queries. earthaccess takes the trouble out of Earthdata Login authentication, makes search easier, and provides a stream-line way to download or stream search results into an xarray object.\nFor more on earthaccess visit the earthaccess GitHub page and/or the earthaccess documentation site. Be aware that earthaccess is under active development.",
     "crumbs": [
@@ -514,7 +514,7 @@
   {
     "objectID": "tutorials/python/1-earthaccess.html#prerequisites",
     "href": "tutorials/python/1-earthaccess.html#prerequisites",
-    "title": "Data discovery with earthaccess",
+    "title": "Earthdata Search and Discovery",
     "section": "Prerequisites",
     "text": "Prerequisites\nAn Earthdata Login account is required to access data from NASA Earthdata. Please visit https://urs.earthdata.nasa.gov to register and manage your Earthdata Login account. This account is free to create and only takes a moment to set up.",
     "crumbs": [
@@ -525,11 +525,11 @@
     ]
   },
   {
-    "objectID": "tutorials/python/1-earthaccess.html#learning-objectives",
-    "href": "tutorials/python/1-earthaccess.html#learning-objectives",
-    "title": "Data discovery with earthaccess",
-    "section": "Learning Objectives",
-    "text": "Learning Objectives\n\nHow to authenticate with earthaccess\nHow to use earthaccess to search for data using spatial and temporal filters\nHow to explore and work with search results",
+    "objectID": "tutorials/python/1-earthaccess.html#get-started",
+    "href": "tutorials/python/1-earthaccess.html#get-started",
+    "title": "Earthdata Search and Discovery",
+    "section": "Get Started",
+    "text": "Get Started\n\nImport Required Packages\n\nimport earthaccess \nfrom pprint import pprint\nimport xarray as xr\nimport geopandas as gpd\n\n\nimport os\nos.environ[\"HOME\"] = \"/home/jovyan\"\n\n\nauth = earthaccess.login()\n# are we authenticated?\nif not auth.authenticated:\n    # ask for credentials and persist them in a .netrc file\n    auth.login(strategy=\"interactive\", persist=True)\n\n\n\nSearch for data\nThere are multiple keywords we can use to discovery data from collections. The table below contains the short_name, concept_id, and doi for some collections we are interested in for other exercises. Each of these can be used to search for data or information related to the collection we are interested in.\n\n\n\n\n\n\n\n\nShortname\nCollection Concept ID\nDOI\n\n\n\n\nMUR-JPL-L4-GLOB-v4.1\nC1996881146-POCLOUD\n10.5067/GHGMR-4FJ04\n\n\nAVHRR_OI-NCEI-L4-GLOB-v2.1\nC2036881712-POCLOUD\n10.5067/GHAAO-4BC21\n\n\n\nHow can we find the shortname, concept_id, and doi for collections not in the table above?. Let’s take a quick detour.\nhttps://search.earthdata.nasa.gov/search\n\nSearch by collection\n\ncollection_id = 'C1996881146-POCLOUD'\n\n\nresults = earthaccess.search_data(\n    concept_id = collection_id,\n    cloud_hosted = True,\n    count = 10    # Restricting to 10 records returned\n)\n\nGranules found: 8002\n\n\nIn this example we used the concept_id parameter to search from our desired collection. However, there are multiple ways to specify the collection(s) we are interested in. Alternative parameters include:\n\ndoi - request collection by digital object identifier (e.g., doi = ‘10.5067/GHGMR-4FJ04’)\n\nshort_name - request collection by CMR shortname (e.g., short_name = ‘MUR-JPL-L4-GLOB-v4.1’)\n\nNOTE: Each Earthdata collection has a unique concept_id and doi. This is not the case with short_name. A shortname can be associated with multiple versions of a collection. If multiple versions of a collection are publicaly available, using the short_name parameter with return all versions available. It is advised to use the version parameter in conjunction with the short_name parameter with searching.\nWe can refine our search by passing more parameters that describe the spatiotemporal domain of our use case. Here, we use the temporal parameter to request a date range and the bounding_box parameter to request granules that intersect with a bounding box.\nFor our bounding box, we need the xmin, ymin, xmax, ymax and we will assign this to bbox. We will assign our start date and end date to a variable named date_range\n\ndate_range = (\"2020-01-16\", \"2020-12-16\")\n# (xmin=-73.5, ymin=33.5, xmax=-43.5, ymax=43.5)\nbbox = (-73.5, 33.5, -43.5, 43.5)\n\n\nresults = earthaccess.search_data(\n    concept_id = collection_id,\n    cloud_hosted = True,\n    temporal = date_range,\n    bounding_box = bbox,\n)\n\nGranules found: 336\n\n\n\nThe short_name and concept_id search parameters can be used to request one or multiple collections per request, but the doi parameter can only request a single collection.\n&gt; concept_ids = [‘C2723754864-GES_DISC’, ‘C1646609808-NSIDC_ECS’]\n\nUse the cloud_hosted search parameter only to search for data assets available from NASA’s Earthdata Cloud.\nThere are even more search parameters that can be passed to help refine our search, however those parameters do have to be populated in the CMR record to be leveraged. A non exhaustive list of examples are below:\n\nday_night_flag = 'day'\n\ncloud_cover = (0, 10)\n\n\n\n# col_ids = ['C2723754864-GES_DISC', 'C1646609808-NSIDC_ECS', 'C2531308461-NSIDC_ECS', 'C2537927247-NSIDC_ECS']    # Specify a list of collections to pass to the search\n\n# results = earthaccess.search_data(\n#     concept_id = col_ids,\n#     #cloud_hosted = True,\n#     temporal = date_range,\n#     bounding_box = bbox,\n# )\n\n\n\n\nWorking with earthaccess returns\nFollowing the search for data, you’ll likely take one of two pathways with those results. You may choose to download the assets that have been returned to you or you may choose to continue working with the search results within the Python environment.\n\nDownload earthaccess results\nIn some cases you may want to download your assets. earthaccess makes downloading the data from the search results very easy using the earthaccess.download() function. The MUR SST files are very large so we won’t run this code.\ndownloaded_files = earthaccess.download( results[0:9], local_path=‘../data’, )\nearthaccess does a lot of heavy lifting for us. It identifies the downloadable links, passes our Earthdata Login credentials, and saves the files with the proper names.\n\n\nWork in the cloud\nWe do not have to download the data to work with it or at least not until we need to compute with it or plot it. Let’s look at a smaller dataset.\n\nresults = earthaccess.search_data(\n    short_name = \"AVHRR_OI-NCEI-L4-GLOB-v2.1\",\n    version = \"2.1\",\n    cloud_hosted = True,\n    temporal = date_range,\n    bounding_box = bbox,\n)\n\nGranules found: 337\n\n\n\ntype(results[0])\n\nearthaccess.results.DataGranule\n\n\n\nresults[0]\n\n\n    \n            \n            \n    \n      \n        \n          \n            Data: 20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc\n            Size: 0.99 MB\n            Cloud Hosted: True\n          \n          \n            \n          \n        \n      \n    \n    \n\n\nThe data_links() methods gets us the url to the data. The data_links() method can also be used to get the s3 URI when we want to perform direct s3 access of the data in the cloud. To get the s3 URI, pass access = 'direct' to the method. Note, for NASA data, you need to be in AWS us-west-2 for direct access to work.\n\nresults[0].data_links()\n\n['https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc']\n\n\nWe can pass or read the data url into libraries like xarray, rioxarray, or gdal, but earthaccess has a built-in module for easily reading these data links in. We use earthaccess’s open() method make a connection the cloud resource so we can work with the files. To get the first file, we use results[0:1].\n\nfileset = earthaccess.open(results[0:1])\n\nOpening 1 granules, approx size: 0.0 GB\n\n\n\n\n\n\n\n\n\n\n\n\nds = xr.open_dataset(fileset[0])\nds\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n&lt;xarray.Dataset&gt; Size: 17MB\nDimensions:           (lat: 720, lon: 1440, time: 1, nv: 2)\nCoordinates:\n  * lat               (lat) float32 3kB -89.88 -89.62 -89.38 ... 89.62 89.88\n  * lon               (lon) float32 6kB -179.9 -179.6 -179.4 ... 179.6 179.9\n  * time              (time) datetime64[ns] 8B 2020-01-15\nDimensions without coordinates: nv\nData variables:\n    lat_bnds          (lat, nv) float32 6kB ...\n    lon_bnds          (lon, nv) float32 12kB ...\n    analysed_sst      (time, lat, lon) float32 4MB ...\n    analysis_error    (time, lat, lon) float32 4MB ...\n    mask              (time, lat, lon) float32 4MB ...\n    sea_ice_fraction  (time, lat, lon) float32 4MB ...\nAttributes: (12/47)\n    Conventions:                CF-1.6, ACDD-1.3\n    title:                      NOAA/NCEI 1/4 Degree Daily Optimum Interpolat...\n    id:                         NCEI-L4LRblend-GLOB-AVHRR_OI\n    references:                 Reynolds, et al.(2009) What is New in Version...\n    institution:                NOAA/NESDIS/NCEI\n    creator_name:               NCEI Products and Services\n    ...                         ...\n    Metadata_Link.:             http://doi.org/10.7289/V5SQ8XB5\n    keywords:                   Oceans&gt;Ocean Temperature&gt;Sea Surface Temperature\n    keywords_vocabulary:        NASA Global Change Master Directory (GCMD) Sc...\n    standard_name_vocabulary:   CF Standard Name Table v29\n    processing_level:           L4\n    cdm_data_type:              Gridxarray.DatasetDimensions:lat: 720lon: 1440time: 1nv: 2Coordinates: (3)lat(lat)float32-89.88 -89.62 ... 89.62 89.88long_name :latitudestandard_name :latitudeaxis :Yunits :degrees_northvalid_min :-90.0valid_max :90.0bounds :lat_bndscomment :Uniform grid with centers from -89.875 to 89.875 by 0.25 degreesarray([-89.875, -89.625, -89.375, ...,  89.375,  89.625,  89.875],\n      dtype=float32)lon(lon)float32-179.9 -179.6 ... 179.6 179.9long_name :longitudestandard_name :longitudeaxis :Xunits :degrees_eastvalid_min :-180.0valid_max :180.0bounds :lon_bndscomment :Uniform grid with centers from -179.875 to 179.875 by 0.25 degreesarray([-179.875, -179.625, -179.375, ...,  179.375,  179.625,  179.875],\n      dtype=float32)time(time)datetime64[ns]2020-01-15long_name :reference time of sst fieldstandard_name :timeaxis :Tcomment :Nominal time because observations are from different sources and are made at different times of the day.array(['2020-01-15T00:00:00.000000000'], dtype='datetime64[ns]')Data variables: (6)lat_bnds(lat, nv)float32...units :degrees_northcomment :This variable defines the latitude values at the north and south bounds of every 0.25-degree pixel.[1440 values with dtype=float32]lon_bnds(lon, nv)float32...units :degrees_eastcomment :This variable defines the longitude values at the west and east bounds of every 0.25-degree pixel.[2880 values with dtype=float32]analysed_sst(time, lat, lon)float32...long_name :analysed sea surface temperaturestandard_name :sea_surface_temperatureunits :kelvinvalid_min :-300valid_max :4500source :UNKNOWN,ICOADS SHIPS,ICOADS BUOYS,ICOADS argos,MMAB_50KM-NCEP-ICEcomment :Single-sensor Pathfinder 5.0/5.1 AVHRR SSTs used until 2005; two AVHRRs at a time are used 2007 onward. Sea ice and in-situ data used also are near real time quality for recent period. SST (bulk) is at ambiguous depth because multiple types of observations are used.[1036800 values with dtype=float32]analysis_error(time, lat, lon)float32...long_name :estimated error standard deviation of analysed_sstunits :kelvinvalid_min :0valid_max :32767comment :Sum of bias, sampling and random errors.[1036800 values with dtype=float32]mask(time, lat, lon)float32...long_name :sea/land field composite maskvalid_min :1valid_max :31flag_masks :[ 1  2  4  8 16]flag_meanings :water land optional_lake_surface sea_ice optional_river_surfacesource :RWReynolds_landmask_V1.0comment :Several masks distinguishing between water, land and ice.[1036800 values with dtype=float32]sea_ice_fraction(time, lat, lon)float32...long_name :sea ice area fractionstandard_name :sea_ice_area_fractionunits :1valid_min :0valid_max :100source :MMAB_50KM-NCEP-ICEcomment :7-day median filtered. Switch from 25 km NASA team ice (http://nsidc.org/data/nsidc-0051.html) to 50 km NCEP ice (http://polar.ncep.noaa.gov/seaice) after 2004 results in artificial increase in ice coverage.[1036800 values with dtype=float32]Indexes: (3)latPandasIndexPandasIndex(Index([-89.875, -89.625, -89.375, -89.125, -88.875, -88.625, -88.375, -88.125,\n       -87.875, -87.625,\n       ...\n        87.625,  87.875,  88.125,  88.375,  88.625,  88.875,  89.125,  89.375,\n        89.625,  89.875],\n      dtype='float32', name='lat', length=720))lonPandasIndexPandasIndex(Index([-179.875, -179.625, -179.375, -179.125, -178.875, -178.625, -178.375,\n       -178.125, -177.875, -177.625,\n       ...\n        177.625,  177.875,  178.125,  178.375,  178.625,  178.875,  179.125,\n        179.375,  179.625,  179.875],\n      dtype='float32', name='lon', length=1440))timePandasIndexPandasIndex(DatetimeIndex(['2020-01-15'], dtype='datetime64[ns]', name='time', freq=None))Attributes: (47)Conventions :CF-1.6, ACDD-1.3title :NOAA/NCEI 1/4 Degree Daily Optimum Interpolation Sea Surface Temperature (OISST) Analysis, Version 2 - Finalid :NCEI-L4LRblend-GLOB-AVHRR_OIreferences :Reynolds, et al.(2009) What is New in Version 2. Available at http://www.ncdc.noaa.gov/sites/default/files/attachments/Reynolds2009_oisst_daily_v02r00_version2-features.pdf;Daily 1/4 Degree Optimum Interpolation Sea Surface Temperature (OISST) - Climate Algorithm Theoretical Basis Document, NOAA Climate Data Record Program CDRP-ATBD-0303 Rev. 2 (2013). Available at http://www1.ncdc.noaa.gov/pub/data/sds/cdr/CDRs/Sea_Surface_Temperature_Optimum_Interpolation/AlgorithmDescription.pdf.institution :NOAA/NESDIS/NCEIcreator_name :NCEI Products and Servicescreator_email :ncei.orders@noaa.govcreator_url :http://www.ncdc.noaa.gov/oisstgds_version_id :v2.0r5netcdf_version_id :4.3.2date_created :20200211T000000Zproduct_version :Version 2.0history :2015-10-28: Modified format and attributes with NCO to match the GDS 2.0 rev 5 specification.spatial_resolution :0.25 degreestart_time :20200115T000000Zstop_time :20200116T000000Zwesternmost_longitude :-179.875easternmost_longitude :179.875southernmost_latitude :-89.875northernmost_latitude :89.875file_quality_level :3source :UNKNOWN,ICOADS SHIPS,ICOADS BUOYS,ICOADS argos,MMAB_50KM-NCEP-ICEcomment :The daily OISST version 2.0 data contained in this file are the same as those in the equivalent GDS 1.0 file.summary :NOAAs 1/4-degree Daily Optimum Interpolation Sea Surface Temperature (OISST) (sometimes referred to as Reynolds SST, which however also refers to earlier products at different resolution), currently available as version 2, is created by interpolating and extrapolating SST observations from different sources, resulting in a smoothed complete field. The sources of data are satellite (AVHRR) and in situ platforms (i.e., ships and buoys), and the specific datasets employed may change over time. At the marginal ice zone, sea ice concentrations are used to generate proxy SSTs.  A preliminary version of this file is produced in near-real time (1-day latency), and then replaced with a final version after 2 weeks. Note that this is the AVHRR-ONLY DOISST, available from Oct 1981, but there is a companion DOISST product that includes microwave satellite data, available from June 2002.acknowledgement :This project was supported in part by a grant from the NOAA Climate Data Record (CDR) Program. Cite this dataset when used as a source. The recommended citation and DOI depends on the data center from which the files were acquired. For data accessed from NOAA in near real-time or from the GHRSST LTSRF, cite as: Richard W. Reynolds, Viva F. Banzon, and NOAA CDR Program (2008): NOAA Optimum Interpolation 1/4 Degree Daily Sea Surface Temperature (OISST) Analysis, Version 2. [indicate subset used]. NOAA National Centers for Environmental Information. http://doi.org/doi:10.7289/V5SQ8XB5 [access date]. For data accessed from the NASA PO.DAAC, cite as: Richard W. Reynolds, Viva F. Banzon, and NOAA CDR Program (2008): NOAA Optimum Interpolation 1/4 Degree Daily Sea Surface Temperature (OISST) Analysis, Version 2. [indicate subset used]. PO.DAAC, CA, USA. http://doi.org/10.5067/GHAAO-4BC01 [access date].license :No constraints on data access or use.project :Group for High Resolution Sea Surface Temperaturepublisher_name :NCEI Products and Servicespublisher_email :ncei.orders@noaa.govpublisher_url :http://www.ncdc.noaa.gov/oisstnaming_authority :org.ghrssttime_coverage_start :20200115T000000Ztime_coverage_end :20200116T000000Zplatform :sensor :uuid :15459239-4bd8-4e2c-801a-9c515da7af42geospatial_lat_units :degrees_northgeospatial_lat_resolution :0.25geospatial_lon_units :degrees_eastgeospatial_lon_resolution :0.25Metadata_Conventions :ACDD-1.3Metadata_Link. :http://doi.org/10.7289/V5SQ8XB5keywords :Oceans&gt;Ocean Temperature&gt;Sea Surface Temperaturekeywords_vocabulary :NASA Global Change Master Directory (GCMD) Science Keywords, Version 8.1standard_name_vocabulary :CF Standard Name Table v29processing_level :L4cdm_data_type :Grid\n\n\n\nds['analysed_sst'].plot()",
     "crumbs": [
       "JupyterHub",
       "Tutorials",
@@ -538,11 +538,11 @@
     ]
   },
   {
-    "objectID": "tutorials/python/1-earthaccess.html#get-started",
-    "href": "tutorials/python/1-earthaccess.html#get-started",
-    "title": "Data discovery with earthaccess",
-    "section": "Get Started",
-    "text": "Get Started\n\nImport Required Packages\n\nimport earthaccess \nfrom pprint import pprint\nimport xarray as xr\nimport geopandas as gpd\n\n\nimport os\nos.environ[\"HOME\"] = \"/home/jovyan\"\n\n\nauth = earthaccess.login()\n# are we authenticated?\nif not auth.authenticated:\n    # ask for credentials and persist them in a .netrc file\n    auth.login(strategy=\"interactive\", persist=True)\n\n\n\nSearch for data\nThere are multiple keywords we can use to discovery data from collections. The table below contains the short_name, concept_id, and doi for some collections we are interested in for other exercises. Each of these can be used to search for data or information related to the collection we are interested in.\n\n\n\nShortname\nCollection Concept ID\nDOI\n\n\n\n\nGPM_3IMERGDF\nC2723754864-GES_DISC\n10.5067/GPM/IMERGDF/DAY/07\n\n\nMOD10C1\nC1646609808-NSIDC_ECS\n10.5067/MODIS/MOD10C1.061\n\n\nSPL4SMGP\nC2531308461-NSIDC_ECS\n10.5067/EVKPQZ4AFC4D\n\n\nSPL4SMAU\nC2537927247-NSIDC_ECS\n10.5067/LWJ6TF5SZRG3\n\n\n\nBut wait…You may be asking “how can we find the shortname, concept_id, and doi for collections not in the table above?”. Let’s take a quick detour.\nhttps://search.earthdata.nasa.gov/search?q=GPM_3IMERGDF\n\nSearch by collection\n\n#collection_id = 'C2723754864-GES_DISC'\ncollection_id = 'C1598621096-GES_DISC'\n\n\nresults = earthaccess.search_data(\n    concept_id = collection_id,\n    cloud_hosted = True,\n    count = 10    # Restricting to 10 records returned\n)\n\nGranules found: 7792\n\n\nIn this example we used the concept_id parameter to search from our desired collection. However, there are multiple ways to specify the collection(s) we are interested in. Alternative parameters include:\n\ndoi - request collection by digital object identifier (e.g., doi = ‘10.5067/GPM/IMERGDF/DAY/07’)\n\nshort_name - request collection by CMR shortname (e.g., short_name = ‘GPM_3IMERGDF’)\n\nNOTE: Each Earthdata collect has a unique concept_id and doi. This is not the case with short_name. A shortname can be associated with multiple versions of a collection. If multiple versions of a collection are publicaly available, using the short_name parameter with return all versions available. It is advised to use the version parameter in conjunction with the short_name parameter with searching.\nWe can refine our search by passing more parameters that describe the spatiotemporal domain of our use case. Here, we use the temporal parameter to request a date range and the bounding_box parameter to request granules that intersect with a bounding box.\nFor our bounding box, we are going to read in a GeoJSON file containing a single feature and extract the coordinate pairs for the southeast corner and the northwest corner (or lowerleft and upperright corners) of the bounding box around the feature.\n\ninGeojson = gpd.read_file('../../NOAAHackDay-Dec-2023/data/sf_to_sierranvmt.geojson')\n\nERROR 1: PROJ: proj_create_from_database: Open of /srv/conda/envs/notebook/share/proj failed\n\n\nDriverError: ../../NOAAHackDay-Dec-2023/data/sf_to_sierranvmt.geojson: No such file or directory\n\n\n\nxmin, ymin, xmax, ymax = inGeojson.total_bounds\n\nWe will assign our start date and end date to a variable named date_range and we’ll assign the southeast and the northwest corner coordinates to a variable named bbox to be passed to our earthaccess search request.\n\n#date_range = (\"2022-11-19\", \"2023-04-06\")\ndate_range = (\"2019-11-19\", \"2019-12-06\")\nbbox = (xmin, ymin, xmax, ymax)\n\n\nresults = earthaccess.search_data(\n    concept_id = collection_id,\n    cloud_hosted = True,\n    temporal = date_range,\n    bounding_box = bbox,\n)\n\nGranules found: 18\n\n\n\nThe short_name and concept_id search parameters can be used to request one or multiple collections per request, but the doi parameter can only request a single collection.\n&gt; concept_ids = [‘C2723754864-GES_DISC’, ‘C1646609808-NSIDC_ECS’]\n\nUse the cloud_hosted search parameter only to search for data assets available from NASA’s Earthdata Cloud.\nThere are even more search parameters that can be passed to help refine our search, however those parameters do have to be populated in the CMR record to be leveraged. A non exhaustive list of examples are below:\n\nday_night_flag = 'day'\n\ncloud_cover = (0, 10)\n\n\n\n# col_ids = ['C2723754864-GES_DISC', 'C1646609808-NSIDC_ECS', 'C2531308461-NSIDC_ECS', 'C2537927247-NSIDC_ECS']    # Specify a list of collections to pass to the search\n\n# results = earthaccess.search_data(\n#     concept_id = col_ids,\n#     #cloud_hosted = True,\n#     temporal = date_range,\n#     bounding_box = bbox,\n# )\n\n\n\n\nWorking with earthaccess returns\nearthaccess provides several convenience methods to help streamline processes that historically have be painful when done using traditional methods. Following the search for data, you’ll likely take one of two pathways with those results. You may choose to download the assets that have been returned to you or you may choose to continue working with the search results within the Python environment.\n\nDownload earthaccess results\nIn some cases you may want to download your assets. earthaccess makes downloading the data from the search results very easy using the earthaccess.download() function.\n\ndownloaded_files = earthaccess.download(\n    results[0:9],\n    local_path='../../NOAAHackDay-Dec-2023/data',\n)\n\n Getting 9 granules, approx download size: 0.27 GB\n\n\n\n\n\n\n\n\n\n\n\nearthaccess did a lot of heavy lifting for us. It identified the downloadable links, passed our Earthdata Login credentials, and save off the file with the proper name. Amazing right!?\nWe’re going to remove those files to keep our space clean.\n\n!rm ../../NOAAHackDay-Dec-2023/data/*.nc4\n\n\n\nExplore earthaccess search response\n\nprint(f'The results variable is a {type(results)} of {type(results[0])}')\n\nThe results variable is a &lt;class 'list'&gt; of &lt;class 'earthaccess.results.DataGranule'&gt;\n\n\n\nlen(results)\n\n18\n\n\nWe can explore the first item (earthaccess.results.DataGranule) in our list.\n\nitem = results[0]\ntype(item)\n\nearthaccess.results.DataGranule\n\n\nEach item contains three keys that can be used to explore the item\n\nitem.keys()\n\ndict_keys(['meta', 'umm', 'size'])\n\n\n\nitem['umm']\n\n{'RelatedUrls': [{'URL': 'https://data.gesdisc.earthdata.nasa.gov/data/GPM_L3/GPM_3IMERGDF.06/2019/11/3B-DAY.MS.MRG.3IMERG.20191119-S000000-E235959.V06.nc4', 'Type': 'GET DATA', 'Description': 'Download 3B-DAY.MS.MRG.3IMERG.20191119-S000000-E235959.V06.nc4'}, {'URL': 's3://gesdisc-cumulus-prod-protected/GPM_L3/GPM_3IMERGDF.06/2019/11/3B-DAY.MS.MRG.3IMERG.20191119-S000000-E235959.V06.nc4', 'Type': 'GET DATA VIA DIRECT ACCESS', 'Description': 'This link provides direct download access via S3 to the granule'}, {'URL': 'https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2019/11/3B-DAY.MS.MRG.3IMERG.20191119-S000000-E235959.V06.nc4', 'Type': 'USE SERVICE API', 'Subtype': 'OPENDAP DATA', 'Description': 'The OPENDAP location for the granule.', 'MimeType': 'application/x-netcdf-4'}, {'URL': 'https://data.gesdisc.earthdata.nasa.gov/s3credentials', 'Type': 'VIEW RELATED INFORMATION', 'Description': 'api endpoint to retrieve temporary credentials valid for same-region direct s3 access'}], 'SpatialExtent': {'HorizontalSpatialDomain': {'Geometry': {'BoundingRectangles': [{'WestBoundingCoordinate': -180.0, 'EastBoundingCoordinate': 180.0, 'NorthBoundingCoordinate': 90.0, 'SouthBoundingCoordinate': -90.0}]}}}, 'ProviderDates': [{'Date': '2020-02-27T16:10:05.000Z', 'Type': 'Insert'}, {'Date': '2020-02-27T16:10:05.000Z', 'Type': 'Update'}], 'CollectionReference': {'ShortName': 'GPM_3IMERGDF', 'Version': '06'}, 'DataGranule': {'DayNightFlag': 'Unspecified', 'Identifiers': [{'Identifier': '3B-DAY.MS.MRG.3IMERG.20191119-S000000-E235959.V06.nc4', 'IdentifierType': 'ProducerGranuleId'}], 'ProductionDateTime': '2020-02-27T16:10:05.000Z', 'ArchiveAndDistributionInformation': [{'Name': 'Not provided', 'Size': 29.92357635498047, 'SizeUnit': 'MB'}]}, 'TemporalExtent': {'RangeDateTime': {'BeginningDateTime': '2019-11-19T00:00:00.000Z', 'EndingDateTime': '2019-11-19T23:59:59.999Z'}}, 'GranuleUR': 'GPM_3IMERGDF.06:3B-DAY.MS.MRG.3IMERG.20191119-S000000-E235959.V06.nc4', 'MetadataSpecification': {'URL': 'https://cdn.earthdata.nasa.gov/umm/granule/v1.6.5', 'Name': 'UMM-G', 'Version': '1.6.5'}}\n\n\n\n\nGet data URLs / S3 URIs\nGet links to data. The data_links() method is used to return the URL(s)/data link(s) for the item. By default the method returns the HTTPS URL to download or access the item.\n\nitem.data_links()\n\n['https://data.gesdisc.earthdata.nasa.gov/data/GPM_L3/GPM_3IMERGDF.06/2019/11/3B-DAY.MS.MRG.3IMERG.20191119-S000000-E235959.V06.nc4']\n\n\nThe data_links() method can also be used to get the s3 URI when we want to perform direct s3 access of the data in the cloud. To get the s3 URI, pass access = 'direct' to the method.\n\nitem.data_links(access='direct')\n\n['s3://gesdisc-cumulus-prod-protected/GPM_L3/GPM_3IMERGDF.06/2019/11/3B-DAY.MS.MRG.3IMERG.20191119-S000000-E235959.V06.nc4']\n\n\nIf we want to extract all of the data links from our search results and add or save them to a list, we can.\n\ndata_link_list = []\n\nfor granule in results:\n    for asset in granule.data_links(access='direct'):\n        data_link_list.append(asset)\n        \n\n\ndata_link_list[0:9]\n\n['s3://gesdisc-cumulus-prod-protected/GPM_L3/GPM_3IMERGDF.06/2019/11/3B-DAY.MS.MRG.3IMERG.20191119-S000000-E235959.V06.nc4',\n 's3://gesdisc-cumulus-prod-protected/GPM_L3/GPM_3IMERGDF.06/2019/11/3B-DAY.MS.MRG.3IMERG.20191120-S000000-E235959.V06.nc4',\n 's3://gesdisc-cumulus-prod-protected/GPM_L3/GPM_3IMERGDF.06/2019/11/3B-DAY.MS.MRG.3IMERG.20191121-S000000-E235959.V06.nc4',\n 's3://gesdisc-cumulus-prod-protected/GPM_L3/GPM_3IMERGDF.06/2019/11/3B-DAY.MS.MRG.3IMERG.20191122-S000000-E235959.V06.nc4',\n 's3://gesdisc-cumulus-prod-protected/GPM_L3/GPM_3IMERGDF.06/2019/11/3B-DAY.MS.MRG.3IMERG.20191123-S000000-E235959.V06.nc4',\n 's3://gesdisc-cumulus-prod-protected/GPM_L3/GPM_3IMERGDF.06/2019/11/3B-DAY.MS.MRG.3IMERG.20191124-S000000-E235959.V06.nc4',\n 's3://gesdisc-cumulus-prod-protected/GPM_L3/GPM_3IMERGDF.06/2019/11/3B-DAY.MS.MRG.3IMERG.20191125-S000000-E235959.V06.nc4',\n 's3://gesdisc-cumulus-prod-protected/GPM_L3/GPM_3IMERGDF.06/2019/11/3B-DAY.MS.MRG.3IMERG.20191126-S000000-E235959.V06.nc4',\n 's3://gesdisc-cumulus-prod-protected/GPM_L3/GPM_3IMERGDF.06/2019/11/3B-DAY.MS.MRG.3IMERG.20191127-S000000-E235959.V06.nc4']\n\n\nWe can pass or read these lists of data links into libraries like xarray, rioxarray, or gdal, but earthaccess has a built-in module for easily reading these data links in.\n\n\nOpen results in xarray\nWe use earthaccess’s open() method to make a connection to and open the files from our search result.\n\nfileset = earthaccess.open(results)\n\n Opening 18 granules, approx size: 0.53 GB\n\n\n\n\n\n\n\n\n\n\n\nThen we pass the fileset object to xarray.\n\nds = xr.open_mfdataset(fileset, chunks = {})\n\nSome really cool things just happened here! Not only were we able to seamlessly stream our earthaccess search results into a xarray dataset using the open_mfdataset() (multi-file) method, but earthaccess whether we were working from within AWS us-west-2 and could use direct S3 access or if not, would use https. We didn’t have to create a session or a filesystem to authenticate and connect to the data. earthaccess did this for us using the auth object we created at the beginning of this tutorial.\nLet’s take a quick lock at our xarray dataset\n\nds\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n&lt;xarray.Dataset&gt;\nDimensions:                    (time: 18, lon: 3600, lat: 1800, nv: 2)\nCoordinates:\n  * lon                        (lon) float32 -179.9 -179.8 ... 179.9 179.9\n  * lat                        (lat) float32 -89.95 -89.85 ... 89.85 89.95\n  * time                       (time) object 2019-11-19 00:00:00 ... 2019-12-...\nDimensions without coordinates: nv\nData variables:\n    precipitationCal           (time, lon, lat) float32 dask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n    precipitationCal_cnt       (time, lon, lat) int8 dask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n    precipitationCal_cnt_cond  (time, lon, lat) int8 dask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n    HQprecipitation            (time, lon, lat) float32 dask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n    HQprecipitation_cnt        (time, lon, lat) int8 dask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n    HQprecipitation_cnt_cond   (time, lon, lat) int8 dask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n    randomError                (time, lon, lat) float32 dask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n    randomError_cnt            (time, lon, lat) int8 dask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n    time_bnds                  (time, nv) object dask.array&lt;chunksize=(1, 2), meta=np.ndarray&gt;\nAttributes:\n    BeginDate:       2019-11-19\n    BeginTime:       00:00:00.000Z\n    EndDate:         2019-11-19\n    EndTime:         23:59:59.999Z\n    FileHeader:      StartGranuleDateTime=2019-11-19T00:00:00.000Z;\\nStopGran...\n    InputPointer:    3B-HHR.MS.MRG.3IMERG.20191119-S000000-E002959.0000.V06B....\n    title:           GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 ...\n    DOI:             10.5067/GPM/IMERGDF/DAY/06\n    ProductionTime:  2020-02-27T16:09:48.308Zxarray.DatasetDimensions:time: 18lon: 3600lat: 1800nv: 2Coordinates: (3)lon(lon)float32-179.9 -179.8 ... 179.9 179.9units :degrees_eastlong_name :Longitudearray([-179.95   , -179.84999, -179.75   , ...,  179.75002,  179.85002,\n        179.95   ], dtype=float32)lat(lat)float32-89.95 -89.85 ... 89.85 89.95units :degrees_northlong_name :Latitudearray([-89.95    , -89.85    , -89.75    , ...,  89.75    ,  89.850006,\n        89.95001 ], dtype=float32)time(time)object2019-11-19 00:00:00 ... 2019-12-...standard_name :timebounds :time_bndsarray([cftime.DatetimeJulian(2019, 11, 19, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 20, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 21, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 22, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 23, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 24, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 25, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 26, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 27, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 28, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 29, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 30, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 12, 1, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 12, 2, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 12, 3, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 12, 4, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 12, 5, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 12, 6, 0, 0, 0, 0, has_year_zero=False)],\n      dtype=object)Data variables: (9)precipitationCal(time, lon, lat)float32dask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;units :mmlong_name :Daily accumulated precipitation (combined microwave-IR) estimate\n\n\n\n\n\n\n\n\n\n\n\nArray\nChunk\n\n\n\n\nBytes\n444.95 MiB\n24.72 MiB\n\n\nShape\n(18, 3600, 1800)\n(1, 3600, 1800)\n\n\nDask graph\n18 chunks in 37 graph layers\n\n\nData type\nfloat32 numpy.ndarray\n\n\n\n\n                                                           1800 3600 18\n\n\n\n\n\n\n\n\nprecipitationCal_cnt\n\n\n(time, lon, lat)\n\n\nint8\n\n\ndask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nunits :\n\ncount\n\nlong_name :\n\nCount of all valid half-hourly precipitationCal retrievals for the day\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nArray\nChunk\n\n\n\n\nBytes\n111.24 MiB\n6.18 MiB\n\n\nShape\n(18, 3600, 1800)\n(1, 3600, 1800)\n\n\nDask graph\n18 chunks in 37 graph layers\n\n\nData type\nint8 numpy.ndarray\n\n\n\n\n                                                           1800 3600 18\n\n\n\n\n\n\n\n\nprecipitationCal_cnt_cond\n\n\n(time, lon, lat)\n\n\nint8\n\n\ndask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nunits :\n\ncount\n\nlong_name :\n\nCount of valid half-hourly precipitationCal retrievals for the day where precipitation is greater than 0\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nArray\nChunk\n\n\n\n\nBytes\n111.24 MiB\n6.18 MiB\n\n\nShape\n(18, 3600, 1800)\n(1, 3600, 1800)\n\n\nDask graph\n18 chunks in 37 graph layers\n\n\nData type\nint8 numpy.ndarray\n\n\n\n\n                                                           1800 3600 18\n\n\n\n\n\n\n\n\nHQprecipitation\n\n\n(time, lon, lat)\n\n\nfloat32\n\n\ndask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nunits :\n\nmm\n\nlong_name :\n\nDaily accumulated High Quality precipitation from all available MW sources\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nArray\nChunk\n\n\n\n\nBytes\n444.95 MiB\n24.72 MiB\n\n\nShape\n(18, 3600, 1800)\n(1, 3600, 1800)\n\n\nDask graph\n18 chunks in 37 graph layers\n\n\nData type\nfloat32 numpy.ndarray\n\n\n\n\n                                                           1800 3600 18\n\n\n\n\n\n\n\n\nHQprecipitation_cnt\n\n\n(time, lon, lat)\n\n\nint8\n\n\ndask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nunits :\n\ncount\n\nlong_name :\n\nCount of all valid half-hourly HQprecipitation retrievals for the day\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nArray\nChunk\n\n\n\n\nBytes\n111.24 MiB\n6.18 MiB\n\n\nShape\n(18, 3600, 1800)\n(1, 3600, 1800)\n\n\nDask graph\n18 chunks in 37 graph layers\n\n\nData type\nint8 numpy.ndarray\n\n\n\n\n                                                           1800 3600 18\n\n\n\n\n\n\n\n\nHQprecipitation_cnt_cond\n\n\n(time, lon, lat)\n\n\nint8\n\n\ndask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nunits :\n\ncount\n\nlong_name :\n\nCount of valid half-hourly HQprecipitation retrievals for the day where precipitation is greater than 0\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nArray\nChunk\n\n\n\n\nBytes\n111.24 MiB\n6.18 MiB\n\n\nShape\n(18, 3600, 1800)\n(1, 3600, 1800)\n\n\nDask graph\n18 chunks in 37 graph layers\n\n\nData type\nint8 numpy.ndarray\n\n\n\n\n                                                           1800 3600 18\n\n\n\n\n\n\n\n\nrandomError\n\n\n(time, lon, lat)\n\n\nfloat32\n\n\ndask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nunits :\n\nmm\n\nlong_name :\n\nDaily total error of precipitation estimate\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nArray\nChunk\n\n\n\n\nBytes\n444.95 MiB\n24.72 MiB\n\n\nShape\n(18, 3600, 1800)\n(1, 3600, 1800)\n\n\nDask graph\n18 chunks in 37 graph layers\n\n\nData type\nfloat32 numpy.ndarray\n\n\n\n\n                                                           1800 3600 18\n\n\n\n\n\n\n\n\nrandomError_cnt\n\n\n(time, lon, lat)\n\n\nint8\n\n\ndask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nunits :\n\ncount\n\nlong_name :\n\nCount of valid half-hourly randomError retrievals for the day\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nArray\nChunk\n\n\n\n\nBytes\n111.24 MiB\n6.18 MiB\n\n\nShape\n(18, 3600, 1800)\n(1, 3600, 1800)\n\n\nDask graph\n18 chunks in 37 graph layers\n\n\nData type\nint8 numpy.ndarray\n\n\n\n\n                                                           1800 3600 18\n\n\n\n\n\n\n\n\ntime_bnds\n\n\n(time, nv)\n\n\nobject\n\n\ndask.array&lt;chunksize=(1, 2), meta=np.ndarray&gt;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ncoordinates :\n\ntime nv\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nArray\nChunk\n\n\n\n\nBytes\n288 B\n16 B\n\n\nShape\n(18, 2)\n(1, 2)\n\n\nDask graph\n18 chunks in 37 graph layers\n\n\nData type\nobject numpy.ndarray\n\n\n\n\n                          2 18\n\n\n\n\n\nIndexes: (3)lonPandasIndexPandasIndex(Float64Index([ -179.9499969482422, -179.84999084472656,             -179.75,\n              -179.64999389648438,  -179.5500030517578,  -179.4499969482422,\n              -179.34999084472656,             -179.25, -179.14999389648438,\n               -179.0500030517578,\n              ...\n                179.0500030517578,  179.15000915527344,  179.25001525878906,\n                179.3500213623047,   179.4499969482422,   179.5500030517578,\n               179.65000915527344,  179.75001525878906,   179.8500213623047,\n                179.9499969482422],\n             dtype='float64', name='lon', length=3600))latPandasIndexPandasIndex(Float64Index([-89.94999694824219,  -89.8499984741211,             -89.75,\n              -89.64999389648438, -89.54999542236328, -89.44999694824219,\n               -89.3499984741211,             -89.25, -89.14999389648438,\n              -89.04999542236328,\n              ...\n               89.05000305175781,  89.15000915527344,              89.25,\n               89.35000610351562,  89.45001220703125,  89.55000305175781,\n               89.65000915527344,              89.75,  89.85000610351562,\n               89.95001220703125],\n             dtype='float64', name='lat', length=1800))timePandasIndexPandasIndex(CFTimeIndex([2019-11-19 00:00:00, 2019-11-20 00:00:00, 2019-11-21 00:00:00,\n             2019-11-22 00:00:00, 2019-11-23 00:00:00, 2019-11-24 00:00:00,\n             2019-11-25 00:00:00, 2019-11-26 00:00:00, 2019-11-27 00:00:00,\n             2019-11-28 00:00:00, 2019-11-29 00:00:00, 2019-11-30 00:00:00,\n             2019-12-01 00:00:00, 2019-12-02 00:00:00, 2019-12-03 00:00:00,\n             2019-12-04 00:00:00, 2019-12-05 00:00:00, 2019-12-06 00:00:00],\n            dtype='object', length=18, calendar='julian', freq='D'))Attributes: (9)BeginDate :2019-11-19BeginTime :00:00:00.000ZEndDate :2019-11-19EndTime :23:59:59.999ZFileHeader :StartGranuleDateTime=2019-11-19T00:00:00.000Z;\nStopGranuleDateTime=2019-11-19T23:59:59.999ZInputPointer :3B-HHR.MS.MRG.3IMERG.20191119-S000000-E002959.0000.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S003000-E005959.0030.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S010000-E012959.0060.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S013000-E015959.0090.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S020000-E022959.0120.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S023000-E025959.0150.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S030000-E032959.0180.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S033000-E035959.0210.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S040000-E042959.0240.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S043000-E045959.0270.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S050000-E052959.0300.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S053000-E055959.0330.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S060000-E062959.0360.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S063000-E065959.0390.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S070000-E072959.0420.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S073000-E075959.0450.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S080000-E082959.0480.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S083000-E085959.0510.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S090000-E092959.0540.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S093000-E095959.0570.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S100000-E102959.0600.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S103000-E105959.0630.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S110000-E112959.0660.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S113000-E115959.0690.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S120000-E122959.0720.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S123000-E125959.0750.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S130000-E132959.0780.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S133000-E135959.0810.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S140000-E142959.0840.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S143000-E145959.0870.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S150000-E152959.0900.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S153000-E155959.0930.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S160000-E162959.0960.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S163000-E165959.0990.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S170000-E172959.1020.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S173000-E175959.1050.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S180000-E182959.1080.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S183000-E185959.1110.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S190000-E192959.1140.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S193000-E195959.1170.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S200000-E202959.1200.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S203000-E205959.1230.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S210000-E212959.1260.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S213000-E215959.1290.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S220000-E222959.1320.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S223000-E225959.1350.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S230000-E232959.1380.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S233000-E235959.1410.V06B.HDF5title :GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree (GPM_3IMERGDF)DOI :10.5067/GPM/IMERGDF/DAY/06ProductionTime :2020-02-27T16:09:48.308Z",
+    "objectID": "tutorials/python/1-earthaccess.html#conclusion",
+    "href": "tutorials/python/1-earthaccess.html#conclusion",
+    "title": "Earthdata Search and Discovery",
+    "section": "Conclusion",
+    "text": "Conclusion\nThis concludes tutorial 1. You have worked with remote-sensing data in the cloud and plotted a single file.\nNext we will learn to subset the data so we can work with bigger datasets in the cloud without downloading the whole dataset.",
     "crumbs": [
       "JupyterHub",
       "Tutorials",
@@ -553,7 +553,7 @@
   {
     "objectID": "tutorials/python/1-earthaccess.html#resources",
     "href": "tutorials/python/1-earthaccess.html#resources",
-    "title": "Data discovery with earthaccess",
+    "title": "Earthdata Search and Discovery",
     "section": "Resources",
     "text": "Resources\n\nNASA’s Common Metadata Repository (CMR) API\n\nearthaccess repository\nearthaccess documentation\nEarthdata Search",
     "crumbs": [
@@ -564,321 +564,309 @@
     ]
   },
   {
-    "objectID": "support.html#thank-you-for-inspiration-and-content",
-    "href": "support.html#thank-you-for-inspiration-and-content",
-    "title": "Acknowledgements",
-    "section": "Thank you for inspiration and content!",
-    "text": "Thank you for inspiration and content!\nThank you to the open science community that has created software, teaching resources, and workflows that we have been able to build off of and be inspired by. These include: NASA Openscapes • OceanHackWeek • SnowEx Hackweek • eScience Institute, University of Washington • ICESat-2 Hackweek • Project Jupyter • Pangeo Project • CryoCloud"
+    "objectID": "team.html#organizers-and-instructors",
+    "href": "team.html#organizers-and-instructors",
+    "title": "Our Team",
+    "section": "Organizers and Instructors",
+    "text": "Organizers and Instructors\n\n\nEli Holmes\n\n\nNOAA Fisheries\nwebpage • GitHub • ORCID\n\n\nSunny Hospital\n\nNOAA CoastWatch PolarWatch\nGitHub\n\n\nMatt Grossi\n\n\nEmily Markowitz\n\nNOAA Fisheries\nwebpage • GitHub • NOAA • ORCID\n\n\n\n\nMore\n\n\nMore\n\n\nMore\n\n\nMore",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Our Team"
+    ]
   },
   {
-    "objectID": "schedule.html",
-    "href": "schedule.html",
-    "title": "Schedule",
+    "objectID": "setup.html",
+    "href": "setup.html",
+    "title": "Set-up",
     "section": "",
-    "text": "11-22 September 2023"
+    "text": "To work on the JupyterHub for the workshop:",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Set-up"
+    ]
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "EDMW 2024 - Workshop 3B",
+    "objectID": "setup.html#github-username-required-to-get-on-hub",
+    "href": "setup.html#github-username-required-to-get-on-hub",
+    "title": "Set-up",
+    "section": "GitHub username (required to get on hub)",
+    "text": "GitHub username (required to get on hub)\n\nCreate a GitHub account (if you don’t already have one) at https://github.com. Advice for choosing a GitHub username: this is a professional username that you will use in work settings. GitHub accounts are not anonymous; this is for sharing work. Using your real name is common.\nWrite down your username and password; you will need to log in during the course!\nHere is a video showing the whole process",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Set-up"
+    ]
+  },
+  {
+    "objectID": "setup.html#get-on-the-jupyterhub-if-you-want-to-follow-along",
+    "href": "setup.html#get-on-the-jupyterhub-if-you-want-to-follow-along",
+    "title": "Set-up",
+    "section": "Get on the JupyterHub (if you want to follow along)",
+    "text": "Get on the JupyterHub (if you want to follow along)\nOnce you have submitted your GitHub username and have been accepted as a member of the DaskHub team on the nmfs-opensci organization, you can log-into the JupyterHub.\nhttps://dhub.opensci.live/\n\nChoose the default Py-R base geospatial image. Watch a video of the login process and basic JupyterHub orientation.\nhome directory is yours and no one else can see it. To share files, you can connect to a GitHub repository or use the shared directory. Everyone can read and write to this directory. Please don’t delete content that is not your own.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Set-up"
+    ]
+  },
+  {
+    "objectID": "setup.html#earthdata-login-account-optional",
+    "href": "setup.html#earthdata-login-account-optional",
+    "title": "Set-up",
+    "section": "Earthdata Login account (optional)",
+    "text": "Earthdata Login account (optional)\nWe will be using a public user account, but if you do a lot of work with NASA Earthdata, you should get a login account.\n\nCreate an Earthdata Login account (if you don’t already have one) at https://urs.earthdata.nasa.gov\nWrite down your username and password; you will need it.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Set-up"
+    ]
+  },
+  {
+    "objectID": "setup.html#set-up-authentication-to-github",
+    "href": "setup.html#set-up-authentication-to-github",
+    "title": "Set-up",
+    "section": "Set up authentication to GitHub",
+    "text": "Set up authentication to GitHub\nYou need to tell GitHub who you are so you can push your local changes up to GitHub. There are a few ways to do this. I am going to show you a way that works on any computer, including a virtual computer like the JupyterHub.\n\nStep 1: Generate a Personal Access Token\nWe are going to generate a classic token.\n\nGo to https://github.com/settings/tokens\nClick Generate new token &gt; Generate new token (classic)\nWhen the pop-up shows up, fill in a description, click the “repo” checkbox, and then scroll to bottom to click “Generate”.\nFor scope, select “repo”.\nSAVE the token. You need it for the next step.\n\n\n\nStep 2: Tell Git who your are\n\nOpen a terminal. In Jupyter Lab, you will see a box labelled “Terminal” on the Launcher window. In RStudio, you will see a tab (usually in lower left) with the label “Terminal”\nPaste these 3 lines of code into the terminal\n\ngit config --global user.email \"&lt;your email&gt;\"\ngit config --global user.name \"&lt;your name&gt;\"\ngit config --global pull.rebase false\ngit config --global credential.helper store\nReplace \"&lt;your email&gt;\" with something like jane.doe@noaa.gov. Replace \"&lt;your name&gt;\" with something like \"Jane Doe\". Notice the quotes.\n\n\nStep 3: Trigger git to ask for your password\nThere are a few ways to do this.\n\nClone a repo, make a change, and then commit and push the change\nClone a private repo\n\nOption b is easiest if you are new to Git and GitHub.\n\nOpen a terminal window\nMake sure you are in the home directory by typing cd ~\nClone a repo and create an RStudio project. File &gt; New Project &gt; Version Control &gt; Git. Paste in this URL https://github.com/nmfs-opensci/github_setup_check and make sure it is creating the repo at ~ (home directory).\nYou will be asked for your GitHub username and password. For the password, enter the PERSONAL ACCESS TOKEN from Step 1.\n\nWatch a video of these 4 steps\nFull instructions with other ways to do this from R",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Set-up"
+    ]
+  },
+  {
+    "objectID": "overview.html",
+    "href": "overview.html",
+    "title": "Overview",
     "section": "",
-    "text": "Welcome to the NOAA Fisheries workshop focused on geospatial analysis using ocean ‘big data’. Today, we are focused on using data from NASA EarthData but the skills you will learn are transferable to other ways that you might get earth data, e.g. NESDIS, NCEI, ERDDAP servers, Copernicus, etc.\nThis session will also introduce to working with JupyterHubs. We will use both Jupyter Lab (Python) and RStudio (R) within our JupyterHub. Go to set-up for the basic orientation and how to get on the JupyterHub.",
+    "text": "The the era of big data in the earth sciences is here and learning how to effectively use oceanographic remote-sensing data, both in the cloud and on your computer, is a core skill for modern fisheries science and management. Learning how to access cloud-based data, visualize these data, use these data in models, and use the tools of modern reproducible and collaborative science is the main goal of this course. Through the course, participants will gain experience with assessing remote-sensing data in the cloud, R and RStudio, Python and Jupyter notebooks, and collaborating with Git and GitHub.",
     "crumbs": [
       "JupyterHub",
+      "Welcome",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "overview.html#aims-and-objectives",
+    "href": "overview.html#aims-and-objectives",
+    "title": "Overview",
+    "section": "Aims and Objectives",
+    "text": "Aims and Objectives\n\nLearn how to discover and use oceanographic remote-sensing data for species distribution modeling and other fisheries applications\nFamiliarize participants with using remote-sensing data and geospatial tools in R and Python code.\nObtain hands-on experience in using remote-sensing data and other earth data in science workflows by working together on a group project.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "overview.html#what-is-a-hackweek",
+    "href": "overview.html#what-is-a-hackweek",
+    "title": "Overview",
+    "section": "What is a hackweek?",
+    "text": "What is a hackweek?\nA hackweek is a participant-driven workshop that blends data science education, community building, and project work over a short period of time (one to two weeks). The events are highly immersive and allow participants to work directly with data science professionals to co-shape projects and educational outcomes. Hackweeks help individuals and teams engage more effectively in open and reproducible science. - eScience Institute, University of Washington, Seattle USA\nThe hackweek model has become a vital tool in the data science community, fostering idea exchange through modern data analysis workflow training. Unlike traditional academic events, hackweeks offer intensive, interactive learning, including tutorials on cutting-edge methods, peer-based learning, and collaborative on-site projects. Unlike hackathons, which emphasize software development, hackweeks prioritize education and open-ended projects, benefiting fields needing both expertise and efficient computational workflows for idea exchange and discovery. The hackweek model is now widely used in many fields: Astrohackweek, Neurohackweek, Geohackweek, OceanHackWeek, ICESat-2 Hackweek, SnowEx Hackweek, NASA Cloud Hackathon. The NOAA HackDays content and format is modeled off the University of Washington eScience Hackweek model.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "overview.html#code-of-conduct",
+    "href": "overview.html#code-of-conduct",
+    "title": "Overview",
+    "section": "Code of Conduct",
+    "text": "Code of Conduct\nThe NOAA HackDays events are a safe learning space and all participants are required to abide by our Code of Conduct.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "content/index.html",
+    "href": "content/index.html",
+    "title": "Week 1 Tutorials",
+    "section": "",
+    "text": "During week 1, participants will gain experience with the platforms used in collaborative science: GitHub and RMarkdown."
+  },
+  {
+    "objectID": "content/index.html#prerequisites",
+    "href": "content/index.html#prerequisites",
+    "title": "Week 1 Tutorials",
+    "section": "Prerequisites",
+    "text": "Prerequisites\nPlease follow the set up prerequisites"
+  },
+  {
+    "objectID": "content/index.html#content",
+    "href": "content/index.html#content",
+    "title": "Week 1 Tutorials",
+    "section": "Content",
+    "text": "Content\n\nThe R language and RStudio\nIntro to RStudio\nIntroduction to Git and GitHub"
+  },
+  {
+    "objectID": "content/02-local-setup.html",
+    "href": "content/02-local-setup.html",
+    "title": "Setting up on your computer",
+    "section": "",
+    "text": "Here are instructions for installing on your own computer.\nInstall the development version of earthdatalogin and update terra.\n\ndevtools::install_github(\"boettiger-lab/earthdatalogin\")\ninstall.packages(\"terra\")\ninstall.packages(\"rstac\")\ninstall.packages(\"gdalcubes\")\ninstall.packages(\"here\")\n\nlibrary(\"earthdatalogin\")\nlibrary(\"terra\")\nlibrary(\"rstac\")\nlibrary(\"gdalcubes\")\nlibrary(\"here\")\n\nYou will need GDAL installed. See these instructions if you do not have it installed: https://developers.planet.com/docs/integrations/qgis/install-qgis-gdal/\nYou may need to install terra and sf from source to get them to use the latest GDAL installation.\n\ninstall.packages(\"terra\", type = \"source\")\ninstall.packages(\"sf\", type = \"source\")\nsf_extSoftVersion()\n\nThe environment we are using today is the py-rocket-geospatial image. This is part of work on a Data Science Docker Stack for NOAA Fisheries.\n\nR Version Metadata\n\nsessionInfo()\n\nR version 4.4.0 (2024-04-24)\nPlatform: x86_64-pc-linux-gnu\nRunning under: Ubuntu 22.04.4 LTS\n\nMatrix products: default\nBLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 \nLAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0\n\nlocale:\n [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       \n [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   \n [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          \n[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   \n\ntime zone: Etc/UTC\ntzcode source: system (glibc)\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base     \n\nloaded via a namespace (and not attached):\n [1] htmlwidgets_1.6.4 compiler_4.4.0    fastmap_1.1.1     cli_3.6.2        \n [5] tools_4.4.0       htmltools_0.5.8.1 rstudioapi_0.16.0 yaml_2.3.8       \n [9] rmarkdown_2.26    knitr_1.46        jsonlite_1.8.8    xfun_0.43        \n[13] digest_0.6.35     rlang_1.1.3       evaluate_0.23",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Local set-up"
+    ]
+  },
+  {
+    "objectID": "content/02-git-jupyter.html#summary",
+    "href": "content/02-git-jupyter.html#summary",
+    "title": "Git - Jupyter Lab",
+    "section": "Summary",
+    "text": "Summary\nIn this tutorial, we will provide a brief introduction to:\n\nCommand line (terminal/shell)\nNavigating around folders in Jupyter Lab\nVersion Control (code management using git)\nSetting up Git in Jupyter Lab\nThe Git GUI in Jupyter Lab\nBasic Git commands",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-JupyterLab"
+    ]
+  },
+  {
+    "objectID": "content/02-git-jupyter.html#introduction-jupyter-lab",
+    "href": "content/02-git-jupyter.html#introduction-jupyter-lab",
+    "title": "Git - Jupyter Lab",
+    "section": "Introduction :: Jupyter Lab",
+    "text": "Introduction :: Jupyter Lab\nWhen you start the JupyterHub, you will be in Jupyter Lab. From there you can click on the RStudio box and open RStudio. However for this tutorial, we will stay in Juptyer Lab.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-JupyterLab"
+    ]
+  },
+  {
+    "objectID": "content/02-git-jupyter.html#introduction-terminalshell",
+    "href": "content/02-git-jupyter.html#introduction-terminalshell",
+    "title": "Git - Jupyter Lab",
+    "section": "Introduction :: Terminal/Shell",
+    "text": "Introduction :: Terminal/Shell\nLog into the JupyterHub. If you do not see this\n\nThen go to File &gt; New Launcher\nClick on the “Terminal” box to open a new terminal window.\n\nShell or Terminal Basics\n\nWhat is Terminal or Shell?\nNavigating Files and Directories\nWorking with Files and Directories\nOptional: Detailed self-paced lesson on running scripts from the shell: Shell Lesson from Software Carpentry\n\nYou will need only basic navigation skills for this course: cd, ls and cat\n\npwd where am I\ncd nameofdir move into a directory\ncd .. move up a directory\nls list the files in the current directory\nls -a list the files including hidden files\nls -l list the files with more info\ncat filename print out the contents of a file\n\n\n\nLet’s try\nls\nls -a\ncd shared\nls\ncd shell-tutorial\ncat lesson1.sh\ncd ..\ncd ..\n\n\nClose the terminal\nJust click on the X in the terminal tab",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-JupyterLab"
+    ]
+  },
+  {
+    "objectID": "content/02-git-jupyter.html#introduction-file-navigation",
+    "href": "content/02-git-jupyter.html#introduction-file-navigation",
+    "title": "Git - Jupyter Lab",
+    "section": "Introduction :: File Navigation",
+    "text": "Introduction :: File Navigation\nIn the far left, you will see a line of icons. The top one is a folder and allows us to move around our file system.\n\nClick on shared. Now you can see the files in the shared directory.\nClick on shell-tutorial. Then click on lesson1.sh. The file opens. You won’t be able to save changes here because you don’t have write permission on this drive.\nClick on the folder icon that looks like this. Click on the actual folder image. \nNow it should look like this folder /\nThis shows me doing this\n\nCreate a new folder.\n\nNext to the blue rectange with a +, is a grey folder with a +. Click that to create a new folder, called lesson-scripts.\nThen click on lesson-scripts to enter the folder\n\n\nCreate a new file\n\nCreate with File &gt; New &gt; Text file\nThe file will open and you can edit it.\nSave with File &gt; Save Text\nDelete the file by right-clicking on it and clicking “Delete”",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-JupyterLab"
+    ]
+  },
+  {
+    "objectID": "content/02-git-jupyter.html#introduction-version-control-git",
+    "href": "content/02-git-jupyter.html#introduction-version-control-git",
+    "title": "Git - Jupyter Lab",
+    "section": "Introduction :: Version Control (Git)",
+    "text": "Introduction :: Version Control (Git)\n\nWhat is version control, git, github, and how to set it up?\nVersion control is managing and tracking changes to your documents (program source code, images, websites, data files, etc.). git is a popular tool used for version control of software code. github.com is popular platform that provides remote server hosting for git repositories. A repository is a collection of various files that you are tracking for changes and versions. Currently GitHub is the most popular platform for file sharing code and code packages.\nThis section is a step-by-step guide to set up git on our JupyterHub. We will also configure git to use your github.com account for managing your repositories hosted on github.com. There are 5 main steps.\n\n\nStep 1: Create a GitHub account\nTo complete the setup, you will need an account on github.com. If you don’t have an account, please visit github.com, create an account (free) and come back to this guide for setting up git.\n\n\nStep 2: Clone a repository\nWe have created a demo repository for you to clone:\nhttps://github.com/nmfs-opensci/Git-Lesson\n\nStart your JupyterHub\nClick on the Git icon\n\n\n\nClick “Clone a Repository”\nWhere it says “Enter the URI of the remote Git repository”, paste in the URL https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024\nThe folder appears and you can enter the folder and edit and create files.\n\n\nYour task: Create a file with your name and save to the Git-Lesson folder",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-JupyterLab"
+    ]
+  },
+  {
+    "objectID": "content/02-git-jupyter.html#step-3",
+    "href": "content/02-git-jupyter.html#step-3",
+    "title": "Git - Jupyter Lab",
+    "section": "Step 3:",
+    "text": "Step 3:\nConfigure git with your name and email address.\n``` bash\ngit config --global user.name \"Makhan Virdi\"\ngit config --global user.email \"Makhan.Virdi@gmail.com\"\n```\n\n**Note:** This name and email could be different from your github.com credentials. Remember `git` is a program that keeps track of your changes locally (on the JupyterHub or your own computer) and github.com is a platform to host your repositories. However, since your changes are tracked by `git`, the email/name used in git configuration will show up next to your contributions on github.com when you `push` your repository to github.com (`git push` is discussed in a later step).\n\nConfigure git to store your github credentials to avoid having to enter your github username and token each time you push changes to your repository(in Step 5, we will describe how to use github token instead of a password)\ngit config --global credential.helper store\nCopy link for the demo repository from your github account. Click the green “Code” button and copy the link as shown.\n\nClone the repository using git clone command in the terminal\nTo clone a repository from github, copy the link for the repository (previous step) and use git clone:\ngit clone https://github.com/YOUR-GITHUB-USERNAME/check_github_setup\nNote: Replace YOUR-GITHUB-USERNAME here with your github.com username. For example, it is virdi for my github.com account as seen in this image.\n\nUse ls (list files) to verify the existence of the repository that you just cloned\n\nChange directory to the cloned repository using cd check_github_setup and check the current directory using pwd command (present working directory)\n\nCheck status of your git repository to confirm git set up using git status\n\nYou are all set with using git on your 2i2c JupyterHub! But the collaborative power of git through github needs some additional setup.\nIn the next step, we will create a new file in this repository, track changes to this file, and link it with your github.com account.\n\n\nStep 4. Creating new file and tracking changes\n\nIn the left panel on your 2i2c JupyterHub, click on the “directory” icon and then double click on “check_github_setup” directory.\n\n\nOnce you are in the check_github_setup directory, create a new file using the text editor in your 2i2c JupyterHub (File &gt;&gt; New &gt;&gt; Text File).\n\nName the file lastname.txt. For example, virdi.txt for me (use your last name). Add some content to this file (for example, I added this to my virdi.txt file: my last name is virdi).\n\nNow you should have a new file (lastname.txt) in the git repository directory check_github_setup\nCheck if git can see that you have added a new file using git status. Git reports that you have a new file that is not tracked by git yet, and suggests adding that file to the git tracking system.\n\nAs seen in this image, git suggests adding that file so it can be tracked for changes. You can add file to git for tracking changes using git add. Then, you can commit changes to this file’s content using git commit as shown in the image.\ngit add virdi.txt\ngit status\ngit commit -m \"adding a new file\"\ngit status\n\nAs seen in the image above, git is suggesting to push the change that you just committed to the remote server at github.com (so that your collaborators can also see what changes you made).\nNote: DO NOT execute push yet. Before we push to github.com, let’s configure git further and store our github.com credentials to avoid entering the credentials every time we invoke git push. For doing so, we need to create a token on github.com to be used in place of your github.com password.\n\n\n\nStep 5. Create access token on github.com\n\nGo to your github account and create a new “personal access token”: https://github.com/settings/tokens/new\n\n\n\nGenerate Personal Access Token on github.com\n\n\nEnter a description in “Note” field as seen above, select “repo” checkbox, and scroll to the bottom and click the green button “Generate Token”. Once generated, copy the token (or save it in a text file for reference).\nIMPORTANT: You will see this token only once, so be sure to copy this. If you do not copy your token at this stage, you will need to generate a new token.\n\nTo push (transfer) your changes to github, use git push in terminal. It requires you to enter your github credentials. You will be prompted to enter your github username and “password”. When prompted for your “password”, DO NOT use your github password, use the github token that was copied in the previous step.\ngit push\n\nNote: When you paste your token in the terminal window, windows users will press Ctrl+V and mac os users will press Cmd+V. If it does not work, try generating another token and use the copy icon next to the token to copy the token. Then, paste using your computer’s keyboard shortcut for paste.\nNow your password is stored in ~/.git-credentials and you will not be prompted again unless the Github token expires. You can check the presence of this git-credentials file using Terminal. Here the ~ character represents your home directory (/home/jovyan/).\nls -la ~\nThe output looks like this:\ndrwxr-xr-x 13 jovyan jovyan 6144 Oct 22 17:35 .\ndrwxr-xr-x  1 root   root   4096 Oct  4 16:21 ..\n-rw-------  1 jovyan jovyan 1754 Oct 29 18:30 .bash_history\ndrwxr-xr-x  4 jovyan jovyan 6144 Oct 29 16:38 .config\n-rw-------  1 jovyan jovyan   66 Oct 22 17:35 .git-credentials\n-rw-r--r--  1 jovyan jovyan   84 Oct 22 17:14 .gitconfig\ndrwxr-xr-x 10 jovyan jovyan 6144 Oct 21 16:19 2021-Cloud-Hackathon\nYou can also verify your git configuration\n(notebook) jovyan@jupyter-virdi:~$ git config -l\nThe output should have credential.helper = store:\nuser.email        = Makhan.Virdi@gmail.com\nuser.name         = Makhan Virdi\ncredential.helper = store\n\nNow we are all set to collaborate with github on the JupyterHub during the Cloud Hackathon!\n\n\nSummary: Git Commands\n\nCommonly used git commands (modified from source)\n\n\nGit Command\nDescription\n\n\n\n\ngit status\nShows the current state of the repository: the current working branch, files in the staging area, etc.\n\n\ngit add\nAdds a new, previously untracked file to version control and marks already tracked files to be committed with the next commit\n\n\ngit commit\nSaves the current state of the repository and creates an entry in the log\n\n\ngit log\nShows the history for the repository\n\n\ngit diff\nShows content differences between commits, branches, individual files and more\n\n\ngit clone\nCopies a repository to your local environment, including all the history\n\n\ngit pull\nGets the latest changes of a previously cloned repository\n\n\ngit push\nPushes your local changes to the remote repository, sharing them with others\n\n\n\n\n\nGit: More Details\nLesson: For a more detailed self-paced lesson on git, visit Git Lesson from Software Carpentry\nCheatsheet: Frequently used git commands\nDangit, Git!?!: If you are stuck after a git mishap, there are ready-made solutions to common problems at Dangit, Git!?!\n\n\nCloning our repository using the git Jupyter lab extension.\nIf we’re already familiar with git commands and feel more confortable using a GUI our Jupyterhub deployment comes with a git extension. This plugin allows us to operate with git using a simple user interface.\nFor example we can clone our repository using the extension.\n\n\n\ngit extension",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-JupyterLab"
+    ]
+  },
+  {
+    "objectID": "content/01-welcome.html",
+    "href": "content/01-welcome.html",
+    "title": "Welcome",
+    "section": "",
+    "text": "Introduction to working with earth data in the cloud and NASA Earth Data\nOrientation on our JupyterHub\nTutorial 1: Searching for resources in NASA Earth Data\nTutorial 2: Points and shapefiles\nTutorial 3: Subsetting your earth data with in a region (shapefile)\nTutorial 4: Getting values at points (along a track or transect)",
+    "crumbs": [
+      "JupyterHub",
+      "Tutorials",
+      "Welcome",
       "Welcome"
     ]
   },
   {
-    "objectID": "index.html#topics-for-may-15-2024",
-    "href": "index.html#topics-for-may-15-2024",
-    "title": "EDMW 2024 - Workshop 3B",
-    "section": "Topics for May 15, 2024",
-    "text": "Topics for May 15, 2024\n\nIntroduction to working with earth data in the cloud and NASA Earth Data\nOrientation on our JupyterHub\nTutorial 1: Searching for resources in NASA Earth Data\nTutorial 2: Points and shapefiles\nTutorial 3: Subsetting your earth data with in a region (shapefile)\nTutorial 4: Getting values at points (along a track or transect)",
+    "objectID": "content/01-intro-to-cloud.html",
+    "href": "content/01-intro-to-cloud.html",
+    "title": "Intro the Cloud",
+    "section": "",
+    "text": "Lecture on NASA earth data in the cloud by Michele Thornton (NASA Openscapes) Video",
     "crumbs": [
       "JupyterHub",
-      "Welcome"
+      "Tutorials",
+      "Welcome",
+      "Geoscience cloud tools"
     ]
   },
   {
-    "objectID": "index.html#resources",
-    "href": "index.html#resources",
-    "title": "EDMW 2024 - Workshop 3B",
-    "section": "Resources",
-    "text": "Resources\n\nCoastWatch GitHub organization for many more training modules for working with satellite data in Python and R\nNASA EarthData Cloudbook for many tutorials on using satellite data in Python and R and NASA Earth Data",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome"
-    ]
-  },
-  {
-    "objectID": "index.html#thank-you-for-inspiration-and-content",
-    "href": "index.html#thank-you-for-inspiration-and-content",
-    "title": "EDMW 2024 - Workshop 3B",
-    "section": "Thank you for inspiration and content!",
-    "text": "Thank you for inspiration and content!\nThank you to the open science community that has created software, teaching resources, and workflows that we have been able to build off of and be inspired by. These include: NASA Openscapes • OceanHackWeek • SnowEx Hackweek • eScience Institute, University of Washington • ICESat-2 Hackweek • Project Jupyter • Pangeo Project • CryoCloud",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome"
-    ]
-  },
-  {
-    "objectID": "content/02-rstudio.html#open-rstudio-in-the-jupyterhub",
-    "href": "content/02-rstudio.html#open-rstudio-in-the-jupyterhub",
-    "title": "RStudio - R",
-    "section": "Open RStudio in the JupyterHub",
-    "text": "Open RStudio in the JupyterHub\n\nLogin the JupyterHub\nClick on the RStudio button when the Launcher appears \nLook for the browser tab with the RStudio icon",
+    "objectID": "coc.html",
+    "href": "coc.html",
+    "title": "Code of Conduct",
+    "section": "",
+    "text": "We are dedicated to providing a harassment-free learning experience for everyone regardless of gender, gender identity and expression, sexual orientation, disability, physical appearance, body size, race, age or religion. We do not tolerate harassment of participants in any form. Sexual language and imagery is not appropriate either in-person or virtual form, including the Discussion boards and Slack workspace. Participants (including event volunteers and organizers) violating these rules may be sanctioned or expelled from the event at the discretion of the organizers.",
     "crumbs": [
       "JupyterHub",
       "Welcome",
-      "Orientation",
-      "RStudio"
+      "Code of Conduct"
     ]
   },
   {
-    "objectID": "content/02-rstudio.html#basic-navigation",
-    "href": "content/02-rstudio.html#basic-navigation",
-    "title": "RStudio - R",
-    "section": "Basic Navigation",
-    "text": "Basic Navigation\n\n\n\nRStudio Panels",
+    "objectID": "coc.html#definition-of-harassment",
+    "href": "coc.html#definition-of-harassment",
+    "title": "Code of Conduct",
+    "section": "Definition of Harassment",
+    "text": "Definition of Harassment\nHarassment includes, but is not limited to:\n\nVerbal comments that reinforce social structures of domination related to gender, gender identity and expression, sexual orientation, disability, physical appearance, body size, race, age, religion.\nSexual images in public spaces\nDeliberate intimidation, stalking, or following\nHarassing photography or recording\nSustained disruption of talks or other events\nInappropriate physical contact\nUnwelcome sexual attention\nAdvocating for, or encouraging, any of the above behavior",
     "crumbs": [
       "JupyterHub",
       "Welcome",
-      "Orientation",
-      "RStudio"
+      "Code of Conduct"
     ]
   },
   {
-    "objectID": "content/02-rstudio.html#create-an-rstudio-project",
-    "href": "content/02-rstudio.html#create-an-rstudio-project",
-    "title": "RStudio - R",
-    "section": "Create an RStudio project",
-    "text": "Create an RStudio project\n\nOpen RStudio\nIn the file panel, click on the Home icon to make sure you are in your home directory\nFrom the file panel, click “New Project” to create a new project\nIn the pop up, select New Directory and then New Project\nName it sandbox\nClick on the dropdown in the upper right corner to select your sandbox project\nClick on Tools &gt; Project Options &gt; General and change the first 2 options about saving and restoring the workspace to “No”",
+    "objectID": "coc.html#expectations",
+    "href": "coc.html#expectations",
+    "title": "Code of Conduct",
+    "section": "Expectations",
+    "text": "Expectations\nParticipants asked to stop any harassing behavior are expected to comply immediately. If a participant engages in harassing behavior, the organizers retain the right to take any actions to keep the event a welcoming environment for all participants. This includes warning the offender or expulsion from the event.\nThe organizers may take action to redress anything designed to, or with the clear impact of, disrupting the event or making the environment hostile for any participants. We expect participants to follow these rules at all the event venues and event-related social activities.",
     "crumbs": [
       "JupyterHub",
       "Welcome",
-      "Orientation",
-      "RStudio"
+      "Code of Conduct"
     ]
   },
   {
-    "objectID": "content/02-rstudio.html#installing-packages",
-    "href": "content/02-rstudio.html#installing-packages",
-    "title": "RStudio - R",
-    "section": "Installing packages",
-    "text": "Installing packages\nIn the bottom right panel, select the Packages tab, click install and then start typing the name of the package. Then click Install.\nThe JupyterHub comes with many packages already installed so you shouldn’t have to install many packages.\nWhen you want to use a package, you first need to load it with\nlibrary(hello)\nYou will see this in the tutorials. You might also see something like\nhello::thefunction()\nThis is using thefunction() from the hello package.\n\n\n\n\n\n\nNote\n\n\n\nPython users. In R, you will always call a function like funtion(object) and never like object.function(). The exception is something called ‘piping’ in R, which I have never seen in Python. In this case you pass objects left to right. Like object %&gt;% function(). Piping is very common in modern R but you won’t see it much in R from 10 years ago.",
+    "objectID": "coc.html#reporting-a-violation",
+    "href": "coc.html#reporting-a-violation",
+    "title": "Code of Conduct",
+    "section": "Reporting a violation",
+    "text": "Reporting a violation\nHarassment and other code of conduct violations reduce the value of the event for everyone. If someone makes you or anyone else feel unsafe or unwelcome, please report it as soon as possible.\nIf you feel comfortable contacting someone associated with our event, you may speak with one of the event organizers in person or contact an organizer on a private Slack channel.",
     "crumbs": [
       "JupyterHub",
       "Welcome",
-      "Orientation",
-      "RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-rstudio.html#uploading-and-downloading-files",
-    "href": "content/02-rstudio.html#uploading-and-downloading-files",
-    "title": "RStudio - R",
-    "section": "Uploading and downloading files",
-    "text": "Uploading and downloading files\nNote, Upload and download is only for the JupyterHub not on RStudio on your computer.\n\nUploading is easy.\nLook for the Upload button in the Files tab of the bottom right panel.\n\n\nDownload is less intuitive.\n\nClick the checkbox next to the file you want to download. One only.\nClick the “cog” icon in the Files tab of the bottom right panel. Then click Export.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-rstudio.html#creating-files",
-    "href": "content/02-rstudio.html#creating-files",
-    "title": "RStudio - R",
-    "section": "Creating files",
-    "text": "Creating files\nWhen you start your server, you will have access to your own virtual drive space. No other users will be able to see or access your files. You can upload files to your virtual drive space and save files here. You can create folders to organize your files. You personal directory is home/rstudio. Everyone has the same home directory but your files are separate and cannot be seen by others.\nPython users: If you open a Python image instead of the R image, your home is home/jovyan.\nThere are a number of different ways to create new files. Let’s practice making new files in RStudio.\n\nR Script\n\nOpen RStudio\nIn the upper right, make sure you are in your sandbox project.\nFrom the file panel, click on “New Blank File” and create a new R script.\nPaste\n\nprint(\"Hello World\")\n1+1\nin the script. 7. Click the Source button (upper left of your new script file) to run this code. 8. Try putting your cursor on one line and running that line of code by clicking “Run” 9. Try selecting lines of code and running that by clicking “Run”\n\n\ncsv file\n\nFrom the file panel, click on “New Blank File” and create a Text File.\nThe file will open in the top left corner. Paste in the following:\n\nname, place, value\nA, 1, 2\nB, 10, 20\nC, 100, 200\n\nClick the save icon (above your new file) to save your csv file\n\n\n\nA Rmarkdown document\nNow let’s create some more complicated files using the RStudio template feature.\n\nFrom the upper left, click File -&gt; New File -&gt; RMarkdown\nClick “Ok” at the bottom.\nWhen the file opens, click Knit (icon at top of file).\nIt will ask for a name. Give it one and save.\nYou file will render into html.\n\nReference sheet for writing in RMarkdown or go to Help &gt; Markdown Quick Reference\n\n\nA Rmarkdown presentation\n\nFrom the upper left, click File -&gt; New File -&gt; RMarkdown\nClick “Presentation” on left of the popup and click “Ok” at the bottom.\nWhen the file opens, click Knit (icon at top of file).\nIt will ask for a name. Give it one and save.\nYou file will render into html.\n\n\n\n(advanced) An interactive application\n\nFrom the upper left, click File -&gt; New File -&gt; Shiny Web App\nIn the popup, give the app a name and make sure the app is saved to my-files\nWhen the file opens, Run App (icon at top of file).\n\n\n\nAnd many more\nPlay around with creating other types of documents using templates. Especially if you already use RStudio.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-rstudio.html#more-tips",
-    "href": "content/02-rstudio.html#more-tips",
-    "title": "RStudio - R",
-    "section": "More tips",
-    "text": "More tips\nLearn some tips and tricks from these\n\nhttps://colorado.posit.co/rsc/the-unknown/into-the-unknown.html\nhttps://www.dataquest.io/blog/rstudio-tips-tricks-shortcuts/",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-rstudio.html#plotting-a-netcdf-file",
-    "href": "content/02-rstudio.html#plotting-a-netcdf-file",
-    "title": "RStudio - R",
-    "section": "Plotting a netCDF file",
-    "text": "Plotting a netCDF file\n\nhttps://pjbartlein.github.io/REarthSysSci/netCDF.html\nhttps://r-spatial.github.io/sf/articles/sf1.html\n\nwebpage:\nhttps://coastwatch.pfeg.noaa.gov/erddap/griddap/ncdcOisst21Agg.graph?sst%5B(2023-08-27T12:00:00Z)%5D%5B(0.0)%5D%5B(-7.8):(44.8)%5D%5B(39.7):(92.3)%5D&.draw=surface&.vars=longitude%7Clatitude%7Csst&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff\nurl from the dropdown on that page\nurl &lt;- https://coastwatch.pfeg.noaa.gov/erddap/griddap/ncdcOisst21Agg.nc?sst%5B(2023-08-27T12:00:00Z)%5D%5B(0.0)%5D%5B(-7.875):(44.875)%5D%5B(39.625):(92.375)%5D&.draw=surface&.vars=longitude%7Clatitude%7Csst&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff\n\nOpen an R script\n\nAdd this code.\n\nlibrary(ggplot2) # package for plotting\nlibrary(sf)\nlibrary(stars)\nlibrary(dplyr)\n\nurl &lt;- \"https://coastwatch.pfeg.noaa.gov/erddap/griddap/ncdcOisst21Agg.nc?sst%5B(2023-08-27T12:00:00Z)%5D%5B(0.0)%5D%5B(-7.875):(44.875)%5D%5B(39.625):(92.375)%5D&.draw=surface&.vars=longitude%7Clatitude%7Csst&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff\"\n\nfil &lt;- \"sst.nc\"\nif(!exists(fil)){\n  download.file(url=url, destfile=fil)\n}\n\nstars_object &lt;- raster::raster(fil) %&gt;% st_as_stars()\nggplot() + geom_stars(data = stars_object)",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-git-rstudio.html#what-is-git-and-github",
-    "href": "content/02-git-rstudio.html#what-is-git-and-github",
-    "title": "Basic Git/GitHub Skills Using RStudio",
-    "section": "What is Git and GitHub?",
-    "text": "What is Git and GitHub?\nGit A program to track your file changes and create a history of those changes. Creates a ‘container’ for a set of files called a repository.\nGitHub A website to host these repositories and allow you to sync local copies (on your computer) to the website. Lots of functionality built on top of this.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-git-rstudio.html#some-basic-git-jargon",
-    "href": "content/02-git-rstudio.html#some-basic-git-jargon",
-    "title": "Basic Git/GitHub Skills Using RStudio",
-    "section": "Some basic Git jargon",
-    "text": "Some basic Git jargon\n\nRepo Repository. It is your code and the record of your changes. This record and also the status of your repo is a hidden folder called .git . You have a local repo and a remote repo. The remote repo is on GitHub (for in our case) is called origin. The local repo is on the JupyterHub.\nStage Tell Git which changes you want to commit (write to the repo history).\nCommit Write a note about what change the staged files and “commit” that note to the repository record. You are also tagging this state of the repo and you could go back to this state if you wanted.\nPush Push local changes (commits) up to the remote repository on GitHub (origin).\nPull Pull changes on GitHub into the local repository on the JupyterHub.\nGit GUIs A graphical interface for Git (which is command line). Today I will use jupyterlab-git which we have installed on JupyterHub.\nShell A terminal window where we can issue git commands.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-git-rstudio.html#overview",
-    "href": "content/02-git-rstudio.html#overview",
-    "title": "Basic Git/GitHub Skills Using RStudio",
-    "section": "Overview",
-    "text": "Overview\nToday I will cover the four basic Git/GitHub skills. The goal for today is to first get you comfortable with the basic skills and terminology. We will use what is called a “trunk-based workflow”.\n\nSimple Trunk-based Workflow:\n\nMake local (on your computer) changes to code.\nRecord what those changes were about and commit to the code change record (history).\nPush those changes to your remote repository (aka origin)\n\nWe’ll do this",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-git-rstudio.html#setting-up-git",
-    "href": "content/02-git-rstudio.html#setting-up-git",
-    "title": "Basic Git/GitHub Skills Using RStudio",
-    "section": "Setting up Git",
-    "text": "Setting up Git\nYou should have gotten this done on Tuesday but if not here are the instructions\nBefore we can work with Git in the JupyterHub, we need to do some set up.\n\nTell Git who you are and to store your credentials (GitHub login info)\n\nShow me\nPaste this into a terminal window:\ngit config --global user.email \"&lt;your email&gt;\"\ngit config --global user.name \"&lt;your name&gt;\"\ngit config --global pull.rebase false\ngit config --global credential.helper store\n\nGet a Personal Access Token from GitHub\n\nCopy the token! You will need it in the next step.\nShow me Note, one change to this video is that you need to specify that you want a classic token.\n\nTrigger Git to ask for your password (that personal access token)\n\nYou can do this by cloning a private repo. In the Terminal, issue this command\ngit clone https://github.com/nmfs-opensci/github_setup_check\nIt will ask for your GitHub username and password. At the password part, paste in the Personal Access Token.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-git-rstudio.html#git-tab",
-    "href": "content/02-git-rstudio.html#git-tab",
-    "title": "Basic Git/GitHub Skills Using RStudio",
-    "section": "Git tab",
-    "text": "Git tab\nWhen the instructions say to use or open or click the Git tab,",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-git-rstudio.html#the-key-skills",
-    "href": "content/02-git-rstudio.html#the-key-skills",
-    "title": "Basic Git/GitHub Skills Using RStudio",
-    "section": "The Key Skills",
-    "text": "The Key Skills\n\nSkill 1: Create a blank repo on GitHub\nSkill 2: Clone your GitHub repo to RStudio\nSkill 3: Make some changes and commit those local changes\nSkill 4: Push the changes to GitHub\nSkill 1b: Copy someone else’s GitHub repository",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-git-rstudio.html#lets-see-it-done",
-    "href": "content/02-git-rstudio.html#lets-see-it-done",
-    "title": "Basic Git/GitHub Skills Using RStudio",
-    "section": "Let’s see it done!",
-    "text": "Let’s see it done!\n\nSkill 1: Create a blank repo on GitHub\n\nClick the + in the upper left from YOUR GitHub page.\nGive your repo the name Test and make sure it is public.\nClick new and check checkbox to add the Readme file and .gitignore\nCopy the URL of your new repo. It’s in the browser where you normally see a URL.\n\nShow me\n\n\nSkill 2: Clone your repo to the RStudio\nIn RStudio we do this by making a new project.\n\nCopy the URL of your repo. https://www.github.com/yourname/Test\nFile &gt; New Project &gt; Version Control &gt; Git\nPast in the URL of your repo from Step 1\nCheck that it is being created in your Home directory which will be denoted ~ in the JupyterHub.\nClick Create.\n\nShow me\n\n\nSkill 3: Make some changes and commit your changes\nThis writes a note about what changes you have made. It also marks a ‘point’ in time that you can go back to if you need to.\n\nMake some changes to the README.md file in the Test repo.\nClick the Git tab, and stage the change(s) by checking the checkboxes next to the files listed.\nClick the Commit button.\nAdd a commit comment, click commit.\n\nShow me\n\n\nSkill 4: Push changes to GitHub / Pull changes from GitHub\nTo push changes you committed in Skill #3\n\nFrom Git tab, click on the Green up arrow that says Push.\nTo pull changes on GitHub that are not on your local computer:\nMake some changes directly on GitHub (not in RStudio)\nFrom Git tab, click on the down arrow that says Pull.\n\nShow me\n\n\nPair-activity 1\nIn RStudio,\n\nMake a copy of README.md\nRename it to .md\nAdd some text.\nStage and commit the added file.\nPush to GitHub.\n\nTry before watching.\nShow me in RStudio – Show me in the shell – Show me in jupyter-git\n\n\nPair-activity 2\nAll of this activity is in RStudio.\n\nClone this repo https://github.com/nmfs-opensci/git-basics to RStudio and create a new project\nNavigate to the files in your new project, create a filed called to &lt;yourname&gt;.md. Use your actual name so the filename is different from everyone elses.\nStage and then commit that new file.\nPush to GitHub.\nMake some more changes and push to GitHub.\nPull in your partner’s (and everyone elses) changes\n\nShow me in RStudio – Show me in JupyterLab\n\n\nPair-activity 3\nYou can copy your own or other people’s repos1.\n\nIn a browser, go to the GitHub repository https://github.com/RWorkflow-Workshops/Week5\nCopy its URL.\nNavigate to your GitHub page: click your icon in the upper right and then ‘your repositories’\nClick the + in top right and click import repository. Paste in the URL and give your repo a name.\nUse Skill #1 to clone your new repo to RStudio and create a new project",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-git-rstudio.html#footnotes",
-    "href": "content/02-git-rstudio.html#footnotes",
-    "title": "Basic Git/GitHub Skills Using RStudio",
-    "section": "Footnotes",
-    "text": "Footnotes\n\n\nThis is different from forking. There is no connection to the original repository.↩︎",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-earthdata.html#overview",
-    "href": "content/02-earthdata.html#overview",
-    "title": "Earthdata Login",
-    "section": "Overview",
-    "text": "Overview",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Earthdata login"
-    ]
-  },
-  {
-    "objectID": "content/02-earthdata.html#why-do-i-need-an-earthdata-login",
-    "href": "content/02-earthdata.html#why-do-i-need-an-earthdata-login",
-    "title": "Earthdata Login",
-    "section": "Why do I need an Earthdata login?",
-    "text": "Why do I need an Earthdata login?\nWe will be teaching you ways to programmatically access NASA remote-sensing data from within your scripts. You will need to enter your Earthdata username and password in order for this to work.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Earthdata login"
-    ]
-  },
-  {
-    "objectID": "content/02-earthdata.html#getting-an-earthdata-login",
-    "href": "content/02-earthdata.html#getting-an-earthdata-login",
-    "title": "Earthdata Login",
-    "section": "Getting an Earthdata login",
-    "text": "Getting an Earthdata login\nIf you do not already have an Earthdata login, then navigate to the Earthdata Login page, a username and password, and then record this somewhere for use during the tutorials:",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Earthdata login"
-    ]
-  },
-  {
-    "objectID": "content/02-earthdata.html#configure-programmatic-access-to-nasa-servers",
-    "href": "content/02-earthdata.html#configure-programmatic-access-to-nasa-servers",
-    "title": "Earthdata Login",
-    "section": "Configure programmatic access to NASA servers",
-    "text": "Configure programmatic access to NASA servers\nIf you use web interfaces to retrieve nasa data such as Earthdata Search you are prompted to login. We will be using software to retrieve data from NASA Servers during the hackweek, so you must store your credentials on the JupyterHub. Run the following commands on the JupyterHub in a terminal replacing your Earthdata login username and password:\necho \"machine urs.earthdata.nasa.gov login EARTHDATA_LOGIN password EARTHDATA_PASSWORD\" &gt; ~/.netrc\nchmod 0600 .netrc",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Earthdata login"
+      "Code of Conduct"
     ]
   },
   {
@@ -986,310 +974,350 @@
     ]
   },
   {
-    "objectID": "coc.html",
-    "href": "coc.html",
-    "title": "Code of Conduct",
+    "objectID": "content/02-earthdata.html#overview",
+    "href": "content/02-earthdata.html#overview",
+    "title": "Earthdata Login",
+    "section": "Overview",
+    "text": "Overview",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Earthdata login"
+    ]
+  },
+  {
+    "objectID": "content/02-earthdata.html#why-do-i-need-an-earthdata-login",
+    "href": "content/02-earthdata.html#why-do-i-need-an-earthdata-login",
+    "title": "Earthdata Login",
+    "section": "Why do I need an Earthdata login?",
+    "text": "Why do I need an Earthdata login?\nWe will be teaching you ways to programmatically access NASA remote-sensing data from within your scripts. You will need to enter your Earthdata username and password in order for this to work.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Earthdata login"
+    ]
+  },
+  {
+    "objectID": "content/02-earthdata.html#getting-an-earthdata-login",
+    "href": "content/02-earthdata.html#getting-an-earthdata-login",
+    "title": "Earthdata Login",
+    "section": "Getting an Earthdata login",
+    "text": "Getting an Earthdata login\nIf you do not already have an Earthdata login, then navigate to the Earthdata Login page, a username and password, and then record this somewhere for use during the tutorials:",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Earthdata login"
+    ]
+  },
+  {
+    "objectID": "content/02-earthdata.html#configure-programmatic-access-to-nasa-servers",
+    "href": "content/02-earthdata.html#configure-programmatic-access-to-nasa-servers",
+    "title": "Earthdata Login",
+    "section": "Configure programmatic access to NASA servers",
+    "text": "Configure programmatic access to NASA servers\nIf you use web interfaces to retrieve nasa data such as Earthdata Search you are prompted to login. We will be using software to retrieve data from NASA Servers during the hackweek, so you must store your credentials on the JupyterHub. Run the following commands on the JupyterHub in a terminal replacing your Earthdata login username and password:\necho \"machine urs.earthdata.nasa.gov login EARTHDATA_LOGIN password EARTHDATA_PASSWORD\" &gt; ~/.netrc\nchmod 0600 .netrc",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Earthdata login"
+    ]
+  },
+  {
+    "objectID": "content/02-git-rstudio.html#what-is-git-and-github",
+    "href": "content/02-git-rstudio.html#what-is-git-and-github",
+    "title": "Basic Git/GitHub Skills Using RStudio",
+    "section": "What is Git and GitHub?",
+    "text": "What is Git and GitHub?\nGit A program to track your file changes and create a history of those changes. Creates a ‘container’ for a set of files called a repository.\nGitHub A website to host these repositories and allow you to sync local copies (on your computer) to the website. Lots of functionality built on top of this.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-git-rstudio.html#some-basic-git-jargon",
+    "href": "content/02-git-rstudio.html#some-basic-git-jargon",
+    "title": "Basic Git/GitHub Skills Using RStudio",
+    "section": "Some basic Git jargon",
+    "text": "Some basic Git jargon\n\nRepo Repository. It is your code and the record of your changes. This record and also the status of your repo is a hidden folder called .git . You have a local repo and a remote repo. The remote repo is on GitHub (for in our case) is called origin. The local repo is on the JupyterHub.\nStage Tell Git which changes you want to commit (write to the repo history).\nCommit Write a note about what change the staged files and “commit” that note to the repository record. You are also tagging this state of the repo and you could go back to this state if you wanted.\nPush Push local changes (commits) up to the remote repository on GitHub (origin).\nPull Pull changes on GitHub into the local repository on the JupyterHub.\nGit GUIs A graphical interface for Git (which is command line). Today I will use jupyterlab-git which we have installed on JupyterHub.\nShell A terminal window where we can issue git commands.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-git-rstudio.html#overview",
+    "href": "content/02-git-rstudio.html#overview",
+    "title": "Basic Git/GitHub Skills Using RStudio",
+    "section": "Overview",
+    "text": "Overview\nToday I will cover the four basic Git/GitHub skills. The goal for today is to first get you comfortable with the basic skills and terminology. We will use what is called a “trunk-based workflow”.\n\nSimple Trunk-based Workflow:\n\nMake local (on your computer) changes to code.\nRecord what those changes were about and commit to the code change record (history).\nPush those changes to your remote repository (aka origin)\n\nWe’ll do this",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-git-rstudio.html#setting-up-git",
+    "href": "content/02-git-rstudio.html#setting-up-git",
+    "title": "Basic Git/GitHub Skills Using RStudio",
+    "section": "Setting up Git",
+    "text": "Setting up Git\nYou should have gotten this done on Tuesday but if not here are the instructions\nBefore we can work with Git in the JupyterHub, we need to do some set up.\n\nTell Git who you are and to store your credentials (GitHub login info)\n\nShow me\nPaste this into a terminal window:\ngit config --global user.email \"&lt;your email&gt;\"\ngit config --global user.name \"&lt;your name&gt;\"\ngit config --global pull.rebase false\ngit config --global credential.helper store\n\nGet a Personal Access Token from GitHub\n\nCopy the token! You will need it in the next step.\nShow me Note, one change to this video is that you need to specify that you want a classic token.\n\nTrigger Git to ask for your password (that personal access token)\n\nYou can do this by cloning a private repo. In the Terminal, issue this command\ngit clone https://github.com/nmfs-opensci/github_setup_check\nIt will ask for your GitHub username and password. At the password part, paste in the Personal Access Token.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-git-rstudio.html#git-tab",
+    "href": "content/02-git-rstudio.html#git-tab",
+    "title": "Basic Git/GitHub Skills Using RStudio",
+    "section": "Git tab",
+    "text": "Git tab\nWhen the instructions say to use or open or click the Git tab,",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-git-rstudio.html#the-key-skills",
+    "href": "content/02-git-rstudio.html#the-key-skills",
+    "title": "Basic Git/GitHub Skills Using RStudio",
+    "section": "The Key Skills",
+    "text": "The Key Skills\n\nSkill 1: Create a blank repo on GitHub\nSkill 2: Clone your GitHub repo to RStudio\nSkill 3: Make some changes and commit those local changes\nSkill 4: Push the changes to GitHub\nSkill 1b: Copy someone else’s GitHub repository",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-git-rstudio.html#lets-see-it-done",
+    "href": "content/02-git-rstudio.html#lets-see-it-done",
+    "title": "Basic Git/GitHub Skills Using RStudio",
+    "section": "Let’s see it done!",
+    "text": "Let’s see it done!\n\nSkill 1: Create a blank repo on GitHub\n\nClick the + in the upper left from YOUR GitHub page.\nGive your repo the name Test and make sure it is public.\nClick new and check checkbox to add the Readme file and .gitignore\nCopy the URL of your new repo. It’s in the browser where you normally see a URL.\n\nShow me\n\n\nSkill 2: Clone your repo to the RStudio\nIn RStudio we do this by making a new project.\n\nCopy the URL of your repo. https://www.github.com/yourname/Test\nFile &gt; New Project &gt; Version Control &gt; Git\nPast in the URL of your repo from Step 1\nCheck that it is being created in your Home directory which will be denoted ~ in the JupyterHub.\nClick Create.\n\nShow me\n\n\nSkill 3: Make some changes and commit your changes\nThis writes a note about what changes you have made. It also marks a ‘point’ in time that you can go back to if you need to.\n\nMake some changes to the README.md file in the Test repo.\nClick the Git tab, and stage the change(s) by checking the checkboxes next to the files listed.\nClick the Commit button.\nAdd a commit comment, click commit.\n\nShow me\n\n\nSkill 4: Push changes to GitHub / Pull changes from GitHub\nTo push changes you committed in Skill #3\n\nFrom Git tab, click on the Green up arrow that says Push.\nTo pull changes on GitHub that are not on your local computer:\nMake some changes directly on GitHub (not in RStudio)\nFrom Git tab, click on the down arrow that says Pull.\n\nShow me\n\n\nPair-activity 1\nIn RStudio,\n\nMake a copy of README.md\nRename it to .md\nAdd some text.\nStage and commit the added file.\nPush to GitHub.\n\nTry before watching.\nShow me in RStudio – Show me in the shell – Show me in jupyter-git\n\n\nPair-activity 2\nAll of this activity is in RStudio.\n\nClone this repo https://github.com/nmfs-opensci/git-basics to RStudio and create a new project\nNavigate to the files in your new project, create a filed called to &lt;yourname&gt;.md. Use your actual name so the filename is different from everyone elses.\nStage and then commit that new file.\nPush to GitHub.\nMake some more changes and push to GitHub.\nPull in your partner’s (and everyone elses) changes\n\nShow me in RStudio – Show me in JupyterLab\n\n\nPair-activity 3\nYou can copy your own or other people’s repos1.\n\nIn a browser, go to the GitHub repository https://github.com/RWorkflow-Workshops/Week5\nCopy its URL.\nNavigate to your GitHub page: click your icon in the upper right and then ‘your repositories’\nClick the + in top right and click import repository. Paste in the URL and give your repo a name.\nUse Skill #1 to clone your new repo to RStudio and create a new project",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-git-rstudio.html#footnotes",
+    "href": "content/02-git-rstudio.html#footnotes",
+    "title": "Basic Git/GitHub Skills Using RStudio",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nThis is different from forking. There is no connection to the original repository.↩︎",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-rstudio.html#open-rstudio-in-the-jupyterhub",
+    "href": "content/02-rstudio.html#open-rstudio-in-the-jupyterhub",
+    "title": "RStudio - R",
+    "section": "Open RStudio in the JupyterHub",
+    "text": "Open RStudio in the JupyterHub\n\nLogin the JupyterHub\nClick on the RStudio button when the Launcher appears \nLook for the browser tab with the RStudio icon",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-rstudio.html#basic-navigation",
+    "href": "content/02-rstudio.html#basic-navigation",
+    "title": "RStudio - R",
+    "section": "Basic Navigation",
+    "text": "Basic Navigation\n\n\n\nRStudio Panels",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-rstudio.html#create-an-rstudio-project",
+    "href": "content/02-rstudio.html#create-an-rstudio-project",
+    "title": "RStudio - R",
+    "section": "Create an RStudio project",
+    "text": "Create an RStudio project\n\nOpen RStudio\nIn the file panel, click on the Home icon to make sure you are in your home directory\nFrom the file panel, click “New Project” to create a new project\nIn the pop up, select New Directory and then New Project\nName it sandbox\nClick on the dropdown in the upper right corner to select your sandbox project\nClick on Tools &gt; Project Options &gt; General and change the first 2 options about saving and restoring the workspace to “No”",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-rstudio.html#installing-packages",
+    "href": "content/02-rstudio.html#installing-packages",
+    "title": "RStudio - R",
+    "section": "Installing packages",
+    "text": "Installing packages\nIn the bottom right panel, select the Packages tab, click install and then start typing the name of the package. Then click Install.\nThe JupyterHub comes with many packages already installed so you shouldn’t have to install many packages.\nWhen you want to use a package, you first need to load it with\nlibrary(hello)\nYou will see this in the tutorials. You might also see something like\nhello::thefunction()\nThis is using thefunction() from the hello package.\n\n\n\n\n\n\nNote\n\n\n\nPython users. In R, you will always call a function like funtion(object) and never like object.function(). The exception is something called ‘piping’ in R, which I have never seen in Python. In this case you pass objects left to right. Like object %&gt;% function(). Piping is very common in modern R but you won’t see it much in R from 10 years ago.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-rstudio.html#uploading-and-downloading-files",
+    "href": "content/02-rstudio.html#uploading-and-downloading-files",
+    "title": "RStudio - R",
+    "section": "Uploading and downloading files",
+    "text": "Uploading and downloading files\nNote, Upload and download is only for the JupyterHub not on RStudio on your computer.\n\nUploading is easy.\nLook for the Upload button in the Files tab of the bottom right panel.\n\n\nDownload is less intuitive.\n\nClick the checkbox next to the file you want to download. One only.\nClick the “cog” icon in the Files tab of the bottom right panel. Then click Export.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-rstudio.html#creating-files",
+    "href": "content/02-rstudio.html#creating-files",
+    "title": "RStudio - R",
+    "section": "Creating files",
+    "text": "Creating files\nWhen you start your server, you will have access to your own virtual drive space. No other users will be able to see or access your files. You can upload files to your virtual drive space and save files here. You can create folders to organize your files. You personal directory is home/rstudio. Everyone has the same home directory but your files are separate and cannot be seen by others.\nPython users: If you open a Python image instead of the R image, your home is home/jovyan.\nThere are a number of different ways to create new files. Let’s practice making new files in RStudio.\n\nR Script\n\nOpen RStudio\nIn the upper right, make sure you are in your sandbox project.\nFrom the file panel, click on “New Blank File” and create a new R script.\nPaste\n\nprint(\"Hello World\")\n1+1\nin the script. 7. Click the Source button (upper left of your new script file) to run this code. 8. Try putting your cursor on one line and running that line of code by clicking “Run” 9. Try selecting lines of code and running that by clicking “Run”\n\n\ncsv file\n\nFrom the file panel, click on “New Blank File” and create a Text File.\nThe file will open in the top left corner. Paste in the following:\n\nname, place, value\nA, 1, 2\nB, 10, 20\nC, 100, 200\n\nClick the save icon (above your new file) to save your csv file\n\n\n\nA Rmarkdown document\nNow let’s create some more complicated files using the RStudio template feature.\n\nFrom the upper left, click File -&gt; New File -&gt; RMarkdown\nClick “Ok” at the bottom.\nWhen the file opens, click Knit (icon at top of file).\nIt will ask for a name. Give it one and save.\nYou file will render into html.\n\nReference sheet for writing in RMarkdown or go to Help &gt; Markdown Quick Reference\n\n\nA Rmarkdown presentation\n\nFrom the upper left, click File -&gt; New File -&gt; RMarkdown\nClick “Presentation” on left of the popup and click “Ok” at the bottom.\nWhen the file opens, click Knit (icon at top of file).\nIt will ask for a name. Give it one and save.\nYou file will render into html.\n\n\n\n(advanced) An interactive application\n\nFrom the upper left, click File -&gt; New File -&gt; Shiny Web App\nIn the popup, give the app a name and make sure the app is saved to my-files\nWhen the file opens, Run App (icon at top of file).\n\n\n\nAnd many more\nPlay around with creating other types of documents using templates. Especially if you already use RStudio.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-rstudio.html#more-tips",
+    "href": "content/02-rstudio.html#more-tips",
+    "title": "RStudio - R",
+    "section": "More tips",
+    "text": "More tips\nLearn some tips and tricks from these\n\nhttps://colorado.posit.co/rsc/the-unknown/into-the-unknown.html\nhttps://www.dataquest.io/blog/rstudio-tips-tricks-shortcuts/",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-rstudio.html#plotting-a-netcdf-file",
+    "href": "content/02-rstudio.html#plotting-a-netcdf-file",
+    "title": "RStudio - R",
+    "section": "Plotting a netCDF file",
+    "text": "Plotting a netCDF file\n\nhttps://pjbartlein.github.io/REarthSysSci/netCDF.html\nhttps://r-spatial.github.io/sf/articles/sf1.html\n\nwebpage:\nhttps://coastwatch.pfeg.noaa.gov/erddap/griddap/ncdcOisst21Agg.graph?sst%5B(2023-08-27T12:00:00Z)%5D%5B(0.0)%5D%5B(-7.8):(44.8)%5D%5B(39.7):(92.3)%5D&.draw=surface&.vars=longitude%7Clatitude%7Csst&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff\nurl from the dropdown on that page\nurl &lt;- https://coastwatch.pfeg.noaa.gov/erddap/griddap/ncdcOisst21Agg.nc?sst%5B(2023-08-27T12:00:00Z)%5D%5B(0.0)%5D%5B(-7.875):(44.875)%5D%5B(39.625):(92.375)%5D&.draw=surface&.vars=longitude%7Clatitude%7Csst&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff\n\nOpen an R script\n\nAdd this code.\n\nlibrary(ggplot2) # package for plotting\nlibrary(sf)\nlibrary(stars)\nlibrary(dplyr)\n\nurl &lt;- \"https://coastwatch.pfeg.noaa.gov/erddap/griddap/ncdcOisst21Agg.nc?sst%5B(2023-08-27T12:00:00Z)%5D%5B(0.0)%5D%5B(-7.875):(44.875)%5D%5B(39.625):(92.375)%5D&.draw=surface&.vars=longitude%7Clatitude%7Csst&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff\"\n\nfil &lt;- \"sst.nc\"\nif(!exists(fil)){\n  download.file(url=url, destfile=fil)\n}\n\nstars_object &lt;- raster::raster(fil) %&gt;% st_as_stars()\nggplot() + geom_stars(data = stars_object)",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "RStudio"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "EDMW 2024 - Workshop 3B",
     "section": "",
-    "text": "We are dedicated to providing a harassment-free learning experience for everyone regardless of gender, gender identity and expression, sexual orientation, disability, physical appearance, body size, race, age or religion. We do not tolerate harassment of participants in any form. Sexual language and imagery is not appropriate either in-person or virtual form, including the Discussion boards and Slack workspace. Participants (including event volunteers and organizers) violating these rules may be sanctioned or expelled from the event at the discretion of the organizers.",
+    "text": "Welcome to the NOAA Fisheries workshop focused on geospatial analysis using ocean ‘big data’. Today, we are focused on using data from NASA EarthData but the skills you will learn are transferable to other ways that you might get earth data, e.g. NESDIS, NCEI, ERDDAP servers, Copernicus, etc.\nThis session will also introduce to working with JupyterHubs. We will use both Jupyter Lab (Python) and RStudio (R) within our JupyterHub. Go to set-up for the basic orientation and how to get on the JupyterHub.",
     "crumbs": [
       "JupyterHub",
-      "Welcome",
-      "Code of Conduct"
-    ]
-  },
-  {
-    "objectID": "coc.html#definition-of-harassment",
-    "href": "coc.html#definition-of-harassment",
-    "title": "Code of Conduct",
-    "section": "Definition of Harassment",
-    "text": "Definition of Harassment\nHarassment includes, but is not limited to:\n\nVerbal comments that reinforce social structures of domination related to gender, gender identity and expression, sexual orientation, disability, physical appearance, body size, race, age, religion.\nSexual images in public spaces\nDeliberate intimidation, stalking, or following\nHarassing photography or recording\nSustained disruption of talks or other events\nInappropriate physical contact\nUnwelcome sexual attention\nAdvocating for, or encouraging, any of the above behavior",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Code of Conduct"
-    ]
-  },
-  {
-    "objectID": "coc.html#expectations",
-    "href": "coc.html#expectations",
-    "title": "Code of Conduct",
-    "section": "Expectations",
-    "text": "Expectations\nParticipants asked to stop any harassing behavior are expected to comply immediately. If a participant engages in harassing behavior, the organizers retain the right to take any actions to keep the event a welcoming environment for all participants. This includes warning the offender or expulsion from the event.\nThe organizers may take action to redress anything designed to, or with the clear impact of, disrupting the event or making the environment hostile for any participants. We expect participants to follow these rules at all the event venues and event-related social activities.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Code of Conduct"
-    ]
-  },
-  {
-    "objectID": "coc.html#reporting-a-violation",
-    "href": "coc.html#reporting-a-violation",
-    "title": "Code of Conduct",
-    "section": "Reporting a violation",
-    "text": "Reporting a violation\nHarassment and other code of conduct violations reduce the value of the event for everyone. If someone makes you or anyone else feel unsafe or unwelcome, please report it as soon as possible.\nIf you feel comfortable contacting someone associated with our event, you may speak with one of the event organizers in person or contact an organizer on a private Slack channel.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Code of Conduct"
-    ]
-  },
-  {
-    "objectID": "content/01-intro-to-cloud.html",
-    "href": "content/01-intro-to-cloud.html",
-    "title": "Intro the Cloud",
-    "section": "",
-    "text": "Lecture on NASA earth data in the cloud by Michele Thornton (NASA Openscapes) Video",
-    "crumbs": [
-      "JupyterHub",
-      "Tutorials",
-      "Welcome",
-      "Geoscience cloud tools"
-    ]
-  },
-  {
-    "objectID": "content/01-welcome.html",
-    "href": "content/01-welcome.html",
-    "title": "Welcome",
-    "section": "",
-    "text": "Introduction to working with earth data in the cloud and NASA Earth Data\nOrientation on our JupyterHub\nTutorial 1: Searching for resources in NASA Earth Data\nTutorial 2: Points and shapefiles\nTutorial 3: Subsetting your earth data with in a region (shapefile)\nTutorial 4: Getting values at points (along a track or transect)",
-    "crumbs": [
-      "JupyterHub",
-      "Tutorials",
-      "Welcome",
       "Welcome"
     ]
   },
   {
-    "objectID": "content/02-git-jupyter.html#summary",
-    "href": "content/02-git-jupyter.html#summary",
-    "title": "Git - Jupyter Lab",
+    "objectID": "index.html#topics-for-may-15-2024",
+    "href": "index.html#topics-for-may-15-2024",
+    "title": "EDMW 2024 - Workshop 3B",
+    "section": "Topics for May 15, 2024",
+    "text": "Topics for May 15, 2024\n\nIntroduction to working with earth data in the cloud and NASA Earth Data\nOrientation on our JupyterHub\nTutorial 1: Searching for resources in NASA Earth Data\nTutorial 2: Points and shapefiles\nTutorial 3: Subsetting your earth data with in a region (shapefile)\nTutorial 4: Getting values at points (along a track or transect)",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome"
+    ]
+  },
+  {
+    "objectID": "index.html#resources",
+    "href": "index.html#resources",
+    "title": "EDMW 2024 - Workshop 3B",
+    "section": "Resources",
+    "text": "Resources\n\nCoastWatch GitHub organization for many more training modules for working with satellite data in Python and R\nNASA EarthData Cloudbook for many tutorials on using satellite data in Python and R and NASA Earth Data",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome"
+    ]
+  },
+  {
+    "objectID": "index.html#thank-you-for-inspiration-and-content",
+    "href": "index.html#thank-you-for-inspiration-and-content",
+    "title": "EDMW 2024 - Workshop 3B",
+    "section": "Thank you for inspiration and content!",
+    "text": "Thank you for inspiration and content!\nThank you to the open science community that has created software, teaching resources, and workflows that we have been able to build off of and be inspired by. These include: NASA Openscapes • OceanHackWeek • SnowEx Hackweek • eScience Institute, University of Washington • ICESat-2 Hackweek • Project Jupyter • Pangeo Project • CryoCloud",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome"
+    ]
+  },
+  {
+    "objectID": "schedule.html",
+    "href": "schedule.html",
+    "title": "Schedule",
+    "section": "",
+    "text": "11-22 September 2023"
+  },
+  {
+    "objectID": "support.html#thank-you-for-inspiration-and-content",
+    "href": "support.html#thank-you-for-inspiration-and-content",
+    "title": "Acknowledgements",
+    "section": "Thank you for inspiration and content!",
+    "text": "Thank you for inspiration and content!\nThank you to the open science community that has created software, teaching resources, and workflows that we have been able to build off of and be inspired by. These include: NASA Openscapes • OceanHackWeek • SnowEx Hackweek • eScience Institute, University of Washington • ICESat-2 Hackweek • Project Jupyter • Pangeo Project • CryoCloud"
+  },
+  {
+    "objectID": "tutorials/python/1-earthaccess-cut-items.html#summary",
+    "href": "tutorials/python/1-earthaccess-cut-items.html#summary",
+    "title": "Earthdata Search and Discovery",
     "section": "Summary",
-    "text": "Summary\nIn this tutorial, we will provide a brief introduction to:\n\nCommand line (terminal/shell)\nNavigating around folders in Jupyter Lab\nVersion Control (code management using git)\nSetting up Git in Jupyter Lab\nThe Git GUI in Jupyter Lab\nBasic Git commands",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-JupyterLab"
-    ]
+    "text": "Summary\nIn this example we will use the earthaccess library to search for data collections from NASA Earthdata. earthaccess is a Python library that simplifies data discovery and access to NASA Earth science data by providing an abstraction layer for NASA’s Common Metadata Repository (CMR) API Search API. The library makes searching for data more approachable by using a simpler notation instead of low level HTTP queries. earthaccess takes the trouble out of Earthdata Login authentication, makes search easier, and provides a stream-line way to download or stream search results into an xarray object.\nFor more on earthaccess visit the earthaccess GitHub page and/or the earthaccess documentation site. Be aware that earthaccess is under active development."
   },
   {
-    "objectID": "content/02-git-jupyter.html#introduction-jupyter-lab",
-    "href": "content/02-git-jupyter.html#introduction-jupyter-lab",
-    "title": "Git - Jupyter Lab",
-    "section": "Introduction :: Jupyter Lab",
-    "text": "Introduction :: Jupyter Lab\nWhen you start the JupyterHub, you will be in Jupyter Lab. From there you can click on the RStudio box and open RStudio. However for this tutorial, we will stay in Juptyer Lab.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-JupyterLab"
-    ]
-  },
-  {
-    "objectID": "content/02-git-jupyter.html#introduction-terminalshell",
-    "href": "content/02-git-jupyter.html#introduction-terminalshell",
-    "title": "Git - Jupyter Lab",
-    "section": "Introduction :: Terminal/Shell",
-    "text": "Introduction :: Terminal/Shell\nLog into the JupyterHub. If you do not see this\n\nThen go to File &gt; New Launcher\nClick on the “Terminal” box to open a new terminal window.\n\nShell or Terminal Basics\n\nWhat is Terminal or Shell?\nNavigating Files and Directories\nWorking with Files and Directories\nOptional: Detailed self-paced lesson on running scripts from the shell: Shell Lesson from Software Carpentry\n\nYou will need only basic navigation skills for this course: cd, ls and cat\n\npwd where am I\ncd nameofdir move into a directory\ncd .. move up a directory\nls list the files in the current directory\nls -a list the files including hidden files\nls -l list the files with more info\ncat filename print out the contents of a file\n\n\n\nLet’s try\nls\nls -a\ncd shared\nls\ncd shell-tutorial\ncat lesson1.sh\ncd ..\ncd ..\n\n\nClose the terminal\nJust click on the X in the terminal tab",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-JupyterLab"
-    ]
-  },
-  {
-    "objectID": "content/02-git-jupyter.html#introduction-file-navigation",
-    "href": "content/02-git-jupyter.html#introduction-file-navigation",
-    "title": "Git - Jupyter Lab",
-    "section": "Introduction :: File Navigation",
-    "text": "Introduction :: File Navigation\nIn the far left, you will see a line of icons. The top one is a folder and allows us to move around our file system.\n\nClick on shared. Now you can see the files in the shared directory.\nClick on shell-tutorial. Then click on lesson1.sh. The file opens. You won’t be able to save changes here because you don’t have write permission on this drive.\nClick on the folder icon that looks like this. Click on the actual folder image. \nNow it should look like this folder /\nThis shows me doing this\n\nCreate a new folder.\n\nNext to the blue rectange with a +, is a grey folder with a +. Click that to create a new folder, called lesson-scripts.\nThen click on lesson-scripts to enter the folder\n\n\nCreate a new file\n\nCreate with File &gt; New &gt; Text file\nThe file will open and you can edit it.\nSave with File &gt; Save Text\nDelete the file by right-clicking on it and clicking “Delete”",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-JupyterLab"
-    ]
-  },
-  {
-    "objectID": "content/02-git-jupyter.html#introduction-version-control-git",
-    "href": "content/02-git-jupyter.html#introduction-version-control-git",
-    "title": "Git - Jupyter Lab",
-    "section": "Introduction :: Version Control (Git)",
-    "text": "Introduction :: Version Control (Git)\n\nWhat is version control, git, github, and how to set it up?\nVersion control is managing and tracking changes to your documents (program source code, images, websites, data files, etc.). git is a popular tool used for version control of software code. github.com is popular platform that provides remote server hosting for git repositories. A repository is a collection of various files that you are tracking for changes and versions. Currently GitHub is the most popular platform for file sharing code and code packages.\nThis section is a step-by-step guide to set up git on our JupyterHub. We will also configure git to use your github.com account for managing your repositories hosted on github.com. There are 5 main steps.\n\n\nStep 1: Create a GitHub account\nTo complete the setup, you will need an account on github.com. If you don’t have an account, please visit github.com, create an account (free) and come back to this guide for setting up git.\n\n\nStep 2: Clone a repository\nWe have created a demo repository for you to clone:\nhttps://github.com/nmfs-opensci/Git-Lesson\n\nStart your JupyterHub\nClick on the Git icon\n\n\n\nClick “Clone a Repository”\nWhere it says “Enter the URI of the remote Git repository”, paste in the URL https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024\nThe folder appears and you can enter the folder and edit and create files.\n\n\nYour task: Create a file with your name and save to the Git-Lesson folder",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-JupyterLab"
-    ]
-  },
-  {
-    "objectID": "content/02-git-jupyter.html#step-3",
-    "href": "content/02-git-jupyter.html#step-3",
-    "title": "Git - Jupyter Lab",
-    "section": "Step 3:",
-    "text": "Step 3:\nConfigure git with your name and email address.\n``` bash\ngit config --global user.name \"Makhan Virdi\"\ngit config --global user.email \"Makhan.Virdi@gmail.com\"\n```\n\n**Note:** This name and email could be different from your github.com credentials. Remember `git` is a program that keeps track of your changes locally (on the JupyterHub or your own computer) and github.com is a platform to host your repositories. However, since your changes are tracked by `git`, the email/name used in git configuration will show up next to your contributions on github.com when you `push` your repository to github.com (`git push` is discussed in a later step).\n\nConfigure git to store your github credentials to avoid having to enter your github username and token each time you push changes to your repository(in Step 5, we will describe how to use github token instead of a password)\ngit config --global credential.helper store\nCopy link for the demo repository from your github account. Click the green “Code” button and copy the link as shown.\n\nClone the repository using git clone command in the terminal\nTo clone a repository from github, copy the link for the repository (previous step) and use git clone:\ngit clone https://github.com/YOUR-GITHUB-USERNAME/check_github_setup\nNote: Replace YOUR-GITHUB-USERNAME here with your github.com username. For example, it is virdi for my github.com account as seen in this image.\n\nUse ls (list files) to verify the existence of the repository that you just cloned\n\nChange directory to the cloned repository using cd check_github_setup and check the current directory using pwd command (present working directory)\n\nCheck status of your git repository to confirm git set up using git status\n\nYou are all set with using git on your 2i2c JupyterHub! But the collaborative power of git through github needs some additional setup.\nIn the next step, we will create a new file in this repository, track changes to this file, and link it with your github.com account.\n\n\nStep 4. Creating new file and tracking changes\n\nIn the left panel on your 2i2c JupyterHub, click on the “directory” icon and then double click on “check_github_setup” directory.\n\n\nOnce you are in the check_github_setup directory, create a new file using the text editor in your 2i2c JupyterHub (File &gt;&gt; New &gt;&gt; Text File).\n\nName the file lastname.txt. For example, virdi.txt for me (use your last name). Add some content to this file (for example, I added this to my virdi.txt file: my last name is virdi).\n\nNow you should have a new file (lastname.txt) in the git repository directory check_github_setup\nCheck if git can see that you have added a new file using git status. Git reports that you have a new file that is not tracked by git yet, and suggests adding that file to the git tracking system.\n\nAs seen in this image, git suggests adding that file so it can be tracked for changes. You can add file to git for tracking changes using git add. Then, you can commit changes to this file’s content using git commit as shown in the image.\ngit add virdi.txt\ngit status\ngit commit -m \"adding a new file\"\ngit status\n\nAs seen in the image above, git is suggesting to push the change that you just committed to the remote server at github.com (so that your collaborators can also see what changes you made).\nNote: DO NOT execute push yet. Before we push to github.com, let’s configure git further and store our github.com credentials to avoid entering the credentials every time we invoke git push. For doing so, we need to create a token on github.com to be used in place of your github.com password.\n\n\n\nStep 5. Create access token on github.com\n\nGo to your github account and create a new “personal access token”: https://github.com/settings/tokens/new\n\n\n\nGenerate Personal Access Token on github.com\n\n\nEnter a description in “Note” field as seen above, select “repo” checkbox, and scroll to the bottom and click the green button “Generate Token”. Once generated, copy the token (or save it in a text file for reference).\nIMPORTANT: You will see this token only once, so be sure to copy this. If you do not copy your token at this stage, you will need to generate a new token.\n\nTo push (transfer) your changes to github, use git push in terminal. It requires you to enter your github credentials. You will be prompted to enter your github username and “password”. When prompted for your “password”, DO NOT use your github password, use the github token that was copied in the previous step.\ngit push\n\nNote: When you paste your token in the terminal window, windows users will press Ctrl+V and mac os users will press Cmd+V. If it does not work, try generating another token and use the copy icon next to the token to copy the token. Then, paste using your computer’s keyboard shortcut for paste.\nNow your password is stored in ~/.git-credentials and you will not be prompted again unless the Github token expires. You can check the presence of this git-credentials file using Terminal. Here the ~ character represents your home directory (/home/jovyan/).\nls -la ~\nThe output looks like this:\ndrwxr-xr-x 13 jovyan jovyan 6144 Oct 22 17:35 .\ndrwxr-xr-x  1 root   root   4096 Oct  4 16:21 ..\n-rw-------  1 jovyan jovyan 1754 Oct 29 18:30 .bash_history\ndrwxr-xr-x  4 jovyan jovyan 6144 Oct 29 16:38 .config\n-rw-------  1 jovyan jovyan   66 Oct 22 17:35 .git-credentials\n-rw-r--r--  1 jovyan jovyan   84 Oct 22 17:14 .gitconfig\ndrwxr-xr-x 10 jovyan jovyan 6144 Oct 21 16:19 2021-Cloud-Hackathon\nYou can also verify your git configuration\n(notebook) jovyan@jupyter-virdi:~$ git config -l\nThe output should have credential.helper = store:\nuser.email        = Makhan.Virdi@gmail.com\nuser.name         = Makhan Virdi\ncredential.helper = store\n\nNow we are all set to collaborate with github on the JupyterHub during the Cloud Hackathon!\n\n\nSummary: Git Commands\n\nCommonly used git commands (modified from source)\n\n\nGit Command\nDescription\n\n\n\n\ngit status\nShows the current state of the repository: the current working branch, files in the staging area, etc.\n\n\ngit add\nAdds a new, previously untracked file to version control and marks already tracked files to be committed with the next commit\n\n\ngit commit\nSaves the current state of the repository and creates an entry in the log\n\n\ngit log\nShows the history for the repository\n\n\ngit diff\nShows content differences between commits, branches, individual files and more\n\n\ngit clone\nCopies a repository to your local environment, including all the history\n\n\ngit pull\nGets the latest changes of a previously cloned repository\n\n\ngit push\nPushes your local changes to the remote repository, sharing them with others\n\n\n\n\n\nGit: More Details\nLesson: For a more detailed self-paced lesson on git, visit Git Lesson from Software Carpentry\nCheatsheet: Frequently used git commands\nDangit, Git!?!: If you are stuck after a git mishap, there are ready-made solutions to common problems at Dangit, Git!?!\n\n\nCloning our repository using the git Jupyter lab extension.\nIf we’re already familiar with git commands and feel more confortable using a GUI our Jupyterhub deployment comes with a git extension. This plugin allows us to operate with git using a simple user interface.\nFor example we can clone our repository using the extension.\n\n\n\ngit extension",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-JupyterLab"
-    ]
-  },
-  {
-    "objectID": "content/02-local-setup.html",
-    "href": "content/02-local-setup.html",
-    "title": "Setting up on your computer",
-    "section": "",
-    "text": "Here are instructions for installing on your own computer.\nInstall the development version of earthdatalogin and update terra.\n\ndevtools::install_github(\"boettiger-lab/earthdatalogin\")\ninstall.packages(\"terra\")\ninstall.packages(\"rstac\")\ninstall.packages(\"gdalcubes\")\ninstall.packages(\"here\")\n\nlibrary(\"earthdatalogin\")\nlibrary(\"terra\")\nlibrary(\"rstac\")\nlibrary(\"gdalcubes\")\nlibrary(\"here\")\n\nYou will need GDAL installed. See these instructions if you do not have it installed: https://developers.planet.com/docs/integrations/qgis/install-qgis-gdal/\nYou may need to install terra and sf from source to get them to use the latest GDAL installation.\n\ninstall.packages(\"terra\", type = \"source\")\ninstall.packages(\"sf\", type = \"source\")\nsf_extSoftVersion()\n\nThe environment we are using today is the py-rocket-geospatial image. This is part of work on a Data Science Docker Stack for NOAA Fisheries.\n\nR Version Metadata\n\nsessionInfo()\n\nR version 4.4.0 (2024-04-24)\nPlatform: x86_64-pc-linux-gnu\nRunning under: Ubuntu 22.04.4 LTS\n\nMatrix products: default\nBLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 \nLAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0\n\nlocale:\n [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       \n [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   \n [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          \n[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   \n\ntime zone: Etc/UTC\ntzcode source: system (glibc)\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base     \n\nloaded via a namespace (and not attached):\n [1] htmlwidgets_1.6.4 compiler_4.4.0    fastmap_1.1.1     cli_3.6.2        \n [5] tools_4.4.0       htmltools_0.5.8.1 rstudioapi_0.16.0 yaml_2.3.8       \n [9] rmarkdown_2.26    knitr_1.46        jsonlite_1.8.8    xfun_0.43        \n[13] digest_0.6.35     rlang_1.1.3       evaluate_0.23",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Local set-up"
-    ]
-  },
-  {
-    "objectID": "content/index.html",
-    "href": "content/index.html",
-    "title": "Week 1 Tutorials",
-    "section": "",
-    "text": "During week 1, participants will gain experience with the platforms used in collaborative science: GitHub and RMarkdown."
-  },
-  {
-    "objectID": "content/index.html#prerequisites",
-    "href": "content/index.html#prerequisites",
-    "title": "Week 1 Tutorials",
+    "objectID": "tutorials/python/1-earthaccess-cut-items.html#prerequisites",
+    "href": "tutorials/python/1-earthaccess-cut-items.html#prerequisites",
+    "title": "Earthdata Search and Discovery",
     "section": "Prerequisites",
-    "text": "Prerequisites\nPlease follow the set up prerequisites"
+    "text": "Prerequisites\nAn Earthdata Login account is required to access data from NASA Earthdata. Please visit https://urs.earthdata.nasa.gov to register and manage your Earthdata Login account. This account is free to create and only takes a moment to set up."
   },
   {
-    "objectID": "content/index.html#content",
-    "href": "content/index.html#content",
-    "title": "Week 1 Tutorials",
-    "section": "Content",
-    "text": "Content\n\nThe R language and RStudio\nIntro to RStudio\nIntroduction to Git and GitHub"
+    "objectID": "tutorials/python/1-earthaccess-cut-items.html#get-started",
+    "href": "tutorials/python/1-earthaccess-cut-items.html#get-started",
+    "title": "Earthdata Search and Discovery",
+    "section": "Get Started",
+    "text": "Get Started\n\nImport Required Packages\n\nimport earthaccess \nfrom pprint import pprint\nimport xarray as xr\nimport geopandas as gpd\n\n\nimport os\nos.environ[\"HOME\"] = \"/home/jovyan\"\n\n\nauth = earthaccess.login()\n# are we authenticated?\nif not auth.authenticated:\n    # ask for credentials and persist them in a .netrc file\n    auth.login(strategy=\"interactive\", persist=True)\n\n\n\nSearch for data\nThere are multiple keywords we can use to discovery data from collections. The table below contains the short_name, concept_id, and doi for some collections we are interested in for other exercises. Each of these can be used to search for data or information related to the collection we are interested in.\n\n\n\n\n\n\n\n\nShortname\nCollection Concept ID\nDOI\n\n\n\n\nMUR-JPL-L4-GLOB-v4.1\nC1996881146-POCLOUD\n10.5067/GHGMR-4FJ04\n\n\nAVHRR_OI-NCEI-L4-GLOB-v2.1\nC2036881712-POCLOUD\n10.5067/GHAAO-4BC21\n\n\n\nHow can we find the shortname, concept_id, and doi for collections not in the table above?. Let’s take a quick detour.\nhttps://search.earthdata.nasa.gov/search\n\nSearch by collection\n\ncollection_id = 'C1996881146-POCLOUD'\n\n\nresults = earthaccess.search_data(\n    concept_id = collection_id,\n    cloud_hosted = True,\n    count = 10    # Restricting to 10 records returned\n)\n\nGranules found: 8002\n\n\nIn this example we used the concept_id parameter to search from our desired collection. However, there are multiple ways to specify the collection(s) we are interested in. Alternative parameters include:\n\ndoi - request collection by digital object identifier (e.g., doi = ‘10.5067/GHGMR-4FJ04’)\n\nshort_name - request collection by CMR shortname (e.g., short_name = ‘MUR-JPL-L4-GLOB-v4.1’)\n\nNOTE: Each Earthdata collection has a unique concept_id and doi. This is not the case with short_name. A shortname can be associated with multiple versions of a collection. If multiple versions of a collection are publicaly available, using the short_name parameter with return all versions available. It is advised to use the version parameter in conjunction with the short_name parameter with searching.\nWe can refine our search by passing more parameters that describe the spatiotemporal domain of our use case. Here, we use the temporal parameter to request a date range and the bounding_box parameter to request granules that intersect with a bounding box.\nFor our bounding box, we need the xmin, ymin, xmax, ymax and we will assign this to bbox. We will assign our start date and end date to a variable named date_range\n\ndate_range = (\"2020-01-16\", \"2020-12-16\")\n# (xmin=-73.5, ymin=33.5, xmax=-43.5, ymax=43.5)\nbbox = (-73.5, 33.5, -43.5, 43.5)\n\n\nresults = earthaccess.search_data(\n    concept_id = collection_id,\n    cloud_hosted = True,\n    temporal = date_range,\n    bounding_box = bbox,\n)\n\nGranules found: 336\n\n\n\nThe short_name and concept_id search parameters can be used to request one or multiple collections per request, but the doi parameter can only request a single collection.\n&gt; concept_ids = [‘C2723754864-GES_DISC’, ‘C1646609808-NSIDC_ECS’]\n\nUse the cloud_hosted search parameter only to search for data assets available from NASA’s Earthdata Cloud.\nThere are even more search parameters that can be passed to help refine our search, however those parameters do have to be populated in the CMR record to be leveraged. A non exhaustive list of examples are below:\n\nday_night_flag = 'day'\n\ncloud_cover = (0, 10)\n\n\n\n# col_ids = ['C2723754864-GES_DISC', 'C1646609808-NSIDC_ECS', 'C2531308461-NSIDC_ECS', 'C2537927247-NSIDC_ECS']    # Specify a list of collections to pass to the search\n\n# results = earthaccess.search_data(\n#     concept_id = col_ids,\n#     #cloud_hosted = True,\n#     temporal = date_range,\n#     bounding_box = bbox,\n# )\n\n\n\n\nWorking with earthaccess returns\nFollowing the search for data, you’ll likely take one of two pathways with those results. You may choose to download the assets that have been returned to you or you may choose to continue working with the search results within the Python environment.\n\nDownload earthaccess results\nIn some cases you may want to download your assets. earthaccess makes downloading the data from the search results very easy using the earthaccess.download() function. The MUR SST files are very large so we won’t run this code.\ndownloaded_files = earthaccess.download( results[0:9], local_path=‘../data’, )\nearthaccess does a lot of heavy lifting for us. It identifies the downloadable links, passes our Earthdata Login credentials, and saves the files with the proper names.\n\n\nExplore earthaccess search response\n\nprint(f'The results variable is a {type(results)} of {type(results[0])}')\n\nThe results variable is a &lt;class 'list'&gt; of &lt;class 'earthaccess.results.DataGranule'&gt;\n\n\n\nlen(results)\n\n336\n\n\nWe can explore the first item (earthaccess.results.DataGranule) in our list.\n\nitem = results[0]\ntype(item)\n\nearthaccess.results.DataGranule\n\n\nEach item contains three keys that can be used to explore the item\n\nitem.keys()\n\ndict_keys(['meta', 'umm', 'size'])\n\n\n\nitem['umm']\n\n{'TemporalExtent': {'RangeDateTime': {'EndingDateTime': '2020-01-16T21:00:00.000Z',\n   'BeginningDateTime': '2020-01-15T21:00:00.000Z'}},\n 'MetadataSpecification': {'URL': 'https://cdn.earthdata.nasa.gov/umm/granule/v1.6.5',\n  'Name': 'UMM-G',\n  'Version': '1.6.5'},\n 'GranuleUR': '20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1',\n 'ProviderDates': [{'Type': 'Insert', 'Date': '2021-03-31T16:12:39.303Z'},\n  {'Type': 'Update', 'Date': '2021-03-31T16:12:39.322Z'}],\n 'SpatialExtent': {'HorizontalSpatialDomain': {'Geometry': {'BoundingRectangles': [{'WestBoundingCoordinate': -180,\n      'SouthBoundingCoordinate': -90,\n      'EastBoundingCoordinate': 180,\n      'NorthBoundingCoordinate': 90}]}}},\n 'DataGranule': {'ArchiveAndDistributionInformation': [{'SizeUnit': 'MB',\n    'Size': 673.3220148086548,\n    'Checksum': {'Value': '45a73781f8666f74237ce6ae1d57e2d9',\n     'Algorithm': 'MD5'},\n    'SizeInBytes': 706029305,\n    'Name': '20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc'},\n   {'SizeUnit': 'MB',\n    'Size': 9.059906005859375e-05,\n    'Checksum': {'Value': 'fe7bbdcbf9a580175965c417aed586df',\n     'Algorithm': 'MD5'},\n    'SizeInBytes': 95,\n    'Name': '20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.md5'}],\n  'DayNightFlag': 'Unspecified',\n  'ProductionDateTime': '2020-01-25T00:42:39.000Z'},\n 'CollectionReference': {'Version': '4.1',\n  'ShortName': 'MUR-JPL-L4-GLOB-v4.1'},\n 'RelatedUrls': [{'URL': 's3://podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc',\n   'Type': 'GET DATA VIA DIRECT ACCESS',\n   'Description': 'This link provides direct download access via S3 to the granule.'},\n  {'URL': 'https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-public/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.md5',\n   'Description': 'Download 20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.md5',\n   'Type': 'EXTENDED METADATA'},\n  {'URL': 'https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc',\n   'Description': 'Download 20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc',\n   'Type': 'GET DATA'},\n  {'URL': 'https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-public/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.cmr.json',\n   'Description': 'Download 20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.cmr.json',\n   'Type': 'EXTENDED METADATA'},\n  {'URL': 'https://archive.podaac.earthdata.nasa.gov/s3credentials',\n   'Description': 'api endpoint to retrieve temporary credentials valid for same-region direct s3 access',\n   'Type': 'VIEW RELATED INFORMATION'},\n  {'URL': 'https://opendap.earthdata.nasa.gov/providers/POCLOUD/collections/GHRSST%20Level%204%20MUR%20Global%20Foundation%20Sea%20Surface%20Temperature%20Analysis%20(v4.1)/granules/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1',\n   'Type': 'USE SERVICE API',\n   'Subtype': 'OPENDAP DATA',\n   'Description': 'OPeNDAP request URL'}]}\n\n\n\n\nGet data URLs / S3 URIs\nGet links to data. The data_links() method is used to return the URL(s)/data link(s) for the item. By default the method returns the HTTPS URL to download or access the item.\n\nitem.data_links()\n\n['https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc']\n\n\nThe data_links() method can also be used to get the s3 URI when we want to perform direct s3 access of the data in the cloud. To get the s3 URI, pass access = 'direct' to the method.\n\nitem.data_links(access='direct')\n\n['s3://podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc']\n\n\nIf we want to extract all of the data links from our search results and add or save them to a list, we can.\n\ndata_link_list = []\n\nfor granule in results:\n    for asset in granule.data_links(access='direct'):\n        data_link_list.append(asset)\n        \n\n\ndata_link_list[0:9]\n\n['s3://podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc',\n 's3://podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200117090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc',\n 's3://podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200118090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc',\n 's3://podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200119090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc',\n 's3://podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200120090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc',\n 's3://podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200121090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc',\n 's3://podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200122090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc',\n 's3://podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200123090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc',\n 's3://podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200124090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc']\n\n\nWe can pass or read these lists of data links into libraries like xarray, rioxarray, or gdal, but earthaccess has a built-in module for easily reading these data links in.\n\n\nOpen results in xarray\nWe use earthaccess’s open() method to make a connection to and open the files from our search result.\n\nfileset = earthaccess.open(results[1:30])\n\nOpening 29 granules, approx size: 19.99 GB\n\n\n\n\n\n\n\n\n\n\n\nThen we pass the fileset object to xarray.\n\nds = xr.open_mfdataset(fileset, chunks = {})\n\nSome really cool things just happened here! Not only were we able to seamlessly stream our earthaccess search results into a xarray dataset using the open_mfdataset() (multi-file) method, but earthaccess whether we were working from within AWS us-west-2 and could use direct S3 access or if not, would use https. We didn’t have to create a session or a filesystem to authenticate and connect to the data. earthaccess did this for us using the auth object we created at the beginning of this tutorial.\nLet’s take a quick lock at our xarray dataset\n\nds\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n&lt;xarray.Dataset&gt;\nDimensions:                    (time: 18, lon: 3600, lat: 1800, nv: 2)\nCoordinates:\n  * lon                        (lon) float32 -179.9 -179.8 ... 179.9 179.9\n  * lat                        (lat) float32 -89.95 -89.85 ... 89.85 89.95\n  * time                       (time) object 2019-11-19 00:00:00 ... 2019-12-...\nDimensions without coordinates: nv\nData variables:\n    precipitationCal           (time, lon, lat) float32 dask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n    precipitationCal_cnt       (time, lon, lat) int8 dask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n    precipitationCal_cnt_cond  (time, lon, lat) int8 dask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n    HQprecipitation            (time, lon, lat) float32 dask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n    HQprecipitation_cnt        (time, lon, lat) int8 dask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n    HQprecipitation_cnt_cond   (time, lon, lat) int8 dask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n    randomError                (time, lon, lat) float32 dask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n    randomError_cnt            (time, lon, lat) int8 dask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n    time_bnds                  (time, nv) object dask.array&lt;chunksize=(1, 2), meta=np.ndarray&gt;\nAttributes:\n    BeginDate:       2019-11-19\n    BeginTime:       00:00:00.000Z\n    EndDate:         2019-11-19\n    EndTime:         23:59:59.999Z\n    FileHeader:      StartGranuleDateTime=2019-11-19T00:00:00.000Z;\\nStopGran...\n    InputPointer:    3B-HHR.MS.MRG.3IMERG.20191119-S000000-E002959.0000.V06B....\n    title:           GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 ...\n    DOI:             10.5067/GPM/IMERGDF/DAY/06\n    ProductionTime:  2020-02-27T16:09:48.308Zxarray.DatasetDimensions:time: 18lon: 3600lat: 1800nv: 2Coordinates: (3)lon(lon)float32-179.9 -179.8 ... 179.9 179.9units :degrees_eastlong_name :Longitudearray([-179.95   , -179.84999, -179.75   , ...,  179.75002,  179.85002,\n        179.95   ], dtype=float32)lat(lat)float32-89.95 -89.85 ... 89.85 89.95units :degrees_northlong_name :Latitudearray([-89.95    , -89.85    , -89.75    , ...,  89.75    ,  89.850006,\n        89.95001 ], dtype=float32)time(time)object2019-11-19 00:00:00 ... 2019-12-...standard_name :timebounds :time_bndsarray([cftime.DatetimeJulian(2019, 11, 19, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 20, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 21, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 22, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 23, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 24, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 25, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 26, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 27, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 28, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 29, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 11, 30, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 12, 1, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 12, 2, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 12, 3, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 12, 4, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 12, 5, 0, 0, 0, 0, has_year_zero=False),\n       cftime.DatetimeJulian(2019, 12, 6, 0, 0, 0, 0, has_year_zero=False)],\n      dtype=object)Data variables: (9)precipitationCal(time, lon, lat)float32dask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;units :mmlong_name :Daily accumulated precipitation (combined microwave-IR) estimate\n\n\n\n\n\n\n\n\n\n\n\nArray\nChunk\n\n\n\n\nBytes\n444.95 MiB\n24.72 MiB\n\n\nShape\n(18, 3600, 1800)\n(1, 3600, 1800)\n\n\nDask graph\n18 chunks in 37 graph layers\n\n\nData type\nfloat32 numpy.ndarray\n\n\n\n\n                                                           1800 3600 18\n\n\n\n\n\n\n\n\nprecipitationCal_cnt\n\n\n(time, lon, lat)\n\n\nint8\n\n\ndask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nunits :\n\ncount\n\nlong_name :\n\nCount of all valid half-hourly precipitationCal retrievals for the day\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nArray\nChunk\n\n\n\n\nBytes\n111.24 MiB\n6.18 MiB\n\n\nShape\n(18, 3600, 1800)\n(1, 3600, 1800)\n\n\nDask graph\n18 chunks in 37 graph layers\n\n\nData type\nint8 numpy.ndarray\n\n\n\n\n                                                           1800 3600 18\n\n\n\n\n\n\n\n\nprecipitationCal_cnt_cond\n\n\n(time, lon, lat)\n\n\nint8\n\n\ndask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nunits :\n\ncount\n\nlong_name :\n\nCount of valid half-hourly precipitationCal retrievals for the day where precipitation is greater than 0\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nArray\nChunk\n\n\n\n\nBytes\n111.24 MiB\n6.18 MiB\n\n\nShape\n(18, 3600, 1800)\n(1, 3600, 1800)\n\n\nDask graph\n18 chunks in 37 graph layers\n\n\nData type\nint8 numpy.ndarray\n\n\n\n\n                                                           1800 3600 18\n\n\n\n\n\n\n\n\nHQprecipitation\n\n\n(time, lon, lat)\n\n\nfloat32\n\n\ndask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nunits :\n\nmm\n\nlong_name :\n\nDaily accumulated High Quality precipitation from all available MW sources\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nArray\nChunk\n\n\n\n\nBytes\n444.95 MiB\n24.72 MiB\n\n\nShape\n(18, 3600, 1800)\n(1, 3600, 1800)\n\n\nDask graph\n18 chunks in 37 graph layers\n\n\nData type\nfloat32 numpy.ndarray\n\n\n\n\n                                                           1800 3600 18\n\n\n\n\n\n\n\n\nHQprecipitation_cnt\n\n\n(time, lon, lat)\n\n\nint8\n\n\ndask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nunits :\n\ncount\n\nlong_name :\n\nCount of all valid half-hourly HQprecipitation retrievals for the day\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nArray\nChunk\n\n\n\n\nBytes\n111.24 MiB\n6.18 MiB\n\n\nShape\n(18, 3600, 1800)\n(1, 3600, 1800)\n\n\nDask graph\n18 chunks in 37 graph layers\n\n\nData type\nint8 numpy.ndarray\n\n\n\n\n                                                           1800 3600 18\n\n\n\n\n\n\n\n\nHQprecipitation_cnt_cond\n\n\n(time, lon, lat)\n\n\nint8\n\n\ndask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nunits :\n\ncount\n\nlong_name :\n\nCount of valid half-hourly HQprecipitation retrievals for the day where precipitation is greater than 0\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nArray\nChunk\n\n\n\n\nBytes\n111.24 MiB\n6.18 MiB\n\n\nShape\n(18, 3600, 1800)\n(1, 3600, 1800)\n\n\nDask graph\n18 chunks in 37 graph layers\n\n\nData type\nint8 numpy.ndarray\n\n\n\n\n                                                           1800 3600 18\n\n\n\n\n\n\n\n\nrandomError\n\n\n(time, lon, lat)\n\n\nfloat32\n\n\ndask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nunits :\n\nmm\n\nlong_name :\n\nDaily total error of precipitation estimate\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nArray\nChunk\n\n\n\n\nBytes\n444.95 MiB\n24.72 MiB\n\n\nShape\n(18, 3600, 1800)\n(1, 3600, 1800)\n\n\nDask graph\n18 chunks in 37 graph layers\n\n\nData type\nfloat32 numpy.ndarray\n\n\n\n\n                                                           1800 3600 18\n\n\n\n\n\n\n\n\nrandomError_cnt\n\n\n(time, lon, lat)\n\n\nint8\n\n\ndask.array&lt;chunksize=(1, 3600, 1800), meta=np.ndarray&gt;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nunits :\n\ncount\n\nlong_name :\n\nCount of valid half-hourly randomError retrievals for the day\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nArray\nChunk\n\n\n\n\nBytes\n111.24 MiB\n6.18 MiB\n\n\nShape\n(18, 3600, 1800)\n(1, 3600, 1800)\n\n\nDask graph\n18 chunks in 37 graph layers\n\n\nData type\nint8 numpy.ndarray\n\n\n\n\n                                                           1800 3600 18\n\n\n\n\n\n\n\n\ntime_bnds\n\n\n(time, nv)\n\n\nobject\n\n\ndask.array&lt;chunksize=(1, 2), meta=np.ndarray&gt;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ncoordinates :\n\ntime nv\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nArray\nChunk\n\n\n\n\nBytes\n288 B\n16 B\n\n\nShape\n(18, 2)\n(1, 2)\n\n\nDask graph\n18 chunks in 37 graph layers\n\n\nData type\nobject numpy.ndarray\n\n\n\n\n                          2 18\n\n\n\n\n\nIndexes: (3)lonPandasIndexPandasIndex(Float64Index([ -179.9499969482422, -179.84999084472656,             -179.75,\n              -179.64999389648438,  -179.5500030517578,  -179.4499969482422,\n              -179.34999084472656,             -179.25, -179.14999389648438,\n               -179.0500030517578,\n              ...\n                179.0500030517578,  179.15000915527344,  179.25001525878906,\n                179.3500213623047,   179.4499969482422,   179.5500030517578,\n               179.65000915527344,  179.75001525878906,   179.8500213623047,\n                179.9499969482422],\n             dtype='float64', name='lon', length=3600))latPandasIndexPandasIndex(Float64Index([-89.94999694824219,  -89.8499984741211,             -89.75,\n              -89.64999389648438, -89.54999542236328, -89.44999694824219,\n               -89.3499984741211,             -89.25, -89.14999389648438,\n              -89.04999542236328,\n              ...\n               89.05000305175781,  89.15000915527344,              89.25,\n               89.35000610351562,  89.45001220703125,  89.55000305175781,\n               89.65000915527344,              89.75,  89.85000610351562,\n               89.95001220703125],\n             dtype='float64', name='lat', length=1800))timePandasIndexPandasIndex(CFTimeIndex([2019-11-19 00:00:00, 2019-11-20 00:00:00, 2019-11-21 00:00:00,\n             2019-11-22 00:00:00, 2019-11-23 00:00:00, 2019-11-24 00:00:00,\n             2019-11-25 00:00:00, 2019-11-26 00:00:00, 2019-11-27 00:00:00,\n             2019-11-28 00:00:00, 2019-11-29 00:00:00, 2019-11-30 00:00:00,\n             2019-12-01 00:00:00, 2019-12-02 00:00:00, 2019-12-03 00:00:00,\n             2019-12-04 00:00:00, 2019-12-05 00:00:00, 2019-12-06 00:00:00],\n            dtype='object', length=18, calendar='julian', freq='D'))Attributes: (9)BeginDate :2019-11-19BeginTime :00:00:00.000ZEndDate :2019-11-19EndTime :23:59:59.999ZFileHeader :StartGranuleDateTime=2019-11-19T00:00:00.000Z;\nStopGranuleDateTime=2019-11-19T23:59:59.999ZInputPointer :3B-HHR.MS.MRG.3IMERG.20191119-S000000-E002959.0000.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S003000-E005959.0030.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S010000-E012959.0060.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S013000-E015959.0090.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S020000-E022959.0120.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S023000-E025959.0150.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S030000-E032959.0180.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S033000-E035959.0210.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S040000-E042959.0240.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S043000-E045959.0270.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S050000-E052959.0300.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S053000-E055959.0330.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S060000-E062959.0360.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S063000-E065959.0390.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S070000-E072959.0420.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S073000-E075959.0450.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S080000-E082959.0480.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S083000-E085959.0510.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S090000-E092959.0540.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S093000-E095959.0570.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S100000-E102959.0600.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S103000-E105959.0630.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S110000-E112959.0660.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S113000-E115959.0690.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S120000-E122959.0720.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S123000-E125959.0750.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S130000-E132959.0780.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S133000-E135959.0810.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S140000-E142959.0840.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S143000-E145959.0870.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S150000-E152959.0900.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S153000-E155959.0930.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S160000-E162959.0960.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S163000-E165959.0990.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S170000-E172959.1020.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S173000-E175959.1050.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S180000-E182959.1080.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S183000-E185959.1110.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S190000-E192959.1140.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S193000-E195959.1170.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S200000-E202959.1200.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S203000-E205959.1230.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S210000-E212959.1260.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S213000-E215959.1290.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S220000-E222959.1320.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S223000-E225959.1350.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S230000-E232959.1380.V06B.HDF5;3B-HHR.MS.MRG.3IMERG.20191119-S233000-E235959.1410.V06B.HDF5title :GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree (GPM_3IMERGDF)DOI :10.5067/GPM/IMERGDF/DAY/06ProductionTime :2020-02-27T16:09:48.308Z"
   },
   {
-    "objectID": "overview.html",
-    "href": "overview.html",
-    "title": "Overview",
-    "section": "",
-    "text": "The the era of big data in the earth sciences is here and learning how to effectively use oceanographic remote-sensing data, both in the cloud and on your computer, is a core skill for modern fisheries science and management. Learning how to access cloud-based data, visualize these data, use these data in models, and use the tools of modern reproducible and collaborative science is the main goal of this course. Through the course, participants will gain experience with assessing remote-sensing data in the cloud, R and RStudio, Python and Jupyter notebooks, and collaborating with Git and GitHub.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "overview.html#aims-and-objectives",
-    "href": "overview.html#aims-and-objectives",
-    "title": "Overview",
-    "section": "Aims and Objectives",
-    "text": "Aims and Objectives\n\nLearn how to discover and use oceanographic remote-sensing data for species distribution modeling and other fisheries applications\nFamiliarize participants with using remote-sensing data and geospatial tools in R and Python code.\nObtain hands-on experience in using remote-sensing data and other earth data in science workflows by working together on a group project.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "overview.html#what-is-a-hackweek",
-    "href": "overview.html#what-is-a-hackweek",
-    "title": "Overview",
-    "section": "What is a hackweek?",
-    "text": "What is a hackweek?\nA hackweek is a participant-driven workshop that blends data science education, community building, and project work over a short period of time (one to two weeks). The events are highly immersive and allow participants to work directly with data science professionals to co-shape projects and educational outcomes. Hackweeks help individuals and teams engage more effectively in open and reproducible science. - eScience Institute, University of Washington, Seattle USA\nThe hackweek model has become a vital tool in the data science community, fostering idea exchange through modern data analysis workflow training. Unlike traditional academic events, hackweeks offer intensive, interactive learning, including tutorials on cutting-edge methods, peer-based learning, and collaborative on-site projects. Unlike hackathons, which emphasize software development, hackweeks prioritize education and open-ended projects, benefiting fields needing both expertise and efficient computational workflows for idea exchange and discovery. The hackweek model is now widely used in many fields: Astrohackweek, Neurohackweek, Geohackweek, OceanHackWeek, ICESat-2 Hackweek, SnowEx Hackweek, NASA Cloud Hackathon. The NOAA HackDays content and format is modeled off the University of Washington eScience Hackweek model.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "overview.html#code-of-conduct",
-    "href": "overview.html#code-of-conduct",
-    "title": "Overview",
-    "section": "Code of Conduct",
-    "text": "Code of Conduct\nThe NOAA HackDays events are a safe learning space and all participants are required to abide by our Code of Conduct.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "setup.html",
-    "href": "setup.html",
-    "title": "Set-up",
-    "section": "",
-    "text": "To work on the JupyterHub for the workshop:",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Set-up"
-    ]
-  },
-  {
-    "objectID": "setup.html#github-username-required-to-get-on-hub",
-    "href": "setup.html#github-username-required-to-get-on-hub",
-    "title": "Set-up",
-    "section": "GitHub username (required to get on hub)",
-    "text": "GitHub username (required to get on hub)\n\nCreate a GitHub account (if you don’t already have one) at https://github.com. Advice for choosing a GitHub username: this is a professional username that you will use in work settings. GitHub accounts are not anonymous; this is for sharing work. Using your real name is common.\nWrite down your username and password; you will need to log in during the course!\nHere is a video showing the whole process",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Set-up"
-    ]
-  },
-  {
-    "objectID": "setup.html#get-on-the-jupyterhub-if-you-want-to-follow-along",
-    "href": "setup.html#get-on-the-jupyterhub-if-you-want-to-follow-along",
-    "title": "Set-up",
-    "section": "Get on the JupyterHub (if you want to follow along)",
-    "text": "Get on the JupyterHub (if you want to follow along)\nOnce you have submitted your GitHub username and have been accepted as a member of the DaskHub team on the nmfs-opensci organization, you can log-into the JupyterHub.\nhttps://dhub.opensci.live/\n\nChoose the default Py-R base geospatial image. Watch a video of the login process and basic JupyterHub orientation.\nhome directory is yours and no one else can see it. To share files, you can connect to a GitHub repository or use the shared directory. Everyone can read and write to this directory. Please don’t delete content that is not your own.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Set-up"
-    ]
-  },
-  {
-    "objectID": "setup.html#earthdata-login-account-optional",
-    "href": "setup.html#earthdata-login-account-optional",
-    "title": "Set-up",
-    "section": "Earthdata Login account (optional)",
-    "text": "Earthdata Login account (optional)\nWe will be using a public user account, but if you do a lot of work with NASA Earthdata, you should get a login account.\n\nCreate an Earthdata Login account (if you don’t already have one) at https://urs.earthdata.nasa.gov\nWrite down your username and password; you will need it.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Set-up"
-    ]
-  },
-  {
-    "objectID": "setup.html#set-up-authentication-to-github",
-    "href": "setup.html#set-up-authentication-to-github",
-    "title": "Set-up",
-    "section": "Set up authentication to GitHub",
-    "text": "Set up authentication to GitHub\nYou need to tell GitHub who you are so you can push your local changes up to GitHub. There are a few ways to do this. I am going to show you a way that works on any computer, including a virtual computer like the JupyterHub.\n\nStep 1: Generate a Personal Access Token\nWe are going to generate a classic token.\n\nGo to https://github.com/settings/tokens\nClick Generate new token &gt; Generate new token (classic)\nWhen the pop-up shows up, fill in a description, click the “repo” checkbox, and then scroll to bottom to click “Generate”.\nFor scope, select “repo”.\nSAVE the token. You need it for the next step.\n\n\n\nStep 2: Tell Git who your are\n\nOpen a terminal. In Jupyter Lab, you will see a box labelled “Terminal” on the Launcher window. In RStudio, you will see a tab (usually in lower left) with the label “Terminal”\nPaste these 3 lines of code into the terminal\n\ngit config --global user.email \"&lt;your email&gt;\"\ngit config --global user.name \"&lt;your name&gt;\"\ngit config --global pull.rebase false\ngit config --global credential.helper store\nReplace \"&lt;your email&gt;\" with something like jane.doe@noaa.gov. Replace \"&lt;your name&gt;\" with something like \"Jane Doe\". Notice the quotes.\n\n\nStep 3: Trigger git to ask for your password\nThere are a few ways to do this.\n\nClone a repo, make a change, and then commit and push the change\nClone a private repo\n\nOption b is easiest if you are new to Git and GitHub.\n\nOpen a terminal window\nMake sure you are in the home directory by typing cd ~\nClone a repo and create an RStudio project. File &gt; New Project &gt; Version Control &gt; Git. Paste in this URL https://github.com/nmfs-opensci/github_setup_check and make sure it is creating the repo at ~ (home directory).\nYou will be asked for your GitHub username and password. For the password, enter the PERSONAL ACCESS TOKEN from Step 1.\n\nWatch a video of these 4 steps\nFull instructions with other ways to do this from R",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Set-up"
-    ]
-  },
-  {
-    "objectID": "team.html#organizers-and-instructors",
-    "href": "team.html#organizers-and-instructors",
-    "title": "Our Team",
-    "section": "Organizers and Instructors",
-    "text": "Organizers and Instructors\n\n\nEli Holmes\n\n\nNOAA Fisheries\nwebpage • GitHub • ORCID\n\n\nSunny Hospital\n\nNOAA CoastWatch PolarWatch\nGitHub\n\n\nMatt Grossi\n\n\nEmily Markowitz\n\nNOAA Fisheries\nwebpage • GitHub • NOAA • ORCID\n\n\n\n\nMore\n\n\nMore\n\n\nMore\n\n\nMore",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Our Team"
-    ]
+    "objectID": "tutorials/python/1-earthaccess-cut-items.html#resources",
+    "href": "tutorials/python/1-earthaccess-cut-items.html#resources",
+    "title": "Earthdata Search and Discovery",
+    "section": "Resources",
+    "text": "Resources\n\nNASA’s Common Metadata Repository (CMR) API\n\nearthaccess repository\nearthaccess documentation\nEarthdata Search"
   },
   {
     "objectID": "tutorials/python/2-subset-and-plot.html#summary",
@@ -1465,7 +1493,7 @@
     "href": "tutorials/r/1-earthdatalogin.html#prerequisites",
     "title": "Earthdata Search and Discovery",
     "section": "Prerequisites",
-    "text": "Prerequisites\nAn Earthdata Login account is required to access data from NASA Earthdata. Please visit https://urs.earthdata.nasa.gov to register and manage your Earthdata Login account. This account is free to create and only takes a moment to set up.\n\nImport Required Packages\nNote: See the set-up tab (in left nav bar) for instructions on getting set up on your own computer.\n\n# devtools::install_github(\"boettiger-lab/earthdatalogin\")\n# install.packages(\"rstac\")\n# install.packages(\"gdalcubes\")\n\nlibrary(earthdatalogin)\nlibrary(rstac)\nlibrary(gdalcubes)\nlibrary(here)\n\nhere() starts at /home/jovyan/EDMW-EarthData-Workshop-2024\n\ngdalcubes::gdalcubes_options(parallel = TRUE) \n\n\n\nAuthentication for NASA Earthdata\nWe will start by authenticating using our Earthdata Login credentials. Authentication is not necessarily needed to search for publicly available data collections in Earthdata, but is always needed to download or access data from the NASA Earthdata archives. We can use edl_netrc() from the earthdatalogin package to create a .netrc file that will store our credentials.\nYou will have to register at https://urs.earthdata.nasa.gov/ as a new user.\nThe first time you run authentication use:\n\nearthdatalogin::edl_netrc(\n  username = \"user\", # add your user name\n  password = \"password\" # add you password\n)\n\nThis will save your .netrc file. After this you can run:\n\nearthdatalogin::edl_netrc()\n\nBecause the gdalcubes package, which we need for working with data cubes, doesn’t respect global environmental variables, we use a helper utility to export those into its configuration as well.\n\nearthdatalogin::with_gdalcubes()\n\n\n\nSearch for data\nThere are multiple keywords we can use to discovery data from collections. The table below contains the short_name, concept_id, and doi for some collections we are interested in for the tutorials today. Each of these can be used to search for data or information related to the collection we are interested in.\n\n\n\n\n\n\n\n\nShortname\nCollection Concept ID\nDOI\n\n\n\n\nMUR-JPL-L4-GLOB-v4.1\nC1996881146-POCLOUD\n10.5067/GHGMR-4FJ04\n\n\nAVHRR_OI-NCEI-L4-GLOB-v2.1\nC2036881712-POCLOUD\n10.5067/GHAAO-4BC21\n\n\n\nHow can we find the shortname, concept_id, and doi for collections not in the table above?. Let’s take a quick detour.\nhttps://search.earthdata.nasa.gov/search\n\nSearch by text\nLet’s search for “GHRSST Level 4 MUR Global Foundation Sea Surface Temperature Analysis”. Why this? Because we know the type of SST data we are looking for.\nLink to the search\n\nIf we hover over the top box, we will see an i with a circle around it. Click that. On this page, you will see the DOI. Now click “View More Info” to get to https://cmr.earthdata.nasa.gov/search/concepts/C1996881146-POCLOUD.html\nOn that page you will see the “short name”. Note the short name was also on the first search page, but was not noted as the short name.\n\n\nSearch by short name\n\nshort_name &lt;- 'MUR-JPL-L4-GLOB-v4.1'\n\nLet’s set some time bounds.\n\ntbox &lt;- c(\"2020-01-16\", \"2020-12-16\")\n\n\nresults &lt;- earthdatalogin::edl_search(\n    short_name = short_name,\n    version = \"4.1\",\n    temporal = tbox\n)\nresults[1:3]\n\n[1] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n[2] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200117090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n[3] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200118090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n\n\nIn this example we used the short_name parameter to search from our desired data set. However, there are multiple ways to specify the collection(s) we are interested in. Alternative parameters include:\n\ndoi - request collection by digital object identifier (e.g., doi = ‘10.5067/GHAAO-4BC21’)\n\nNOTE: Each Earthdata collect has a unique concept_id and doi. This is not the case with short_name. A shortname can be associated with multiple versions of a collection. If multiple versions of a collection are publicaly available, using the short_name parameter with return all versions available. It is advised to use the version parameter in conjunction with the short_name parameter with searching.\nWe can refine our search by passing more parameters that describe the spatiotemporal domain of our use case. Here, we use the temporal parameter to request a date range and the bounding_box parameter to request granules that intersect with a bounding box.\n\nbbox &lt;- c(xmin=-73.5, ymin=33.5, xmax=-43.5, ymax=43.5) \nbbox\n\n xmin  ymin  xmax  ymax \n-73.5  33.5 -43.5  43.5 \n\n\n\nresults &lt;- earthdatalogin::edl_search(\n    short_name = short_name,\n    version = \"4.1\",\n    temporal = tbox,\n    bounding_box = paste(bbox,collapse=\",\")\n)\nresults[1:3]\n\n[1] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n[2] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200117090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n[3] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200118090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n\n\n\n\n\nWorking with earthdatalogin returns\nFollowing the search for data, you’ll likely take one of two pathways with those results. You may choose to download the assets that have been returned to you or you may choose to continue working with the search results within the R environment.\n\nDownload earthdatalogin results\nIn some cases you may want to download your assets. earthdatalogin makes downloading the data from the search results is very easy using the edl_download() function. The MUR SST files are 673Gb file so I would prefer not to download. But you could.\n\nearthdatalogin::edl_download(\n    results[1],\n    dest = here::here(\"test.nc\")\n)\n\n\n\nWork in the cloud\nWe do not have to download the data to work with it or at least not until we need to compute with it or plot it. Let’s look at a smaller dataset.\n\noi &lt;- earthdatalogin::edl_search(\n    short_name = \"AVHRR_OI-NCEI-L4-GLOB-v2.1\",\n    version = \"2.1\",\n    temporal = c(\"2020-01-16\", \"2020-01-17\")\n)\noi[1:3]\n\n[1] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc\"\n[2] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20200116120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc\"\n[3] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20200117120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc\"\n\n\nLet’s try plotting this. I am going to authenticate again just to make sure my token did not expire.\n\nlibrary(earthdatalogin)\n# Authenticate\nearthdatalogin::edl_netrc()\n\n\nlibrary(terra)\nras &lt;- terra::rast(x = oi[1], vsi=TRUE)\nplot(ras)",
+    "text": "Prerequisites\nAn Earthdata Login account is required to access data from NASA Earthdata. Please visit https://urs.earthdata.nasa.gov to register and manage your Earthdata Login account. This account is free to create and only takes a moment to set up.\n\nImport Required Packages\nNote: See the set-up tab (in left nav bar) for instructions on getting set up on your own computer.\n\n# devtools::install_github(\"boettiger-lab/earthdatalogin\")\n# install.packages(\"rstac\")\n# install.packages(\"gdalcubes\")\n\nlibrary(earthdatalogin)\nlibrary(rstac)\nlibrary(gdalcubes)\nlibrary(here)\n\nhere() starts at /home/jovyan/EDMW-EarthData-Workshop-2024\n\ngdalcubes::gdalcubes_options(parallel = TRUE) \n\n\n\nAuthentication for NASA Earthdata\nWe will start by authenticating using our Earthdata Login credentials. Authentication is not necessarily needed to search for publicly available data collections in Earthdata, but is always needed to download or access data from the NASA Earthdata archives. We can use edl_netrc() from the earthdatalogin package to create a .netrc file that will store our credentials.\nYou will have to register at https://urs.earthdata.nasa.gov/ as a new user.\nThe first time you run authentication use:\n\nearthdatalogin::edl_netrc(\n  username = \"user\", # add your user name\n  password = \"password\" # add you password\n)\n\nThis will save your .netrc file. After this you can run:\n\nearthdatalogin::edl_netrc()\n\nBecause the gdalcubes package, which we need for working with data cubes, doesn’t respect global environmental variables, we use a helper utility to export those into its configuration as well.\n\nearthdatalogin::with_gdalcubes()\n\n\n\nSearch for data\nThere are multiple keywords we can use to discovery data from collections. The table below contains the short_name, concept_id, and doi for some collections we are interested in for the tutorials today. Each of these can be used to search for data or information related to the collection we are interested in.\n\n\n\n\n\n\n\n\nShortname\nCollection Concept ID\nDOI\n\n\n\n\nMUR-JPL-L4-GLOB-v4.1\nC1996881146-POCLOUD\n10.5067/GHGMR-4FJ04\n\n\nAVHRR_OI-NCEI-L4-GLOB-v2.1\nC2036881712-POCLOUD\n10.5067/GHAAO-4BC21\n\n\n\nHow can we find the shortname, concept_id, and doi for collections not in the table above?. Let’s take a quick detour.\nhttps://search.earthdata.nasa.gov/search\nLet’s search for “GHRSST Level 4 MUR Global Foundation Sea Surface Temperature Analysis”.\nLink to the search\n\nIf we hover over the top box, we will see an i with a circle around it. Click that. On this page, you will see the DOI. Now click “View More Info” to get to https://cmr.earthdata.nasa.gov/search/concepts/C1996881146-POCLOUD.html\nOn that page you will see the “short name”. Note the short name was also on the first search page, but was not noted as the short name.\n\nSearch by short name\n\nshort_name &lt;- 'MUR-JPL-L4-GLOB-v4.1'\n\nLet’s set some time bounds.\n\ntbox &lt;- c(\"2020-01-16\", \"2020-12-16\")\n\n\nresults &lt;- earthdatalogin::edl_search(\n    short_name = short_name,\n    version = \"4.1\",\n    temporal = tbox\n)\nresults[1:3]\n\n[1] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n[2] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200117090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n[3] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200118090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n\n\nIn this example we used the short_name parameter to search from our desired data set. However, there are multiple ways to specify the collection(s) we are interested in. Alternative parameters include:\n\ndoi - request collection by digital object identifier (e.g., doi = ‘10.5067/GHAAO-4BC21’)\n\nNOTE: Each Earthdata collect has a unique concept_id and doi. This is not the case with short_name. A shortname can be associated with multiple versions of a collection. If multiple versions of a collection are publicaly available, using the short_name parameter with return all versions available. It is advised to use the version parameter in conjunction with the short_name parameter with searching.\nWe can refine our search by passing more parameters that describe the spatiotemporal domain of our use case. Here, we use the temporal parameter to request a date range and the bounding_box parameter to request granules that intersect with a bounding box.\n\nbbox &lt;- c(xmin=-73.5, ymin=33.5, xmax=-43.5, ymax=43.5) \nbbox\n\n xmin  ymin  xmax  ymax \n-73.5  33.5 -43.5  43.5 \n\n\n\nresults &lt;- earthdatalogin::edl_search(\n    short_name = short_name,\n    version = \"4.1\",\n    temporal = tbox,\n    bounding_box = paste(bbox,collapse=\",\")\n)\nresults[1:3]\n\n[1] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n[2] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200117090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n[3] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200118090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n\n\n\n\n\nWorking with earthdatalogin returns\nFollowing the search for data, you’ll likely take one of two pathways with those results. You may choose to download the assets that have been returned to you or you may choose to continue working with the search results within the R environment.\n\nDownload earthdatalogin results\nIn some cases you may want to download your assets. earthdatalogin makes downloading the data from the search results is very easy using the edl_download() function. The MUR SST files are 673Gb file so I would prefer not to download. But you could.\n\nearthdatalogin::edl_download(\n    results[1],\n    dest = here::here(\"test.nc\")\n)\n\n\n\nWork in the cloud\nWe do not have to download the data to work with it or at least not until we need to compute with it or plot it. Let’s look at a smaller dataset.\n\noi &lt;- earthdatalogin::edl_search(\n    short_name = \"AVHRR_OI-NCEI-L4-GLOB-v2.1\",\n    version = \"2.1\",\n    temporal = c(\"2020-01-16\", \"2020-01-17\")\n)\noi[1:3]\n\n[1] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc\"\n[2] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20200116120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc\"\n[3] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20200117120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc\"\n\n\nLet’s try plotting this. I am going to authenticate again just to make sure my token did not expire.\n\nlibrary(earthdatalogin)\n# Authenticate\nearthdatalogin::edl_netrc()\n\n\nlibrary(terra)\nras &lt;- terra::rast(x = oi[1], vsi=TRUE)\nplot(ras)",
     "crumbs": [
       "JupyterHub",
       "Tutorials",
