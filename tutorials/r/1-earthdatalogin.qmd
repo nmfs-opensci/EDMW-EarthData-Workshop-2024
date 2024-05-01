@@ -28,32 +28,41 @@ An Earthdata Login account is required to access data from NASA Earthdata. Pleas
 *Note: See the set-up tab (in left nav bar) for instructions on getting set up on your own computer.*
 
 ```{r}
+# devtools::install_github("boettiger-lab/earthdatalogin")
+# install.packages("rstac")
+# install.packages("gdalcubes")
+
 library(earthdatalogin)
 library(rstac)
 library(gdalcubes)
-gdalcubes_options(parallel = TRUE) 
+library(here)
+gdalcubes::gdalcubes_options(parallel = TRUE) 
 ```
 
 ### Authentication for NASA Earthdata  
 
 We will start by authenticating using our Earthdata Login credentials. Authentication is not necessarily needed to search for publicly available data collections in Earthdata, but is always needed to download or access data from the NASA Earthdata archives. We can use `edl_netrc()` from the `earthdatalogin` package to create a `.netrc` file that will store our credentials. 
 
+You will have to register at [https://urs.earthdata.nasa.gov/](https://urs.earthdata.nasa.gov/) as a [new user](https://urs.earthdata.nasa.gov/users/new). 
+
 The first time you run authentication use:
-```
-edl_netrc(
-  username = default("user"),
-  password = default("password")
+
+```{r, eval = FALSE}
+earthdatalogin::edl_netrc(
+  username = default("user"), # add your user name
+  password = default("password") # add you password
 )
 ```
+
 This will save your `.netrc` file. After this you can run:
 ```{r}
-edl_netrc()
+earthdatalogin::edl_netrc()
 ```
 
 Because the `gdalcubes` package, which we need for working with data cubes, doesn't respect global environmental variables, we use a helper utility to export those into its configuration as well.
 
 ```{r}
-with_gdalcubes()
+earthdatalogin::with_gdalcubes()
 ```
 
 ### Search for data  
@@ -89,16 +98,18 @@ short_name <- 'MUR-JPL-L4-GLOB-v4.1'
 ```
 
 Let's set some time bounds.
+
 ```{r}
 tbox <- c("2020-01-16", "2020-12-16")
 ```
 
 ```{r}
-results <- edl_search(
+results <- earthdatalogin::edl_search(
     short_name = short_name,
     version = "4.1",
     temporal = tbox
 )
+results
 ```
 
 In this example we used the `short_name` parameter to search from our desired data set. However, there are multiple ways to specify the collection(s) we are interested in. Alternative parameters include:  
@@ -109,20 +120,20 @@ In this example we used the `short_name` parameter to search from our desired da
 
 We can refine our search by passing more parameters that describe the spatiotemporal domain of our use case. Here, we use the `temporal` parameter to request a date range and the `bounding_box` parameter to request granules that intersect with a bounding box.  
 
-
-
 ```{r}
 bbox <- c(xmin=-73.5, ymin=33.5, xmax=-43.5, ymax=43.5) 
+bbox
 ```
 
 
 ```{r}
-results <- edl_search(
+results <- earthdatalogin::edl_search(
     short_name = short_name,
     version = "4.1",
     temporal = tbox,
     bounding_box = paste(bbox,collapse=",")
 )
+results
 ```
 
 
@@ -135,9 +146,9 @@ Following the search for data, you'll likely take one of two pathways with those
 In some cases you may want to download your assets. `earthdatalogin` makes downloading the data from the search results is very easy using the `edl_download()` function. The MUR SST files are 673Gb file so I would prefer not to download. But you could.
 
 ```{r eval=FALSE}
-edl_download(
+earthdatalogin::edl_download(
     results[1],
-    dest="test.nc"
+    dest = here::here("test.nc")
 )
 ```
 
@@ -147,27 +158,27 @@ We do not have to download the data to work with it or at least not until we nee
 Let's look at a smaller dataset.
 
 ```{r}
-oi <- edl_search(
+oi <- earthdatalogin::edl_search(
     short_name = "AVHRR_OI-NCEI-L4-GLOB-v2.1",
     version = "2.1",
     temporal = c("2020-01-16", "2020-01-17")
 )
+oi
 ```
 
 Let's try plotting this. I am going to authenticate again just to make sure my token did not expire.
+
 ```{r}
 library(earthdatalogin)
 # Authenticate
-edl_netrc()
+earthdatalogin::edl_netrc()
 ```
 
 ```{r message=FALSE}
 library(terra)
-ras <- terra::rast(oi[1], vsi=TRUE)
+ras <- terra::rast(x = oi[1], vsi=TRUE)
 plot(ras)
 ```
-
-
 
 ## Conclusion
 
