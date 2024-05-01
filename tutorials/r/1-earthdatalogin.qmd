@@ -49,8 +49,8 @@ The first time you run authentication use:
 
 ```{r, eval = FALSE}
 earthdatalogin::edl_netrc(
-  username = default("user"), # add your user name
-  password = default("password") # add you password
+  username = "user", # add your user name
+  password = "password" # add you password
 )
 ```
 
@@ -109,7 +109,7 @@ results <- earthdatalogin::edl_search(
     version = "4.1",
     temporal = tbox
 )
-results
+results[1:3]
 ```
 
 In this example we used the `short_name` parameter to search from our desired data set. However, there are multiple ways to specify the collection(s) we are interested in. Alternative parameters include:  
@@ -133,7 +133,7 @@ results <- earthdatalogin::edl_search(
     temporal = tbox,
     bounding_box = paste(bbox,collapse=",")
 )
-results
+results[1:3]
 ```
 
 
@@ -163,7 +163,7 @@ oi <- earthdatalogin::edl_search(
     version = "2.1",
     temporal = c("2020-01-16", "2020-01-17")
 )
-oi
+oi[1:3]
 ```
 
 Let's try plotting this. I am going to authenticate again just to make sure my token did not expire.
