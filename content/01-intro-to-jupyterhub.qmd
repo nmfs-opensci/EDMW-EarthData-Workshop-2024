@@ -4,6 +4,7 @@ title: Intro to JupyterHubs
 
 ![](./img/jhub-logo.png){width=200px}
 
+
 ::: {.callout-note icon=false}
 
 ## Goals
@@ -26,7 +27,7 @@ Go to <https://dhub.opensci.live/>. Click "Login to continue". You will be asked
 
 ### Image type: Python or R
 
-Next you select your image type. We have two different R images and two Python images. The images have geospatial libraries pre-loaded.
+Next you select your image type. We will use the default Py-R - base geospatial image.
 
 ### Virtual Machine size
 
@@ -36,7 +37,7 @@ You'll see something similar to this that allows you to choose a large virtual m
 
 ### Start up
 
-After we select our server type and click on start, JupyterHub will allocate our instance using Amazon Web Services (AWS). This may take several minutes. 
+After we select our server type and click on start, JupyterHub will allocate our instance in the cloud (on Azure). This may take several minutes. 
 
 ![Jupyterhub Spawning](./img/spawning.png)
 
@@ -47,14 +48,15 @@ When you are in the Jupyter Lab tab (note the Jupyter Logo), you will see a Laun
 
 ![Jupyterhub Launcher](./img/jhub-launcher.png)
 
+If you will be using Python today, you can stay in Jupyter Lab. If you are using R today then read the next steps.
+
 * Open RStudio by clicking on the "RStudio" box in the Launcher tab:
 
 ![RStudio](./img/rstudio.png)
-We will be mainly using RStudio in this course. 
 
 ## End your session
 
-When you are finished working for the day it is important to log out of the JupyterHub.  When you keep a session active it uses up AWS resources (costs money) and keeps a series of virtual machines deployed.
+When you are finished working for the day it is important to log out of the Jupyter Hub.  When you keep a session active it uses up cloud resources (costs money) and keeps a series of virtual machines deployed.
 
 ::: {.callout-caution}
 
@@ -90,15 +92,9 @@ Logging out will **NOT** cause any of your work to be lost or deleted. It simply
 
 ![Shared folder](./img/shared-folder.png)
 
-In the file panel, you will see a folder called `shared`. These are read-only shared files. There are two main folders:
-
-* `data` The folder with data files
-* `2023-Hackbook` The full Git repository with this website
+In the file panel, you will see a folder called `shared`. These are read-only shared files. 
 
 You will also see `shared-public`. This is a read-write folder for you to put files for everyone to see and use. You can create a team folder here for shared data and files.  Note, everyone can see and change these so be careful to communicate with your team so multiple people don't work on the same file at the same time. You can also create folders for each team member and agree not to change other team members files.
-
-You will also see other folders of Python content for the Python users. We will have a separate introduction to Jupyter Notebooks.
-
 
 ## **Python users
 
@@ -106,9 +102,7 @@ You can open a Jupyter Notebook by clicking on the "Python 3" box. In the Launch
 
 ![Jupyterhub Launcher](./img/jhub-launcher.png)
 
-Jupyter notebooks are a very common way to share Python code and tutorials. Because we are focusing on R in this course, we will not use Jupyter notebooks much but we have many Juptyer notebooks that you can experiment with in the `python-tutorials` folder. Get an overview of Jupyter Lab: [Intro to Jupyter Lab](./content/jupyter-notebooks.html) Learn about the [geosciences tools in Python](https://foundations.projectpythia.org)
-
-*Note: Python users can run Python in RStudio and R users can run R in Jupyter Notebooks.*
+Jupyter notebooks are a very common way to share Python code and tutorials. Get an overview of Jupyter Lab: [Intro to Jupyter Lab](./content/jupyter-notebooks.html) Learn about the [geosciences tools in Python](https://foundations.projectpythia.org)
 
 
 ## FAQ

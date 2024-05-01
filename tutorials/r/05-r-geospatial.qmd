@@ -12,7 +12,7 @@ In this lab, you will learn basic skills of working with points in space.
 * Create a geospatial object using the sf package
 * Plot your points with mapview and ggplot
 * Apply different coordinate systems
-* Tips for getting help from ChatGPT
+* Tips for getting help from AI
 
 :::
 
@@ -329,7 +329,7 @@ basemap +
   theme(legend.position = "none")
 ```
 
-## Getting help from ChatGPT
+## Getting help from AI
 
 Unfortunately, ChatGPT often gets confused with mapping and gives you code that doesn't fully work. This can be hard for beginners (and experts) to debug.
 

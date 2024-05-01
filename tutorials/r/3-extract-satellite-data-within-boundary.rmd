@@ -68,6 +68,7 @@ ycoord <- st_coordinates(GFST)[,2]
 ## Get a vector of urls to our nc files
 
 ```{r}
+library(earthdatalogin)
 edl_netrc()
 with_gdalcubes()
 ```
@@ -127,11 +128,11 @@ We will create a data cube so that we can compute daily means over the polygon.
 
 Not sure how to do this part.
 
-```{r}
+```{r eval=FALSE}
 sst_mean=apply(satdata$sea_surface_temperature,3,mean,na.rm=TRUE)
 ```
 
-```{r}
+```{r eval=FALSE}
 plot(satdata$time,sst_mean,main='Gulf Stream Province Monthly Mean Temperature 2020',ylab='SSt (ºC)',xlab='',type='b')
 ```
 
