@@ -76,13 +76,11 @@ How can we find the `shortname`, `concept_id`, and `doi` for collections not in 
 
 https://search.earthdata.nasa.gov/search
 
-#### Search by text
-
-Let's search for "GHRSST Level 4 MUR Global Foundation Sea Surface Temperature Analysis". Why this? Because we know the type of SST data we are looking for.
+Let's search for "GHRSST Level 4 MUR Global Foundation Sea Surface Temperature Analysis". 
 
 [Link to the search](https://search.earthdata.nasa.gov/search?q=GHRSST%20Level%204%20MUR%20Global%20Foundation%20Sea%20Surface%20Temperature%20Analysis)
 
-![](images/SST_Blended_Earthdata_Search.png)
+![](images/SST_Blended_Earthdata_Search.png){width=50%}
 
 If we hover over the top box, we will see an i with a circle around it. Click that. On this page, you will see the DOI. Now click "View More Info" to get to https://cmr.earthdata.nasa.gov/search/concepts/C1996881146-POCLOUD.html
 
