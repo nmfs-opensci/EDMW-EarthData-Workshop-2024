@@ -62,7 +62,6 @@ title: Our Team
 </div>
 
 <div>
-### Emily Markowitz
 
 ### Emily Markowitz
 
