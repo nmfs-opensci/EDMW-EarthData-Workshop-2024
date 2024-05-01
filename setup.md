@@ -30,7 +30,7 @@ Here are instructions for installing on your own computer.
 
 Install the development version of earthdatalogin and update terra.
 
-```{r eval=FALSE}
+```
 devtools::install_github("boettiger-lab/earthdatalogin")
 install.packages("terra")
 ```
