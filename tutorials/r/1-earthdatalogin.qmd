@@ -49,10 +49,19 @@ The first time you run authentication use:
 
 ```{r, eval = FALSE}
 earthdatalogin::edl_netrc(
-  username = default("user"), # add your user name
-  password = default("password") # add you password
+  username = default("user"), # or add your user name
+  password = default("password") # or add you password
 )
+
+earthdatalogin::edl_netrc_path()
 ```
+To see if you've been able to 
+
+```{}
+cd ~
+ls -la
+```
+
 
 This will save your `.netrc` file. After this you can run:
 ```{r}
@@ -109,7 +118,7 @@ results <- earthdatalogin::edl_search(
     version = "4.1",
     temporal = tbox
 )
-results
+results[1:10]
 ```
 
 In this example we used the `short_name` parameter to search from our desired data set. However, there are multiple ways to specify the collection(s) we are interested in. Alternative parameters include:  
@@ -133,7 +142,7 @@ results <- earthdatalogin::edl_search(
     temporal = tbox,
     bounding_box = paste(bbox,collapse=",")
 )
-results
+results[1:10]
 ```
 
 
@@ -178,6 +187,12 @@ earthdatalogin::edl_netrc()
 library(terra)
 ras <- terra::rast(x = oi[1], vsi=TRUE)
 plot(ras)
+
+
+url <- lpdacc_example_url()
+ras <- terra::rast(url, vsi=TRUE)
+plot(ras)
+
 ```
 
 ## Conclusion
