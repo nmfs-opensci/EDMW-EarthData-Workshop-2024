@@ -58,23 +58,23 @@ website:
                 href: content/01-intro-to-jupyterhub.qmd
           - section: "Tutorials in R"
             contents:
-              - text: Tutorial 1
+              - text: Search
                 href: tutorials/r/1-earthdatalogin.qmd
-              - text: Tutorial 2
+              - text: Subset
                 href: tutorials/r/2-subset-and-plot.qmd
-              - text: Tutorial 3
+              - text: Mask
                 href: tutorials/r/3-extract-satellite-data-within-boundary.rmd
-              - text: Tutorial 4
+              - text: Track
                 href: tutorials/r/4-matchup-satellite-data-to-track-locations.rmd
           - section: "Tutorials in Python"
             contents:
-              - text: Tutorial 1
+              - text: Search
                 href: tutorials/python/1-earthaccess.ipynb
-              - text: Tutorial 2
+              - text: Subset
                 href: tutorials/python/2-subset-and-plot.ipynb
-              - text: Tutorial 3
+              - text: Mask
                 href: tutorials/python/3-extract-satellite-data-within-boundary.ipynb
-              - text: Tutorial 4
+              - text: Track
                 href: tutorials/python/4-matchup-satellite-data-to-track-locations.ipynb
       - text: <img width=100px>
       - text: <img src="/images/noaa_emblem_logo-2022.png" width=100px>
