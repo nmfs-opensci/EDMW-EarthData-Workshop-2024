@@ -2,6 +2,13 @@
 title: Subset and Plot
 ---
 
+::: {.callout-note title="Learning Objectives"}
+
+1. How to plot a subset of a data file
+2. How to create a data cube
+3. How to subset and aggregate a data cube
+:::
+
 ## Load packages
 
 ```{r}
