@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>2024 EDMW Workshop 3B - Earthdatalogin Search and Discovery</title>
+<title>2024 EDMW Workshop 3B - Earthdata Search and Discovery</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -382,7 +382,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary">Summary</a></li>
   <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
-  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul>
 <div class="toc-actions"><ul class="collapse"><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/edit/main/tutorials/r/1-earthdatalogin.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/tutorials/r/1-earthdatalogin.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
@@ -401,7 +400,7 @@ function googleTranslateElementInit() {
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Tutorials</li><li class="breadcrumb-item"><a href="../../tutorials/r/1-earthdatalogin.html">Tutorials in R</a></li><li class="breadcrumb-item"><a href="../../tutorials/r/1-earthdatalogin.html">Tutorial 1</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Earthdatalogin Search and Discovery</h1>
+<h1 class="title">Earthdata Search and Discovery</h1>
 </div>
 
 
@@ -418,6 +417,23 @@ function googleTranslateElementInit() {
 </header>
 
 
+<div class="callout callout-style-default callout-note callout-titled" title="Learning Objectives">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Learning Objectives
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>How to authenticate with <code>earthdatalogin</code></li>
+<li>How to use <code>earthdatalogin</code> to search for data using spatial and temporal filters</li>
+<li>How to make a plot without downloading the data</li>
+</ol>
+</div>
+</div>
 <section id="summary" class="level2">
 <h2 class="anchored" data-anchor-id="summary">Summary</h2>
 <p>In this example we will use the <code>earthdatalogin</code> R package to search for data collections from NASA Earthdata. <code>earthdatalogin</code> is a R package that simplifies data discovery and access to NASA Earth science data by providing an abstraction layer for NASA’s <a href="https://cmr.earthdata.nasa.gov/search/site/docs/search/api.html">Common Metadata Repository (CMR) API</a> Search API. The library makes searching for data more approachable by using a simpler notation instead of low level HTTP queries. <code>earthdatalogin</code> takes the trouble out of Earthdata Login <strong>authentication</strong>, makes <strong>search</strong> easier, and provides a stream-lined way to download or stream search results into R data objects.</p>
@@ -426,14 +442,6 @@ function googleTranslateElementInit() {
 <section id="prerequisites" class="level2">
 <h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
 <p>An Earthdata Login account is required to access data from NASA Earthdata. Please visit <a href="https://urs.earthdata.nasa.gov" class="uri">https://urs.earthdata.nasa.gov</a> to register and manage your Earthdata Login account. This account is free to create and only takes a moment to set up.</p>
-</section>
-<section id="learning-objectives" class="level2">
-<h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
-<ol type="1">
-<li>How to authenticate with <code>earthdatalogin</code></li>
-<li>How to use <code>earthdatalogin</code> to search for data using spatial and temporal filters</li>
-<li>How to explore and work with search results</li>
-</ol>
 <section id="import-required-packages" class="level3">
 <h3 class="anchored" data-anchor-id="import-required-packages">Import Required Packages</h3>
 <p><em>Note: See the set-up tab (in left nav bar) for instructions on getting set up on your own computer.</em></p>
