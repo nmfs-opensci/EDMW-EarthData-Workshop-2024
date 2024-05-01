@@ -117,7 +117,7 @@ https://github.com/nmfs-opensci/Git-Lesson
 
 3.  Click "Clone a Repository"
 
-4.  Where it says "Enter the URI of the remote Git repository", paste in the URL https://github.com/nmfs-opensci/Git-Lesson
+4.  Where it says "Enter the URI of the remote Git repository", paste in the URL https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024
 
 5. The folder appears and you can enter the folder and edit and create files.
 

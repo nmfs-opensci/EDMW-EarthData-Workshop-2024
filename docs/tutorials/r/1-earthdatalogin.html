@@ -2,13 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.433">
+<meta name="generator" content="quarto-1.4.553">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Carl Boettiger (UC Berkeley)">
 
-<title>2024 EDMW Workshop 3B - Intro to earthdatalogin</title>
+<title>2024 EDMW Workshop 3B - Earthdata Search and Discovery</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -99,6 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -155,11 +155,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </nav>
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Tutorials</li><li class="breadcrumb-item"><a href="../../tutorials/r/1-earthdatalogin.html">Tutorials in R</a></li><li class="breadcrumb-item"><a href="../../tutorials/r/1-earthdatalogin.html">Tutorial 1</a></li></ol></nav>
-        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Tutorials</li><li class="breadcrumb-item"><a href="../../tutorials/r/1-earthdatalogin.html">Tutorials in R</a></li><li class="breadcrumb-item"><a href="../../tutorials/r/1-earthdatalogin.html">Search</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
   </nav>
@@ -167,7 +167,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-center sidebar-header">
       <a href="../../index.html" class="sidebar-logo-link">
       <img src="https://github.com/nmfs-opensci/assets/blob/main/logo/nmfs-opensci-logo2.png?raw=true" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
@@ -202,6 +202,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Set-up</span></a>
   </div>
 </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">
+ <span class="menu-text">Orientation</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/02-rstudio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RStudio</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/02-earthdata.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Earthdata login</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/02-local-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Local set-up</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/02-git-jupyter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Git-JupyterLab</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/02-git-rstudio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Git-RStudio</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../coc.html" class="sidebar-item-text sidebar-link">
@@ -212,22 +253,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
  <span class="menu-text">Tutorials</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false">
  <span class="menu-text">Welcome</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/01-welcome.html" class="sidebar-item-text sidebar-link">
@@ -250,70 +291,70 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
  <span class="menu-text">Tutorials in R</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 show">  
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../tutorials/r/1-earthdatalogin.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Tutorial 1</span></a>
+ <span class="menu-text">Search</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../tutorials/r/2-subset-and-plot.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Tutorial 2</span></a>
+ <span class="menu-text">Subset</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../tutorials/r/3-extract-satellite-data-within-boundary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Tutorial 3</span></a>
+ <span class="menu-text">Mask</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../tutorials/r/4-matchup-satellite-data-to-track-locations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Tutorial 4</span></a>
+ <span class="menu-text">Track</span></a>
   </div>
 </li>
       </ul>
   </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false">
  <span class="menu-text">Tutorials in Python</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../tutorials/python/1-earthaccess.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Tutorial 1</span></a>
+ <span class="menu-text">Search</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../tutorials/python/2-subset-and-plot.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Tutorial 2</span></a>
+ <span class="menu-text">Subset</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../tutorials/python/3-extract-satellite-data-within-boundary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Tutorial 3</span></a>
+ <span class="menu-text">Mask</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../tutorials/python/4-matchup-satellite-data-to-track-locations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Tutorial 4</span></a>
+ <span class="menu-text">Track</span></a>
   </div>
 </li>
       </ul>
@@ -332,16 +373,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#install-earthdatalogin" id="toc-install-earthdatalogin" class="nav-link active" data-scroll-target="#install-earthdatalogin">Install earthdatalogin</a></li>
-  <li><a href="#basic-use" id="toc-basic-use" class="nav-link" data-scroll-target="#basic-use">Basic Use</a></li>
-  <li><a href="#searching-and-subsetting" id="toc-searching-and-subsetting" class="nav-link" data-scroll-target="#searching-and-subsetting">Searching and Subsetting</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul>
 <div class="toc-actions"><ul class="collapse"><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/edit/main/tutorials/r/1-earthdatalogin.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/tutorials/r/1-earthdatalogin.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
     </div>
@@ -357,21 +398,15 @@ function googleTranslateElementInit() {
 
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Tutorials</li><li class="breadcrumb-item"><a href="../../tutorials/r/1-earthdatalogin.html">Tutorials in R</a></li><li class="breadcrumb-item"><a href="../../tutorials/r/1-earthdatalogin.html">Tutorial 1</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Tutorials</li><li class="breadcrumb-item"><a href="../../tutorials/r/1-earthdatalogin.html">Tutorials in R</a></li><li class="breadcrumb-item"><a href="../../tutorials/r/1-earthdatalogin.html">Search</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Intro to earthdatalogin</h1>
+<h1 class="title">Earthdata Search and Discovery</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Carl Boettiger (UC Berkeley) </p>
-          </div>
-  </div>
     
   
     
@@ -382,151 +417,213 @@ function googleTranslateElementInit() {
 </header>
 
 
-<p>This is the “<a href="https://boettiger-lab.github.io/earthdatalogin/articles/gdalcubes-stac-cog.html">Data Cubes with STAC</a>” vignette from <a href="https://boettiger-lab.github.io/earthdatalogin">earthdataaccess package</a>.</p>
-<p>High-resolution satellites generate many snapshot images each with a limited field of view or spatial extent. In order to see a larger area in space, and/or observe changes across space and time, we need to assemble these many snapshots into a mosaic or “data cube” that we can analyze as a cohesive whole.</p>
-<p><a href="https://radiantearth.github.io/stac-browser/#/external/cmr.earthdata.nasa.gov/stac/">EARTHDATA STAC CATALOGS</a></p>
-<section id="install-earthdatalogin" class="level2">
-<h2 class="anchored" data-anchor-id="install-earthdatalogin">Install earthdatalogin</h2>
-<p>Install earthdatalogin and update terra</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Learning Objectives">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Learning Objectives
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>How to authenticate with <code>earthdatalogin</code></li>
+<li>How to use <code>earthdatalogin</code> to search for data using spatial and temporal filters</li>
+<li>How to make a plot without downloading the data</li>
+</ol>
+</div>
+</div>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>In this example we will use the <code>earthdatalogin</code> R package to search for data collections from NASA Earthdata. <code>earthdatalogin</code> is a R package that simplifies data discovery and access to NASA Earth science data by providing an abstraction layer for NASA’s <a href="https://cmr.earthdata.nasa.gov/search/site/docs/search/api.html">Common Metadata Repository (CMR) API</a> Search API. The library makes searching for data more approachable by using a simpler notation instead of low level HTTP queries. <code>earthdatalogin</code> takes the trouble out of Earthdata Login <strong>authentication</strong>, makes <strong>search</strong> easier, and provides a stream-lined way to download or stream search results into R data objects.</p>
+<p>For more on <code>earthdatalogin</code> visit the <a href="https://github.com/boettiger-lab/earthdatalogin/"><code>earthdatalogin</code> GitHub</a> page and/or the <a href="https://boettiger-lab.github.io/earthdatalogin/"><code>earthdatalogin</code> documentation</a> site. Be aware that <code>earthdatalogin</code> is under active development.</p>
+</section>
+<section id="prerequisites" class="level2">
+<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
+<p>An Earthdata Login account is required to access data from NASA Earthdata. Please visit <a href="https://urs.earthdata.nasa.gov" class="uri">https://urs.earthdata.nasa.gov</a> to register and manage your Earthdata Login account. This account is free to create and only takes a moment to set up.</p>
+<section id="import-required-packages" class="level3">
+<h3 class="anchored" data-anchor-id="import-required-packages">Import Required Packages</h3>
+<p><em>Note: See the set-up tab (in left nav bar) for instructions on getting set up on your own computer.</em></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"earthdatalogin"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"terra"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># devtools::install_github("boettiger-lab/earthdatalogin")</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("rstac")</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("gdalcubes")</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(earthdatalogin)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstac)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gdalcubes)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>here() starts at /home/jovyan/EDMW-EarthData-Workshop-2024</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>gdalcubes<span class="sc">::</span><span class="fu">gdalcubes_options</span>(<span class="at">parallel =</span> <span class="cn">TRUE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="basic-use" class="level2">
-<h2 class="anchored" data-anchor-id="basic-use">Basic Use</h2>
-<p>First let’s get <a href="https://urs.earthdata.nasa.gov/">NASA Earth Data Login</a> (EDL) authentication out of the way. For cloud data from almost any other STAC catalog (NOAA, USGS, Planetary Computer, etc), authentication is either unnecessary or already provided by the STAC API, but NASA EDL is special.</p>
+<section id="authentication-for-nasa-earthdata" class="level3">
+<h3 class="anchored" data-anchor-id="authentication-for-nasa-earthdata">Authentication for NASA Earthdata</h3>
+<p>We will start by authenticating using our Earthdata Login credentials. Authentication is not necessarily needed to search for publicly available data collections in Earthdata, but is always needed to download or access data from the NASA Earthdata archives. We can use <code>edl_netrc()</code> from the <code>earthdatalogin</code> package to create a <code>.netrc</code> file that will store our credentials.</p>
+<p>You will have to register at <a href="https://urs.earthdata.nasa.gov/">https://urs.earthdata.nasa.gov/</a> as a <a href="https://urs.earthdata.nasa.gov/users/new">new user</a>.</p>
+<p>The first time you run authentication use:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(earthdatalogin)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Authenticate</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">edl_netrc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>earthdatalogin<span class="sc">::</span><span class="fu">edl_netrc</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">username =</span> <span class="st">"user"</span>, <span class="co"># add your user name</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">password =</span> <span class="st">"password"</span> <span class="co"># add you password</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Get data.</p>
+<p>This will save your <code>.netrc</code> file. After this you can run:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>terra 1.7.71</code></pre>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>earthdatalogin<span class="sc">::</span><span class="fu">edl_netrc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSL30.020/HLS.L30.T56JKT.2023246T235950.v2.0/HLS.L30.T56JKT.2023246T235950.v2.0.SAA.tif"</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(url, <span class="at">vsi=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>This is a boring and weird example. The plot is correct.</p>
+<p>Because the <code>gdalcubes</code> package, which we need for working with data cubes, doesn’t respect global environmental variables, we use a helper utility to export those into its configuration as well.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ras)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="1-earthdatalogin_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
-</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>earthdatalogin<span class="sc">::</span><span class="fu">with_gdalcubes</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="searching-and-subsetting" class="level2">
-<h2 class="anchored" data-anchor-id="searching-and-subsetting">Searching and Subsetting</h2>
-<p>The packages we want</p>
+<section id="search-for-data" class="level3">
+<h3 class="anchored" data-anchor-id="search-for-data">Search for data</h3>
+<p>There are multiple keywords we can use to discovery data from collections. The table below contains the <code>short_name</code>, <code>concept_id</code>, and <code>doi</code> for some collections we are interested in for the tutorials today. Each of these can be used to search for data or information related to the collection we are interested in.</p>
+<table class="table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Shortname</th>
+<th>Collection Concept ID</th>
+<th>DOI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>MUR-JPL-L4-GLOB-v4.1</td>
+<td>C1996881146-POCLOUD</td>
+<td>10.5067/GHGMR-4FJ04</td>
+</tr>
+<tr class="even">
+<td>AVHRR_OI-NCEI-L4-GLOB-v2.1</td>
+<td>C2036881712-POCLOUD</td>
+<td>10.5067/GHAAO-4BC21</td>
+</tr>
+</tbody>
+</table>
+<p>How can we find the <code>shortname</code>, <code>concept_id</code>, and <code>doi</code> for collections not in the table above?. Let’s take a quick detour.</p>
+<p>https://search.earthdata.nasa.gov/search</p>
+<p>Let’s search for “GHRSST Level 4 MUR Global Foundation Sea Surface Temperature Analysis”.</p>
+<p><a href="https://search.earthdata.nasa.gov/search?q=GHRSST%20Level%204%20MUR%20Global%20Foundation%20Sea%20Surface%20Temperature%20Analysis">Link to the search</a></p>
+<p><img src="images/SST_Blended_Earthdata_Search.png" class="img-fluid" style="width:50.0%"></p>
+<p>If we hover over the top box, we will see an i with a circle around it. Click that. On this page, you will see the DOI. Now click “View More Info” to get to https://cmr.earthdata.nasa.gov/search/concepts/C1996881146-POCLOUD.html</p>
+<p>On that page you will see the “short name”. Note the short name was also on the first search page, but was not noted as the short name.</p>
+<section id="search-by-short-name" class="level4">
+<h4 class="anchored" data-anchor-id="search-by-short-name">Search by short name</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstac)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gdalcubes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'gdalcubes'</code></pre>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>short_name <span class="ot">&lt;-</span> <span class="st">'MUR-JPL-L4-GLOB-v4.1'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:terra':
-
-    animate, crop, size</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gdalcubes_options</span>(<span class="at">parallel =</span> <span class="cn">TRUE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<section id="edl-authentication" class="level3">
-<h3 class="anchored" data-anchor-id="edl-authentication">EDL Authentication</h3>
-<p>As usual, we can handle this with <code>edl_netrc()</code>. Because the <code>gdalcubes</code> package doesn’t respect global environmental variables, we use a helper utility to export those into its configuration as well.</p>
+<p>Let’s set some time bounds.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(earthdatalogin)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">edl_netrc</span>()</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">with_gdalcubes</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>tbox <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"2020-01-16"</span>, <span class="st">"2020-12-16"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="search-via-stac" class="level3">
-<h3 class="anchored" data-anchor-id="search-via-stac">Search via STAC</h3>
-<p>We will now use the <code>rstac</code> package to search one or more NASA collections for data that falls into our desired bounding box of space and time. NASA has a CMR option for searching that is more stable but this example is using STAC which is a more universal option.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>bbox <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">xmin=</span><span class="sc">-</span><span class="dv">123</span>, <span class="at">ymin=</span><span class="fl">37.25</span>, <span class="at">xmax=</span><span class="sc">-</span><span class="fl">122.0</span>, <span class="at">ymax=</span><span class="fl">38.25</span>) </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="st">"2021-12-01"</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>end <span class="ot">&lt;-</span> <span class="st">"2022-01-31"</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Find all assets from the desired catalog:</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>items <span class="ot">&lt;-</span> <span class="fu">stac</span>(<span class="st">"https://cmr.earthdata.nasa.gov/stac/LPCLOUD"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stac_search</span>(<span class="at">collections =</span> <span class="st">"HLSL30.v2.0"</span>,</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">bbox =</span> bbox,</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">datetime =</span> <span class="fu">paste</span>(start,end, <span class="at">sep =</span> <span class="st">"/"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">post_request</span>() <span class="sc">|&gt;</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">items_fetch</span>() <span class="sc">|&gt;</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">items_filter</span>(<span class="at">filter_fn =</span> \(x) {x[[<span class="st">"eo:cloud_cover"</span>]] <span class="sc">&lt;</span> <span class="dv">20</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> earthdatalogin<span class="sc">::</span><span class="fu">edl_search</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">short_name =</span> short_name,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">version =</span> <span class="st">"4.1"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">temporal =</span> tbox</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>results[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>
-  |                                                                            
-  |======================================================================| 100%</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: In version 0.9.2, rstac changed how filter function is evaluated. In future versions, the `filter_fn` parameter will be evaluated against each feature in items instead of `properties` field.
-See ?items_filter for more details on how to change your function.</code></pre>
+<pre><code>[1] "https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc"
+[2] "https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200117090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc"
+[3] "https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200118090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc"</code></pre>
 </div>
 </div>
-<p>Note that 98 features have matched our search criteria! Each feature represents a ‘snapshot’ image taken by the satellite as it passes by (this is a harmonized product so actually there’s quite a lot of post-processing.) Each feature thus shares the same bounding box, projection, and timestamp, but may consist of many different ‘assets’, different files representing the different spectral bands on the satellite camera instrument. Each feature can potentially include quite extensive metadata about the feature, including details of instrument itself or from post-processing, such as cloud cover. Unfortunately, Earth Data’s STAC metadata tends to be quite sparse.</p>
-</section>
-<section id="building-a-data-cube" class="level3">
-<h3 class="anchored" data-anchor-id="building-a-data-cube">Building a Data Cube</h3>
+<p>In this example we used the <code>short_name</code> parameter to search from our desired data set. However, there are multiple ways to specify the collection(s) we are interested in. Alternative parameters include:</p>
+<ul>
+<li><code>doi</code> - request collection by digital object identifier (e.g., <code>doi</code> = ‘10.5067/GHAAO-4BC21’)</li>
+</ul>
+<p><strong>NOTE:</strong> Each Earthdata collect has a unique <code>concept_id</code> and <code>doi</code>. This is not the case with <code>short_name</code>. A <strong>shortname</strong> can be associated with multiple versions of a collection. If multiple versions of a collection are publicaly available, using the <code>short_name</code> parameter with return all versions available. It is advised to use the <code>version</code> parameter in conjunction with the <code>short_name</code> parameter with searching.</p>
+<p>We can refine our search by passing more parameters that describe the spatiotemporal domain of our use case. Here, we use the <code>temporal</code> parameter to request a date range and the <code>bounding_box</code> parameter to request granules that intersect with a bounding box.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Desired data cube shape &amp; resolution</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>v <span class="ot">=</span> <span class="fu">cube_view</span>(<span class="at">srs =</span> <span class="st">"EPSG:4326"</span>,</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">extent =</span> <span class="fu">list</span>(<span class="at">t0 =</span> <span class="fu">as.character</span>(start), </span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                            <span class="at">t1 =</span> <span class="fu">as.character</span>(end),</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">left =</span> bbox[<span class="dv">1</span>], <span class="at">right =</span> bbox[<span class="dv">3</span>],</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">top =</span> bbox[<span class="dv">4</span>], <span class="at">bottom =</span> bbox[<span class="dv">2</span>]),</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">nx =</span> <span class="dv">512</span>, <span class="at">ny =</span> <span class="dv">512</span>, <span class="at">dt =</span> <span class="st">"P1M"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>bbox <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">xmin=</span><span class="sc">-</span><span class="fl">73.5</span>, <span class="at">ymin=</span><span class="fl">33.5</span>, <span class="at">xmax=</span><span class="sc">-</span><span class="fl">43.5</span>, <span class="at">ymax=</span><span class="fl">43.5</span>) </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>bbox</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> xmin  ymin  xmax  ymax 
+-73.5  33.5 -43.5  43.5 </code></pre>
 </div>
-<p>RGB bands + cloud cover mask</p>
+</div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>col <span class="ot">&lt;-</span> <span class="fu">stac_image_collection</span>(items<span class="sc">$</span>features, </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">asset_names =</span> <span class="fu">c</span>(<span class="st">"B02"</span>, <span class="st">"B03"</span>, <span class="st">"B04"</span>, <span class="st">"Fmask"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in stac_image_collection(items$features, asset_names = c("B02", : STAC
-asset with name 'B02' does not include eo:bands metadata and will be considered
-as a single band source</code></pre>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> earthdatalogin<span class="sc">::</span><span class="fu">edl_search</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">short_name =</span> short_name,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">version =</span> <span class="st">"4.1"</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">temporal =</span> tbox,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">bounding_box =</span> <span class="fu">paste</span>(bbox,<span class="at">collapse=</span><span class="st">","</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>results[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc"
+[2] "https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200117090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc"
+[3] "https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200118090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc"</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in stac_image_collection(items$features, asset_names = c("B02", : STAC
-asset with name 'B03' does not include eo:bands metadata and will be considered
-as a single band source</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in stac_image_collection(items$features, asset_names = c("B02", : STAC
-asset with name 'B04' does not include eo:bands metadata and will be considered
-as a single band source</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in stac_image_collection(items$features, asset_names = c("B02", : STAC
-asset with name 'Fmask' does not include eo:bands metadata and will be
-considered as a single band source</code></pre>
-</div>
-</div>
-<p>Use a cloud mask. See <a href="https://lpdaac.usgs.gov/documents/1326/HLS_User_Guide_V2.pdf">HLS User Guide</a>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>cloud_mask <span class="ot">&lt;-</span> <span class="fu">image_mask</span>(<span class="st">"Fmask"</span>, <span class="at">values=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="plot" class="level3">
-<h3 class="anchored" data-anchor-id="plot">Plot</h3>
-<p>This takes awhile. So far we have not downloaded anything. We have been working with metadata about the files. Now we do the work which involves server-side subsetting and some operations. We download on the part that we need.</p>
+</section>
+<section id="working-with-earthdatalogin-returns" class="level3">
+<h3 class="anchored" data-anchor-id="working-with-earthdatalogin-returns">Working with <code>earthdatalogin</code> returns</h3>
+<p>Following the search for data, you’ll likely take one of two pathways with those results. You may choose to <strong>download</strong> the assets that have been returned to you or you may choose to continue working with the search results within the R environment.</p>
+<section id="download-earthdatalogin-results" class="level4">
+<h4 class="anchored" data-anchor-id="download-earthdatalogin-results">Download <code>earthdatalogin</code> results</h4>
+<p>In some cases you may want to download your assets. <code>earthdatalogin</code> makes downloading the data from the search results is very easy using the <code>edl_download()</code> function. The MUR SST files are 673Gb file so I would prefer not to download. But you could.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">raster_cube</span>(col, v, <span class="at">mask=</span>cloud_mask) <span class="sc">|&gt;</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select_bands</span>(<span class="fu">c</span>(<span class="st">"B02"</span>,<span class="st">"B03"</span>, <span class="st">"B04"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">rgb=</span><span class="dv">3</span><span class="sc">:</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>earthdatalogin<span class="sc">::</span><span class="fu">edl_download</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    results[<span class="dv">1</span>],</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">dest =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"test.nc"</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="work-in-the-cloud" class="level4">
+<h4 class="anchored" data-anchor-id="work-in-the-cloud">Work in the cloud</h4>
+<p>We do not have to download the data to work with it or at least not until we need to compute with it or plot it. Let’s look at a smaller dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>oi <span class="ot">&lt;-</span> earthdatalogin<span class="sc">::</span><span class="fu">edl_search</span>(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">short_name =</span> <span class="st">"AVHRR_OI-NCEI-L4-GLOB-v2.1"</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">version =</span> <span class="st">"2.1"</span>,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">temporal =</span> <span class="fu">c</span>(<span class="st">"2020-01-16"</span>, <span class="st">"2020-01-17"</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>oi[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc"
+[2] "https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20200116120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc"
+[3] "https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20200117120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc"</code></pre>
+</div>
+</div>
+<p>Let’s try plotting this. I am going to authenticate again just to make sure my token did not expire.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(earthdatalogin)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Authenticate</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>earthdatalogin<span class="sc">::</span><span class="fu">edl_netrc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="at">x =</span> oi[<span class="dv">1</span>], <span class="at">vsi=</span><span class="cn">TRUE</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ras)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="1-earthdatalogin_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="1-earthdatalogin_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
-
-
+</div>
 </section>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>This concludes tutorial 1. You have worked with remote-sensing data in the cloud and plotted it.</p>
+<p>Next we will learn to subset the data so we can work with bigger datasets in the cloud without downloading the whole dataset.</p>
+
+
 </section>
 
 </main> <!-- /main -->
@@ -753,6 +850,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/nmfs-opensci\.github\.io\/EDMW-EarthData-Workshop-2024");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -787,7 +902,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
@@ -802,38 +921,28 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
     }
     stripColumnClz(note)
-    const typesetMath = (el) => {
-      if (window.MathJax) {
-        // MathJax Typeset
-        window.MathJax.typeset([el]);
-      } else if (window.katex) {
-        // KaTeX Render
-        var mathElements = el.getElementsByClassName("math");
-        var macros = [];
-        for (var i = 0; i < mathElements.length; i++) {
-          var texText = mathElements[i].firstChild;
-          if (mathElements[i].tagName == "SPAN") {
-            window.katex.render(texText.data, mathElements[i], {
-              displayMode: mathElements[i].classList.contains('display'),
-              throwOnError: false,
-              macros: macros,
-              fleqn: false
-            });
-          }
-        }
-      }
-    }
     if (id === null || id.startsWith('sec-')) {
       // Special case sections, only their first couple elements
       const container = document.createElement("div");
       if (note.children && note.children.length > 2) {
-        for (let i = 0; i < 2; i++) {
-          container.appendChild(note.children[i].cloneNode(true));
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
         }
-        typesetMath(container);
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
         return container.innerHTML
       } else {
-        typesetMath(note);
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
         return note.innerHTML;
       }
     } else {
@@ -842,8 +951,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (anchorLink) {
         anchorLink.remove();
       }
-      typesetMath(note);
-      return note.innerHTML;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
     }
   }
   for (var i=0; i<xrefs.length; i++) {
@@ -1066,13 +1182,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../content/01-intro-to-jupyterhub.html" class="pagination-link  aria-label=" jupyter="" hubs"="">
+      <a href="../../content/01-intro-to-jupyterhub.html" class="pagination-link" aria-label="Jupyter hubs">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Jupyter hubs</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../tutorials/r/2-subset-and-plot.html" class="pagination-link" aria-label="Tutorial 2">
-        <span class="nav-page-text">Tutorial 2</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../tutorials/r/2-subset-and-plot.html" class="pagination-link" aria-label="Subset">
+        <span class="nav-page-text">Subset</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -1084,7 +1200,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>   
     <div class="nav-footer-center">
 <p><img src="https://github.com/nmfs-opensci/assets/blob/main/logo/nmfs-opensci-logo2.png?raw=true" alt="NMFS Open Science logo" style="width:150px"><br>NMFS Open Science (2023)</p>
-</div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/edit/main/tutorials/r/1-earthdatalogin.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/tutorials/r/1-earthdatalogin.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
