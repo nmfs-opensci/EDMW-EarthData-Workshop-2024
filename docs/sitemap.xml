@@ -1,83 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/team.html</loc>
-    <lastmod>2024-04-26T15:10:11.290Z</lastmod>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/tutorials/r/4-matchup-satellite-data-to-track-locations.html</loc>
+    <lastmod>2024-04-30T19:44:22.375Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/setup.html</loc>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/tutorials/r/2-subset-and-plot.html</loc>
+    <lastmod>2024-04-30T20:17:59.239Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/tutorials/r/05-r-geospatial.html</loc>
+    <lastmod>2024-04-30T20:09:05.136Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/tutorials/python/3-extract-satellite-data-within-boundary.html</loc>
+    <lastmod>2024-04-30T19:40:53.027Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/tutorials/python/1-earthaccess.html</loc>
+    <lastmod>2024-04-30T19:39:16.439Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/support.html</loc>
+    <lastmod>2024-04-30T19:23:43.937Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/schedule.html</loc>
     <lastmod>2024-04-26T14:29:59.589Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/r-tutorials/05-r-geospatial.html</loc>
-    <lastmod>2024-04-26T14:43:33.981Z</lastmod>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/index.html</loc>
+    <lastmod>2024-04-30T20:26:32.022Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/python-notebooks/02_Xarray_hvplot.html</loc>
-    <lastmod>2024-04-26T14:29:58.651Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/python-notebooks/02_Using_Data.html</loc>
-    <lastmod>2024-04-26T14:29:58.647Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/python-notebooks/02_Get_Points.html</loc>
-    <lastmod>2024-04-26T14:29:58.631Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/python-notebooks/01_OPeNDAP_Downloader.html</loc>
-    <lastmod>2024-04-26T14:29:58.612Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/python-notebooks/01_ERDDAP_Downloader.html</loc>
-    <lastmod>2024-04-26T14:29:58.610Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/python-notebooks/00_NASA_Earthdata_Authentication.html</loc>
-    <lastmod>2024-04-26T14:29:58.610Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/projects/index.html</loc>
-    <lastmod>2024-04-26T14:29:58.604Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/overview.html</loc>
-    <lastmod>2024-04-26T14:29:58.603Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/shell.html</loc>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/notebooks.html</loc>
     <lastmod>2024-04-26T14:29:58.467Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/jupyter-notebooks.html</loc>
-    <lastmod>2024-04-26T14:29:58.467Z</lastmod>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/index.html</loc>
+    <lastmod>2024-04-26T14:29:58.466Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/git.html</loc>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/earthdata.html</loc>
     <lastmod>2024-04-26T14:29:58.425Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/data.html</loc>
-    <lastmod>2024-04-26T14:29:58.425Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/03-git-rstudio.html</loc>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/04-intro-sdm.html</loc>
     <lastmod>2024-04-26T14:29:58.363Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/02-rstudio.html</loc>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/03-ai.html</loc>
     <lastmod>2024-04-26T14:29:58.363Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/02-github-2.html</loc>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/02-quarto.html</loc>
     <lastmod>2024-04-26T14:29:58.362Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/01-welcome.html</loc>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/02-git-jupyter.html</loc>
     <lastmod>2024-04-26T14:29:58.362Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/01-intro-to-cloud-geoscience.html</loc>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/01-intro-to-jupyterhub.html</loc>
     <lastmod>2024-04-26T14:29:58.362Z</lastmod>
   </url>
   <url>
@@ -89,83 +73,67 @@
     <lastmod>2024-04-26T14:29:58.362Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/01-github.html</loc>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/01-intro-to-cloud.html</loc>
+    <lastmod>2024-04-30T19:30:41.677Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/01-welcome.html</loc>
+    <lastmod>2024-04-30T19:32:05.048Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/02-github-2.html</loc>
     <lastmod>2024-04-26T14:29:58.362Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/01-intro-to-jupyterhub.html</loc>
-    <lastmod>2024-04-26T14:29:58.362Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/02-git-jupyter.html</loc>
-    <lastmod>2024-04-26T14:29:58.362Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/02-quarto.html</loc>
-    <lastmod>2024-04-26T14:29:58.362Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/03-ai.html</loc>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/02-rstudio.html</loc>
     <lastmod>2024-04-26T14:29:58.363Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/04-intro-sdm.html</loc>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/03-git-rstudio.html</loc>
     <lastmod>2024-04-26T14:29:58.363Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/earthdata.html</loc>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/data.html</loc>
     <lastmod>2024-04-26T14:29:58.425Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/index.html</loc>
-    <lastmod>2024-04-26T14:29:58.466Z</lastmod>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/git.html</loc>
+    <lastmod>2024-04-26T14:29:58.425Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/notebooks.html</loc>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/jupyter-notebooks.html</loc>
     <lastmod>2024-04-26T14:29:58.467Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/index.html</loc>
-    <lastmod>2024-04-26T15:05:24.016Z</lastmod>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/shell.html</loc>
+    <lastmod>2024-04-26T14:29:58.467Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/projects/hackathon-projects.html</loc>
-    <lastmod>2024-04-26T14:29:58.604Z</lastmod>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/overview.html</loc>
+    <lastmod>2024-04-26T14:29:58.603Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/projects/upwelling_ml/intro.html</loc>
-    <lastmod>2024-04-26T14:29:58.610Z</lastmod>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/setup.html</loc>
+    <lastmod>2024-04-30T20:28:39.210Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/python-notebooks/01_ERA5_S3_Downloader.html</loc>
-    <lastmod>2024-04-26T14:29:58.610Z</lastmod>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/team.html</loc>
+    <lastmod>2024-04-26T20:14:35.922Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/python-notebooks/01_MOTU_Downloader.html</loc>
-    <lastmod>2024-04-26T14:29:58.611Z</lastmod>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/tutorials/python/2-subset-and-plot.html</loc>
+    <lastmod>2024-04-30T19:39:36.793Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/python-notebooks/01_earthaccess_Downloader.html</loc>
-    <lastmod>2024-04-26T14:29:58.612Z</lastmod>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/tutorials/python/4-matchup-satellite-data-to-track-locations.html</loc>
+    <lastmod>2024-04-30T19:43:57.169Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/python-notebooks/02_Graphing_Map_Data.html</loc>
-    <lastmod>2024-04-26T14:29:58.639Z</lastmod>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/tutorials/r/1-earthdatalogin.html</loc>
+    <lastmod>2024-04-30T20:00:47.301Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/python-notebooks/02_Xarray.html</loc>
-    <lastmod>2024-04-26T14:29:58.647Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/r-tutorials/03-r-read-in-data.html</loc>
-    <lastmod>2024-04-26T14:29:58.656Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/schedule.html</loc>
-    <lastmod>2024-04-26T14:29:59.589Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/support.html</loc>
-    <lastmod>2024-04-26T14:29:59.590Z</lastmod>
+    <loc>https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/tutorials/r/3-extract-satellite-data-within-boundary.html</loc>
+    <lastmod>2024-04-30T19:41:36.788Z</lastmod>
   </url>
 </urlset>

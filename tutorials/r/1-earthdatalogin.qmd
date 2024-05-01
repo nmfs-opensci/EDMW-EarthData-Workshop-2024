@@ -1,0 +1,177 @@
+---
+title: Earthdatalogin  Search and Discovery
+format:
+  html:
+    code-fold: true
+---
+
+## Summary
+
+In this example we will use the `earthdatalogin` R package to search for data collections from NASA Earthdata. `earthdatalogin` is a R package that simplifies data discovery and access to NASA Earth science data by providing an abstraction layer for NASA’s [Common Metadata Repository (CMR) API](https://cmr.earthdata.nasa.gov/search/site/docs/search/api.html) Search API. The library makes searching for data more approachable by using a simpler notation instead of low level HTTP queries. `earthdatalogin` takes the trouble out of Earthdata Login **authentication**, makes **search** easier, and provides a stream-lined way to download or stream search results into R data objects.
+
+For more on `earthdatalogin` visit the [`earthdatalogin` GitHub](https://github.com/boettiger-lab/earthdatalogin/) page and/or the [`earthdatalogin` documentation](https://boettiger-lab.github.io/earthdatalogin/) site. Be aware that `earthdatalogin` is under active development. 
+
+## Prerequisites
+
+An Earthdata Login account is required to access data from NASA Earthdata. Please visit <https://urs.earthdata.nasa.gov> to register and manage your Earthdata Login account. This account is free to create and only takes a moment to set up.  
+
+
+## Learning Objectives
+
+1. How to authenticate with `earthdatalogin`
+2. How to use `earthdatalogin` to search for data using spatial and temporal filters
+3. How to explore and work with search results
+
+
+### Import Required Packages  
+
+*Note: See the set-up tab (in left nav bar) for instructions on getting set up on your own computer.*
+
+```{r}
+library(earthdatalogin)
+library(rstac)
+library(gdalcubes)
+gdalcubes_options(parallel = TRUE) 
+```
+
+### Authentication for NASA Earthdata  
+
+We will start by authenticating using our Earthdata Login credentials. Authentication is not necessarily needed to search for publicly available data collections in Earthdata, but is always needed to download or access data from the NASA Earthdata archives. We can use `edl_netrc()` from the `earthdatalogin` package to create a `.netrc` file that will store our credentials. 
+
+The first time you run authentication use:
+```
+edl_netrc(
+  username = default("user"),
+  password = default("password")
+)
+```
+This will save your `.netrc` file. After this you can run:
+```{r}
+edl_netrc()
+```
+
+Because the `gdalcubes` package, which we need for working with data cubes, doesn't respect global environmental variables, we use a helper utility to export those into its configuration as well.
+
+```{r}
+with_gdalcubes()
+```
+
+### Search for data  
+
+There are multiple keywords we can use to discovery data from collections. The table below contains the `short_name`, `concept_id`, and `doi` for some collections we are interested in for the tutorials today. Each of these can be 
+used to search for data or information related to the collection we are interested in.  
+
+| Shortname | Collection Concept ID | DOI |
+| --- | --- | --- |
+| MUR-JPL-L4-GLOB-v4.1 | C1996881146-POCLOUD | 10.5067/GHGMR-4FJ04 |
+| AVHRR_OI-NCEI-L4-GLOB-v2.1 | C2036881712-POCLOUD | 10.5067/GHAAO-4BC21 |
+
+How can we find the `shortname`, `concept_id`, and `doi` for collections not in the table above?. Let's take a quick detour.
+
+https://search.earthdata.nasa.gov/search
+
+#### Search by text
+
+Let's search for "GHRSST Level 4 MUR Global Foundation Sea Surface Temperature Analysis". Why this? Because we know the type of SST data we are looking for.
+
+[Link to the search](https://search.earthdata.nasa.gov/search?q=GHRSST%20Level%204%20MUR%20Global%20Foundation%20Sea%20Surface%20Temperature%20Analysis)
+
+![](images/SST_Blended_Earthdata_Search.png)
+
+If we hover over the top box, we will see an i with a circle around it. Click that. On this page, you will see the DOI. Now click "View More Info" to get to https://cmr.earthdata.nasa.gov/search/concepts/C1996881146-POCLOUD.html
+
+On that page you will see the "short name". Note the short name was also on the first search page, but was not noted as the short name.
+
+#### Search by short name
+
+```{r}
+short_name <- 'MUR-JPL-L4-GLOB-v4.1'
+```
+
+Let's set some time bounds.
+```{r}
+tbox <- c("2020-01-16", "2020-12-16")
+```
+
+```{r}
+results <- edl_search(
+    short_name = short_name,
+    version = "4.1",
+    temporal = tbox
+)
+```
+
+In this example we used the `short_name` parameter to search from our desired data set. However, there are multiple ways to specify the collection(s) we are interested in. Alternative parameters include:  
+
+- `doi` - request collection by digital object identifier (e.g., `doi` = '10.5067/GHAAO-4BC21')  
+
+**NOTE:** Each Earthdata collect has a unique `concept_id` and `doi`. This is not the case with `short_name`. A **shortname** can be associated with multiple versions of a collection. If multiple versions of a collection are publicaly available, using the `short_name` parameter with return all versions available. It is advised to use the `version` parameter in conjunction with the `short_name` parameter with searching.
+
+We can refine our search by passing more parameters that describe the spatiotemporal domain of our use case. Here, we use the `temporal` parameter to request a date range and the `bounding_box` parameter to request granules that intersect with a bounding box.  
+
+
+
+```{r}
+bbox <- c(xmin=-73.5, ymin=33.5, xmax=-43.5, ymax=43.5) 
+```
+
+
+```{r}
+results <- edl_search(
+    short_name = short_name,
+    version = "4.1",
+    temporal = tbox,
+    bounding_box = paste(bbox,collapse=",")
+)
+```
+
+
+### Working with `earthdatalogin` returns  
+
+Following the search for data, you'll likely take one of two pathways with those results. You may choose to **download** the assets that have been returned to you or you may choose to continue working with the search results within the R environment.  
+
+#### Download `earthdatalogin` results
+
+In some cases you may want to download your assets. `earthdatalogin` makes downloading the data from the search results is very easy using the `edl_download()` function. The MUR SST files are 673Gb file so I would prefer not to download. But you could.
+
+```{r eval=FALSE}
+edl_download(
+    results[1],
+    dest="test.nc"
+)
+```
+
+#### Work in the cloud
+
+We do not have to download the data to work with it or at least not until we need to compute with it or plot it.
+Let's look at a smaller dataset.
+
+```{r}
+oi <- edl_search(
+    short_name = "AVHRR_OI-NCEI-L4-GLOB-v2.1",
+    version = "2.1",
+    temporal = c("2020-01-16", "2020-01-17")
+)
+```
+
+Let's try plotting this. I am going to authenticate again just to make sure my token did not expire.
+```{r}
+library(earthdatalogin)
+# Authenticate
+edl_netrc()
+```
+
+```{r message=FALSE}
+library(terra)
+ras <- terra::rast(oi[1], vsi=TRUE)
+plot(ras)
+```
+
+
+
+## Conclusion
+
+This concludes tutorial 1. You have worked with remote-sensing data in the cloud and plotted it. 
+
+Next we will learn to subset the data so we can work with bigger datasets in the cloud without downloading the whole dataset.
+
