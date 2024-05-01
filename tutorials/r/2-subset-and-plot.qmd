@@ -5,6 +5,7 @@ format:
     code-fold: true
 ---
 
+## Get a vector of urls to our nc files
 
 ```{r}
 edl_netrc()
@@ -24,7 +25,9 @@ results <- edl_search(
 )
 ```
 
-## Cropping images
+## Crop one image
+
+What is different here is that I did not download the file or load it into memory.
 
 ```{r}
 library(terra)
