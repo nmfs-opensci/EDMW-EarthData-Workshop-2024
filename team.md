@@ -72,7 +72,7 @@ title: Our Team
 
 ### Emily Markowitz
 
-<img src="images/Em.png" alt="Emily Markowitz" style="width:75%; ; border-radius: 50%;">
+<img src="images/em.png" alt="Emily Markowitz" style="width:75%; ; border-radius: 50%;">
 
 [NOAA Fisheries](https://www.fisheries.noaa.gov/)
 
@@ -90,14 +90,20 @@ title: Our Team
     
 [NOAA CoastWatch Great Lakes Node](https://coastwatch.glerl.noaa.gov/)
 
-[webpage](https://sssliuum.github.io/) 
-
+[webpage](https://sssliuum.github.io/)  &#x2022;
 [GitHub](https://github.com/sssliuum) 
 
 </div>
 
 <div>
-### More
+
+### Dan Pendleton
+
+<img src="images/dan.jpeg" alt="Dan Pendelton" style="width:75%; ; border-radius: 50%;">
+
+[NOAA Fisheries](https://www.fisheries.noaa.gov/)
+
+[webpage](https://www.researchgate.net/profile/Daniel-Pendleton) &#x2022;  [GitHub](https://github.com/dep22) &#x2022; [ORCID](https://orcid.org/0000-0001-9341-8841)
 
 </div>
 

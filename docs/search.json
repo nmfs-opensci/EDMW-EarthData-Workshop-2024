@@ -568,7 +568,7 @@
     "href": "team.html#organizers-and-instructors",
     "title": "Our Team",
     "section": "Organizers and Instructors",
-    "text": "Organizers and Instructors\n\n\nEli Holmes\n\n\nNOAA Fisheries\nwebpage • GitHub • ORCID\n\n\nSunny Hospital\n\nNOAA CoastWatch PolarWatch\nGitHub\n\n\nMatt Grossi\n\n\nEmily Markowitz\n\nNOAA Fisheries\nwebpage • GitHub • NOAA • ORCID\n\n\n\n\nSongzhi Liu\n\n[NOAA CoastWatch Great Lakes Node](https://www.fisheries.noaa.gov/\n[webpage](https://github.com/shospital\nGitHub\n\n\nMore\n\n\nMore\n\n\nMore",
+    "text": "Organizers and Instructors\n\n\nEli Holmes\n\n\nNOAA Fisheries\nwebpage • GitHub • ORCID\n\n\nSunny Hospital\n\nNOAA CoastWatch PolarWatch\nGitHub\n\n\nMatt Grossi\n\nNOAA Fisheries\nwebpage • GitHub • ORCID\n\n\nEmily Markowitz\n\nNOAA Fisheries\nwebpage • GitHub • NOAA • ORCID\n\n\n\n\nSongzhi Liu\n\nNOAA CoastWatch Great Lakes Node\nwebpage • GitHub\n\n\nDan Pendleton\n\nNOAA Fisheries\nwebpage • GitHub • ORCID\n\n\nMore\n\n\nMore",
     "crumbs": [
       "JupyterHub",
       "Welcome",
@@ -1555,7 +1555,7 @@
     "href": "tutorials/r/3-extract-satellite-data-within-boundary.html#compute-monthly-average-of-sst",
     "title": "Extract data within a boundary",
     "section": "Compute monthly average of SST",
-    "text": "Compute monthly average of SST\nWe will construct a data cube to compute monthly average for sea surface temperature data within the boundary.\nTo minimize data loading times, the first 10 results, which correspond to approximately two months of data, will be used for this exercise.\n\n# Select the first 10 SST results\nras_all &lt;- terra::rast(results[c(1:10)], vsi = TRUE)\n\n# Trim the SST data to the boundaries of GFST\nrc_all &lt;- terra::mask(ras_all, GFST)\n\n\n|---------|---------|---------|---------|\n=========================================\n                                          \n\n# SST data\nrc_sst &lt;- rc_all[\"analysed_sst\", ]\n\n# Function to convert times to year-month format\nyear_month &lt;- function(x) {\n  format(as.Date(time(x), format=\"%Y-%m-%d\"), \"%Y-%m\")\n}\n\n# Convert time to Year-month format for aggregation\nym &lt;- year_month(rc_all)\n\n# Compute raster mean grouped by Year-month\nmonthly_mean_rast &lt;- terra::tapp(rc_all, ym, fun = mean)\n\n# Compute mean across raster grouped by Year-month\nmonthly_means &lt;- global(monthly_mean_rast, fun = mean)",
+    "text": "Compute monthly average of SST\nWe will construct a data cube to compute monthly average for sea surface temperature data within the boundary.\nTo minimize data loading times, the first 10 results, which correspond to approximately two months of data, will be used for this exercise.\n\n# Select the first 10 SST results\nras_all &lt;- terra::rast(results[c(1:10)], vsi = TRUE)\n\n# Trim the SST data to the boundaries of GFST\nrc_all &lt;- terra::mask(ras_all, GFST)\n\n\n|---------|---------|---------|---------|\n=========================================\n                                          \n\n# SST data\nrc_sst &lt;- rc_all[\"analysed_sst\", ]\n\n# Function to convert times to year-month format\nyear_month &lt;- function(x) {\n  format(as.Date(time(x), format=\"%Y-%m-%d\"), \"%Y-%m\")\n}\n\n# Convert time to Year-month format for aggregation\nym &lt;- year_month(rc_all)\n\n# Compute raster mean grouped by Year-month\nmonthly_mean_rast &lt;- terra::tapp(rc_all, ym, fun = mean)\n\n# Compute mean across raster grouped by Year-month\nmonthly_means &lt;- global(monthly_mean_rast, fun = mean, na.rm=TRUE)",
     "crumbs": [
       "JupyterHub",
       "Tutorials",
@@ -1581,7 +1581,7 @@
     "href": "tutorials/r/3-extract-satellite-data-within-boundary.html#plot-monthly-mean-of-sea-surface-temperature-within-gfst-province",
     "title": "Extract data within a boundary",
     "section": "Plot monthly mean of sea surface temperature within GFST province",
-    "text": "Plot monthly mean of sea surface temperature within GFST province\n\n# Plot monthly mean\nggplot(data = monthly_means_df, aes(x = year_month, y = mean, group = 1)) +\n  geom_line() +\n  geom_point() +\n  xlab(\"Year.Month\") + \n  ylab(\"Mean SST (F)\")\n\nWarning: Removed 2 rows containing missing values or values outside the scale range\n(`geom_line()`).\n\n\nWarning: Removed 2 rows containing missing values or values outside the scale range\n(`geom_point()`).",
+    "text": "Plot monthly mean of sea surface temperature within GFST province\n\n# Plot monthly mean\nggplot(data = monthly_means_df, aes(x = year_month, y = mean, group = 1)) +\n  geom_line() +\n  geom_point() +\n  xlab(\"Year.Month\") + \n  ylab(\"Mean SST (F)\")",
     "crumbs": [
       "JupyterHub",
       "Tutorials",
