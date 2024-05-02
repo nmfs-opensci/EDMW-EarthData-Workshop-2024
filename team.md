@@ -59,6 +59,14 @@ title: Our Team
 <div>
 ### Matt Grossi
 
+<!--
+ ![](images/matt.png){width=75% fig-alt="Matt Grossi"}
+-->
+
+[NOAA Fisheries](https://www.fisheries.noaa.gov/)
+
+[webpage](https://mattgrossi-noaa.github.io/) &#x2022;  [GitHub](https://github.com/mattgrossi-noaa)  &#x2022; [ORCID](https://orcid.org/0000-0002-8550-3189)
+
 </div>
 
 <div>
