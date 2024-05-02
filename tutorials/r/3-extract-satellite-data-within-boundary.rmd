@@ -1,54 +1,89 @@
 ---
 title: Extract data within a boundary
 author: NOAA CoastWatch
-date: August 22, 2023
 ---
 
-```{r setup, include=FALSE, echo=FALSE}
-knitr::opts_chunk$set(
-  echo = TRUE,
-  fig.path = "images/",
-  warning = FALSE, message = FALSE
-)
-```
+::: {.callout-note title="Learning Objectives"}
+
+1. How to access and download sea surface temperature from  NASA Earthdata
+2. How to trim satellite data to specific bounding coordinates
+3. How to cropped satellite data
+4. How to apply shapefiles as masks to satellite data 
+:::
+
+
+## Summary
+
+In this example, we will utilize the earthdatalogin R package 
+to retrieve sea surface temperature data from NASA Earthdata. 
+
+The `earthdatalogin` package simplifies the process of discovering and 
+accessing NASA Earth science data.
+
+
+This example is adapted from the NOAA CoastWatch 
+Satellite Data Tutorials. To explore the full range of 
+tutorials on accessing and utilizing oceanographic satellite data, 
+visit the [NOAA CoastWatch Tutorial Github repository.](https://github.com/coastwatch-training/CoastWatch-Tutorials)
+
+
+For more on `earthdatalogin` visit the 
+[`earthdatalogin` GitHub](https://github.com/boettiger-lab/earthdatalogin/) 
+page and/or the [`earthdatalogin` documentation](https://boettiger-lab.github.io/earthdatalogin/) site. 
+Be aware that `earthdatalogin` is under active development. 
+
+## Prerequisites
+
+An Earthdata Login account is required to access data from NASA Earthdata. 
+Please visit <https://urs.earthdata.nasa.gov> to register and manage 
+your Earthdata Login account. This account is free to create and 
+only takes a moment to set up.  
+
+
+### Import Required Packages  
+
+*Note: See the set-up tab (in left nav bar) for instructions on getting set up on your own computer.*
 
 # Extract data within a boundary
 
-## Background
-One use for satellite observations is to supplement in situ sampling of geographical locations where the timespan, frequency measurements, spatial dimensions or remoteness of the locations, make physical sampling impossible or impractical. One drawback is that satellite data are often rectangular, whereas geographical locations can have irregular boundaries. Examples of boundaries include marine protected areas or marine physical, biological, and ecological divisions like the Longhurst Marine Provinces.  
 
-## Objectives
-In this tutorial we will learn how to download a timeseries of SST satellite data from an ERDDAP server, and then mask the data to retain only the data within an irregular geographical boundary (polygon). We will then plot a yearly seasonal cycle from within the boundary. 
-
-## The tutorial demonstrates the following techniques
--   Downloading data from an ERDDAP data server for a non-rectangular region using the *rerddapXtracto* package
--   Visualizing data on a map
--   Plotting a time-series of mean SST 
 
 ## Datasets used
 __GHRSST Level 4 AVHRR_OI Global Blended Sea Surface Temperature Analysis (GDS2) from NCEI__    
-This NOAA blended SST is a moderate resolution satellite-based gap-free sea surface temperature (SST) product. We will use the daily data.
+This NOAA blended SST is a moderate resolution satellite-based gap-free 
+sea surface temperature (SST) product. We will use the daily data.
 https://cmr.earthdata.nasa.gov/search/concepts/C2036881712-POCLOUD.html
 
 __Longhurst Marine Provinces__  
-The dataset represents the division of the world oceans into provinces as defined by Longhurst (1995; 1998; 2006). This division has been based on the prevailing role of physical forcing as a regulator of phytoplankton distribution. The Longhurst Marine Provinces dataset is available online (https://www.marineregions.org/downloads.php) and within the shapes folder associated with this repository. For this tutorial we will use the Gulf Stream province (ProvCode: GFST)  
+The dataset represents the division of the world oceans 
+into provinces as defined by Longhurst (1995; 1998; 2006). 
+This division has been based on the prevailing role of physical 
+forcing as a regulator of phytoplankton distribution. 
+
+The Longhurst Marine Provinces dataset is available online 
+(https://www.marineregions.org/downloads.php) and 
+within the shapes folder associated with this repository. 
+For this exercise we will use the Gulf Stream province (ProvCode: GFST)  
 
 ![../images/longhurst.png](../images/longhurst.png)
 
 ## Load packages
-
 ```{r}
+library(terra)
+library(earthdatalogin)
 library(sf)
-library(rerddapXtracto)
 ```
+
 
 ## Load boundary coordinates 
 
-The shapefile for the Longhurst marine provinces includes a list of regions.  For this exercise, we will only use the boundary of one province, the Gulf Stream region ("GFST"). 
+The shapefile for the Longhurst marine provinces includes a list of regions.  
+For this exercise, we will only use the boundary of one province, 
+the Gulf Stream region ("GFST"). 
 
 ```{r read province boundaries from shapefiles}
 
-# Set directory path
+# Set directory path for shapefile
 dir_path <- '../resources/longhurst_v4_2010/'
 
 # Import shape files (Longhurst coordinates)
@@ -65,76 +100,125 @@ ycoord <- st_coordinates(GFST)[,2]
 
 ```
 
-## Get a vector of urls to our nc files
+## Search data with the dataset unique name and coordinates/dates 
 
 ```{r}
-library(earthdatalogin)
+# Connect to NASA Earthdata with no credentials
 edl_netrc()
-with_gdalcubes()
+
 ```
 
 ```{r}
+# Dataset unique name
 short_name <- 'AVHRR_OI-NCEI-L4-GLOB-v2.1'
-bbox <- c(xmin=min(xcoord), ymin=min(ycoord), xmax=max(xcoord), ymax=max(ycoord)) 
-tbox <- c("2020-01-16", "2020-12-16")
 
+# Set boundaries based on the shapefile
+bbox <- c(xmin=min(xcoord), ymin=min(ycoord), xmax=max(xcoord), ymax=max(ycoord)) 
+
+# Set time range
+tbox <- c("2020-01-01", "2020-04-01")
+
+# Search data that match the boundaries and time range
 results <- edl_search(
-    short_name = short_name,
-    version = "2.1",
-    temporal = tbox,
-    bounding_box = paste(bbox,collapse=",")
+  short_name = short_name,
+  version = "2.1",
+  temporal = tbox,
+  bounding_box = paste(bbox, collapse = ",")
 )
+
+# Check number of files 
+length(results)
 ```
 
 There are `r length(results)` files.
 
 ## Crop and plot one image
 
-
 ```{r}
-library(terra)
-ras <- terra::rast(results[1], vsi=TRUE)
-e <- ext(c(min(xcoord), max(xcoord),  min(ycoord), max(ycoord) ))
-rc <- crop(ras, e)
+
+# Select the first result
+ras <- terra::rast(results[1], vsi = TRUE)
+
+# Set boundaries to crop
+e <- ext(c(min(xcoord), max(xcoord),  min(ycoord), max(ycoord)))
+
+# Crop the result
+rc <- terra::crop(ras, e)
 ```
 
 This has the following layers.
 ```{r}
+
+# Examine variable names
 names(rc)
-```
 
-```{r}
-plot(rc[["analysed_sst"]])
+# Examine the raster data
+rc
 ```
+ 
 
-## Apply a mask 
+## Apply a mask
 
 Apply mask to a terra raster.
 
 https://rdrr.io/cran/terra/man/mask.html
 
 
+```{r}
+
+# Extract SST from the multi-layer raster data
+rc_sst <- rc[["analysed_sst"]]
+
+
+# Vectorize shapes
+shp <- vect(shapes)
+
+# Get boundaries for GFST
+GFST <- shp[shp$ProvCode == "GFST",]
+
+# Plot the SST data
+plot(rc_sst)
+
+# Show GFST boundaries from shapefile
+plot(GFST,col='red')
+
+# Mask SST with the GFST boundarires
+masked_rc <- mask(rc_sst, GFST)
+
+# Visualize the SST in GFST
+plot(masked_rc)
+```
+
+
 ## Create a data cube
 
 We will create a data cube so that we can compute daily means over the polygon.
+```{r}
 
-## Mask the polygon 
+# Select the first result
+ras_all <- terra::rast(results[c(1:10)], vsi = TRUE)
 
+# Set boundaries to crop
+e <- ext(c(min(xcoord), max(xcoord),  min(ycoord), max(ycoord) ))
 
-### Plot the data
+# Crop
+rc_all <- terra::crop(ras_all, e)
 
+rc_sst <- rc_all["analysed_sst",]
 
-### Plot the mean seasonal temperature for the province
+# Function to convert names to year-month format
+year_month <- function(x) {
+  format(as.Date(time(x), format="%Y-%m-%d"), "%Y-%m")
+}
 
-Not sure how to do this part.
+temp_time <- format(as.Date(time(rc_sst), format="%Y-%m-%d"), "%Y-%m")
+unique(temp_time)
 
-```{r eval=FALSE}
-sst_mean=apply(satdata$sea_surface_temperature,3,mean,na.rm=TRUE)
+# Apply the mean calculation across months
+monthly_mean_rast <- terra::tapp(rc_all, year_month, fun=mean)
+monthly_mean_rast
+
+# Apply the mean calculation across 
+global_means <- global(monthly_mean_rast, fun=mean, na.rm=TRUE)
+global_means
 ```
-
-```{r eval=FALSE}
-plot(satdata$time,sst_mean,main='Gulf Stream Province Monthly Mean Temperature 2020',ylab='SSt (ºC)',xlab='',type='b')
-```
-
-
-
