@@ -33,6 +33,7 @@ library(earthdatalogin)
 library(rstac)
 library(gdalcubes)
 library(here)
+
 gdalcubes::gdalcubes_options(parallel = TRUE) 
 ```
 
@@ -46,23 +47,22 @@ The first time you run authentication use:
 
 ```{r, eval = FALSE}
 earthdatalogin::edl_netrc(
-  username = default("user"), # or add your user name
-  password = default("password") # or add you password
+  username = "user", # add your user name
+  password = "password" # add you password
 )
 earthdatalogin::edl_netrc_path()
 ```
 
-To see if you've been able to properly log in, find the .netrc file in your path by putting these into your terminal line:
+To see if you've been able to properly log in, find the `.netrc` file in your path by putting these into your terminal line:
 
-```{r, eval = FALSE}
-cd ~
-ls -la
-```
+`cd ~`
 
+`ls -la`
 
 This will save your `.netrc` file. After this you can run:
+
 ```{r}
-earthdatalogin::edl_netrc()
+earthdatalogin::edl_netrc() # will use a default example log in
 ```
 
 Because the `gdalcubes` package, which we need for working with data cubes, doesn't respect global environmental variables, we use a helper utility to export those into its configuration as well.
@@ -113,6 +113,7 @@ results <- earthdatalogin::edl_search(
     version = "4.1",
     temporal = tbox
 )
+length(results)
 results[1:3]
 ```
 
@@ -129,7 +130,6 @@ bbox <- c(xmin=-73.5, ymin=33.5, xmax=-43.5, ymax=43.5)
 bbox
 ```
 
-
 ```{r}
 results <- earthdatalogin::edl_search(
     short_name = short_name,
@@ -137,9 +137,9 @@ results <- earthdatalogin::edl_search(
     temporal = tbox,
     bounding_box = paste(bbox,collapse=",")
 )
+length(results)
 results[1:3]
 ```
-
 
 ### Working with `earthdatalogin` returns  
 
@@ -167,35 +167,35 @@ oi <- earthdatalogin::edl_search(
     version = "2.1",
     temporal = c("2020-01-16", "2020-01-17")
 )
-oi[1:3]
+oi
 ```
 
 Let's try plotting this. I am going to authenticate again just to make sure my token did not expire.
 
 ```{r}
-library(earthdatalogin)
-# Authenticate
+# Re-authenticate (just in case)
 earthdatalogin::edl_netrc()
 ```
 
 ```{r message=FALSE}
+# install.packages("terra")
 library(terra)
+
 ras <- terra::rast(x = oi[1], vsi=TRUE)
 plot(ras)
 ```
 
-If that doesn't work, it is likely because you do not have permissions to use that dataset or are properly logged in. Try this: 
+If that doesn't work, it is likely because you do not have the  End User Licence Agreement (EULA)/permissions to use that dataset or are properly logged in. Try this example script from the `?earthdatalogin::edl_netrc` documentation: 
 
 ```{r}
 url <- lpdacc_example_url()
 ras <- terra::rast(url, vsi=TRUE)
 plot(ras)
-
 ```
 
 ## Conclusion
 
-This concludes tutorial 1. You have worked with remote-sensing data in the cloud and plotted it. 
+This concludes tutorial 1. You have worked with remote-sensing data in the cloud and plotted it. Way to go! 
 
 Next we will learn to subset the data so we can work with bigger datasets in the cloud without downloading the whole dataset.
 

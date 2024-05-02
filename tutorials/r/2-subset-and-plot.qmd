@@ -12,6 +12,10 @@ title: Subset and Plot
 ## Load packages
 
 ```{r}
+# devtools::install_github("boettiger-lab/earthdatalogin")
+# install.packages("gdalcubes")
+# install.packages("terra")
+
 library(earthdatalogin)
 library(gdalcubes)
 library(terra)
@@ -20,8 +24,8 @@ library(terra)
 ## Get a vector of urls to our nc files
 
 ```{r}
-edl_netrc()
-with_gdalcubes()
+earthdatalogin::edl_netrc() # will use a default example log in
+earthdatalogin::with_gdalcubes() # expose any ⁠GDAL_*⁠ or ⁠VSI_*⁠ environmental variables to gdalcubes
 ```
 
 ```{r}
@@ -35,20 +39,21 @@ results <- edl_search(
     temporal = tbox,
     bounding_box = paste(bbox,collapse=",")
 )
+length(results)
+results[1:3]
 ```
 
 `results` is a vector of urls pointing to our netCDF files in the cloud.
-```{r}
-results[1:3]
-```
+
 Each netCDF file is ca 670Mb.
 
 ## Crop and plot one image
 
 Each MUR SST netCDF file is large so I do not want to download. Instead I will use `terra::rast()` to do subset the data on the server side.
 
-```{r}
+```{r, eval = FALSE}
 library(terra)
+# needs EULA
 ras <- terra::rast(results[1], vsi=TRUE)
 e <- ext(c(-75.5, -73.5,  33.5, 35.5 ))
 rc <- crop(ras, e)
