@@ -20,40 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -184,12 +150,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./overview.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Overview</span></a>
-  </div>
-</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./team.html" class="sidebar-item-text sidebar-link">
@@ -382,7 +342,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#user-accounts" id="toc-user-accounts" class="nav-link active" data-scroll-target="#user-accounts">User Accounts</a>
   <ul class="collapse">
-  <li><a href="#github-username-required-to-get-on-hub" id="toc-github-username-required-to-get-on-hub" class="nav-link" data-scroll-target="#github-username-required-to-get-on-hub">GitHub username (required to get on hub)</a></li>
+  <li><a href="#github-username-required-to-get-on-jupyterhub" id="toc-github-username-required-to-get-on-jupyterhub" class="nav-link" data-scroll-target="#github-username-required-to-get-on-jupyterhub">GitHub username (required to get on JupyterHub)</a></li>
   <li><a href="#get-on-the-jupyterhub-if-you-want-to-follow-along" id="toc-get-on-the-jupyterhub-if-you-want-to-follow-along" class="nav-link" data-scroll-target="#get-on-the-jupyterhub-if-you-want-to-follow-along">Get on the JupyterHub (if you want to follow along)</a></li>
   <li><a href="#earthdata-login-account-optional" id="toc-earthdata-login-account-optional" class="nav-link" data-scroll-target="#earthdata-login-account-optional">Earthdata Login account (optional)</a></li>
   </ul></li>
@@ -390,7 +350,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#set-up-authentication-to-github" id="toc-set-up-authentication-to-github" class="nav-link" data-scroll-target="#set-up-authentication-to-github">Set up authentication to GitHub</a></li>
   </ul></li>
-  <li><a href="#r-version-metadata" id="toc-r-version-metadata" class="nav-link" data-scroll-target="#r-version-metadata">R Version Metadata</a></li>
   </ul>
 <div class="toc-actions"><ul class="collapse"><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/edit/main/setup.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/setup.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
     </div>
@@ -428,8 +387,8 @@ function googleTranslateElementInit() {
 <p>To work on the JupyterHub for the workshop:</p>
 <section id="user-accounts" class="level1">
 <h1>User Accounts</h1>
-<section id="github-username-required-to-get-on-hub" class="level2">
-<h2 class="anchored" data-anchor-id="github-username-required-to-get-on-hub">GitHub username (required to get on hub)</h2>
+<section id="github-username-required-to-get-on-jupyterhub" class="level2">
+<h2 class="anchored" data-anchor-id="github-username-required-to-get-on-jupyterhub">GitHub username (required to get on JupyterHub)</h2>
 <ul>
 <li>Create a GitHub account (if you don’t already have one) at <a href="https://github.com" class="uri">https://github.com</a>. Advice for choosing a GitHub username: this is a professional username that you will use in work settings. GitHub accounts are not anonymous; this is for sharing work. Using your real name is common.</li>
 <li>Write down your username and password; you will need to log in during the course!</li>
@@ -499,43 +458,10 @@ git config --global credential.helper store</code></pre>
 </ol>
 <p><a href="https://youtu.be/wivH2T9FwlA">Watch a video of these 4 steps</a></p>
 <p><a href="https://rverse-tutorials.github.io/RWorkflow-NWFSC-2022/set-up.html#Git_from_RStudio_Desktop">Full instructions with other ways to do this from R</a></p>
+
+
 </section>
 </section>
-</section>
-<section id="r-version-metadata" class="level1">
-<h1>R Version Metadata</h1>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.4.0 (2024-04-24)
-Platform: x86_64-pc-linux-gnu
-Running under: Ubuntu 22.04.4 LTS
-
-Matrix products: default
-BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
-LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0
-
-locale:
- [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
- [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
- [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
-[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
-
-time zone: Etc/UTC
-tzcode source: system (glibc)
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.4 compiler_4.4.0    fastmap_1.1.1     cli_3.6.2        
- [5] tools_4.4.0       htmltools_0.5.8.1 rstudioapi_0.16.0 yaml_2.3.8       
- [9] rmarkdown_2.26    knitr_1.46        jsonlite_1.8.8    xfun_0.43        
-[13] digest_0.6.35     rlang_1.1.3       evaluate_0.23    </code></pre>
-</div>
-</div>
-
-
 </section>
 
 </main> <!-- /main -->

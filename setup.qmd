@@ -6,7 +6,7 @@ To work on the JupyterHub for the workshop:
 
 # User Accounts
 
-## GitHub username (required to get on hub)
+## GitHub username (required to get on JupyterHub)
 
 * Create a GitHub account (if you don’t already have one) at <https://github.com>. Advice for choosing a GitHub username: this is a professional username that you will use in work settings. GitHub accounts are not anonymous; this is for sharing work. Using your real name is common.
 * Write down your username and password; you will need to log in during the course!
@@ -80,8 +80,4 @@ Option b is easiest if you are new to Git and GitHub.
 
 [Full instructions with other ways to do this from R](https://rverse-tutorials.github.io/RWorkflow-NWFSC-2022/set-up.html#Git_from_RStudio_Desktop)
 
-# R Version Metadata
 
-```{r}
-sessionInfo()
-```

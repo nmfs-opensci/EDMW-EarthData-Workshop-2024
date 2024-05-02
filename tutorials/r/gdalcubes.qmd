@@ -53,3 +53,24 @@ data_gd |>
   aggregate_time(dt="P3D", method="mean") |> 
   plot()
 ```
+
+```{r}
+data_gd <- gdalcubes::stack_cube(vrt(results), datetime_values = url_dates)
+summary(data_gd)
+```
+
+```{r}
+extent = list(left=-75.5, right=-73.5, bottom=bbox[2], top=35.5,
+              t0=tbox[1], t1=tbox[2])
+
+data_gd |> 
+    gdalcubes::crop(extent) |> 
+    aggregate_time(dt="P1M", method="mean")
+```
+
+```{r eval=FALSE}
+# too slow
+data_gd |> 
+    slice_time(it=1) |>
+    plot(col = viridisLite::viridis(10))
+```

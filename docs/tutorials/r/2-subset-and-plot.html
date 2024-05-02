@@ -186,12 +186,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../overview.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Overview</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../../team.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Our Team</span></a>
   </div>
@@ -447,11 +441,11 @@ Learning Objectives
 </section>
 <section id="get-a-vector-of-urls-to-our-nc-files" class="level2">
 <h2 class="anchored" data-anchor-id="get-a-vector-of-urls-to-our-nc-files">Get a vector of urls to our nc files</h2>
+<p>Authenticate.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">edl_netrc</span>(<span class="at">user=</span><span class="st">"eeholmes"</span>, <span class="at">password=</span><span class="st">"C6m3U3iYTTQo"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gdal_cloud_config</span>()   <span class="co"># Optimize GDAL for cloud</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">with_gdalcubes</span>()      <span class="co"># Export settings to gdalcubes package</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>earthdatalogin<span class="sc">::</span><span class="fu">edl_netrc</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Get the urls.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>short_name <span class="ot">&lt;-</span> <span class="st">'MUR-JPL-L4-GLOB-v4.1'</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>bbox <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">xmin=</span><span class="sc">-</span><span class="fl">73.5</span>, <span class="at">ymin=</span><span class="fl">33.5</span>, <span class="at">xmax=</span><span class="sc">-</span><span class="fl">43.5</span>, <span class="at">ymax=</span><span class="fl">43.5</span>) </span>
@@ -462,32 +456,53 @@ Learning Objectives
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">version =</span> <span class="st">"4.1"</span>,</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">temporal =</span> tbox,</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">bounding_box =</span> <span class="fu">paste</span>(bbox,<span class="at">collapse=</span><span class="st">","</span>)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 336</code></pre>
 </div>
-<p><code>results</code> is a vector of urls pointing to our netCDF files in the cloud.</p>
+</div>
+<p><code>results</code> is a vector of urls pointing to our netCDF files in the cloud. Each netCDF file is ca 670Mb.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>results[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>results[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc"
 [2] "https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200117090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc"
 [3] "https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200118090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc"</code></pre>
 </div>
 </div>
-<p>Each netCDF file is ca 670Mb.</p>
 </section>
 <section id="crop-and-plot-one-netcdf-file" class="level2">
 <h2 class="anchored" data-anchor-id="crop-and-plot-one-netcdf-file">Crop and plot one netCDF file</h2>
-<p>Each MUR SST netCDF file is large so I do not want to download. Instead I will use <code>terra::rast()</code> to do subset the data on the server side.</p>
+<p>Each MUR SST netCDF file is large so I do not want to download. Instead I will use <code>terra::rast()</code> to do subset the data on the server side. <code>vsi = TRUE</code> is letting it know that these are files in the cloud and to use GDAL functionality for that type of resource.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(results[<span class="dv">1</span>], <span class="at">vsi=</span><span class="cn">TRUE</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> <span class="fu">ext</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">75.5</span>, <span class="sc">-</span><span class="fl">73.5</span>,  <span class="fl">33.5</span>, <span class="fl">35.5</span> ))</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>rc <span class="ot">&lt;-</span> <span class="fu">crop</span>(ras, e)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rc[[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(results[<span class="dv">1</span>], <span class="at">vsi=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Crop to a small region.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">ext</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">75.5</span>, <span class="sc">-</span><span class="fl">73.5</span>,  <span class="fl">33.5</span>, <span class="fl">35.5</span> ))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>rc <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(ras, e)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>rc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+dimensions  : 200, 200, 6  (nrow, ncol, nlyr)
+resolution  : 0.01, 0.01  (x, y)
+extent      : -75.495, -73.495, 33.505, 35.505  (xmin, xmax, ymin, ymax)
+coord. ref. : lon/lat WGS 84 
+source(s)   : memory
+names       : analysed_sst, analy~error, mask, sea_i~ction, dt_1km_data, sst_anomaly 
+min values  :      290.656,        0.37,    1,        1.28,         128,       0.410 
+max values  :      298.954,        0.40,    2,        1.28,         128,       3.585 
+time        : 2020-01-16 09:00:00 UTC </code></pre>
+</div>
+</div>
+<p>Plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rc[[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="2-subset-and-plot_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2-subset-and-plot_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -495,32 +510,32 @@ Learning Objectives
 </section>
 <section id="crop-and-plot-multiple-netcdf-files" class="level2">
 <h2 class="anchored" data-anchor-id="crop-and-plot-multiple-netcdf-files">Crop and plot multiple netCDF files</h2>
-<p>We can send multiple urls to terra. <code>vsi = TRUE</code> is letting it know that these are files in the cloud and to use GDAL functionality for that type of resource.</p>
+<p>We can send multiple urls to terra.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ras_all <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(results[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)], <span class="at">vsi =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ras_all <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(results[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)], <span class="at">vsi =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Crop to a small extent. The numbers are lons and lats.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> <span class="fu">ext</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">75.5</span>, <span class="sc">-</span><span class="fl">73.5</span>,  <span class="fl">33.5</span>, <span class="fl">35.5</span> ))</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>rc_all <span class="ot">&lt;-</span> <span class="fu">crop</span>(ras_all, e)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>rc_sst <span class="ot">&lt;-</span> rc_all[<span class="st">"analysed_sst"</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">ext</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">75.5</span>, <span class="sc">-</span><span class="fl">73.5</span>,  <span class="fl">33.5</span>, <span class="fl">35.5</span> ))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>rc_all <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(ras_all, e)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>rc_sst <span class="ot">&lt;-</span> rc_all[<span class="st">"analysed_sst"</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Convert Kelvin to Celcius.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>rc_sst <span class="ot">&lt;-</span> rc_sst <span class="sc">-</span> <span class="fl">273.15</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>rc_sst <span class="ot">&lt;-</span> rc_sst <span class="sc">-</span> <span class="fl">273.15</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now plot. We will set the range so it is the same across plots and clean up the titles to be just day without time.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>titles <span class="ot">&lt;-</span> <span class="fu">time</span>(rc_sst) <span class="sc">|&gt;</span> lubridate<span class="sc">::</span><span class="fu">date</span>() <span class="sc">|&gt;</span> <span class="fu">as.character</span>()</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  rc_sst, </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">range =</span> <span class="fu">c</span>(<span class="dv">16</span>, <span class="dv">26</span>),</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> titles</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>titles <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">time</span>(rc_sst) <span class="sc">|&gt;</span> lubridate<span class="sc">::</span><span class="fu">date</span>() <span class="sc">|&gt;</span> <span class="fu">as.character</span>()</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  rc_sst, </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">range =</span> <span class="fu">c</span>(<span class="dv">16</span>, <span class="dv">26</span>),</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> titles</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="2-subset-and-plot_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2-subset-and-plot_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>

@@ -31,7 +31,6 @@ website:
       - section: "Welcome"
         href: index.md
         contents:
-          - overview.md
           - team.md
           - setup.qmd
           - section: Orientation
@@ -64,7 +63,7 @@ website:
               - text: Subset
                 href: tutorials/r/2-subset-and-plot.qmd
               - text: Mask
-                href: tutorials/r/3-extract-satellite-data-within-boundary.rmd
+                href: tutorials/r/3-extract-satellite-data-within-boundary.qmd
               - text: Track
                 href: tutorials/r/4-matchup-satellite-data-to-track-locations.rmd
           - section: "Tutorials in Python"

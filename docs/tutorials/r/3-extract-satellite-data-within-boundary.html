@@ -7,7 +7,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="NOAA CoastWatch">
-<meta name="dcterms.date" content="2023-08-22">
 
 <title>2024 EDMW Workshop 3B - Extract data within a boundary</title>
 <style>
@@ -186,12 +185,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../overview.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Overview</span></a>
-  </div>
-</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../team.html" class="sidebar-item-text sidebar-link">
@@ -382,22 +375,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#extract-data-within-a-boundary" id="toc-extract-data-within-a-boundary" class="nav-link active" data-scroll-target="#extract-data-within-a-boundary">Extract data within a boundary</a>
+  <li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
+  <li><a href="#extract-data-within-a-boundary" id="toc-extract-data-within-a-boundary" class="nav-link" data-scroll-target="#extract-data-within-a-boundary">Extract data within a boundary</a>
   <ul class="collapse">
-  <li><a href="#background" id="toc-background" class="nav-link" data-scroll-target="#background">Background</a></li>
-  <li><a href="#objectives" id="toc-objectives" class="nav-link" data-scroll-target="#objectives">Objectives</a></li>
-  <li><a href="#the-tutorial-demonstrates-the-following-techniques" id="toc-the-tutorial-demonstrates-the-following-techniques" class="nav-link" data-scroll-target="#the-tutorial-demonstrates-the-following-techniques">The tutorial demonstrates the following techniques</a></li>
   <li><a href="#datasets-used" id="toc-datasets-used" class="nav-link" data-scroll-target="#datasets-used">Datasets used</a></li>
   <li><a href="#load-packages" id="toc-load-packages" class="nav-link" data-scroll-target="#load-packages">Load packages</a></li>
   <li><a href="#load-boundary-coordinates" id="toc-load-boundary-coordinates" class="nav-link" data-scroll-target="#load-boundary-coordinates">Load boundary coordinates</a></li>
-  <li><a href="#get-a-vector-of-urls-to-our-nc-files" id="toc-get-a-vector-of-urls-to-our-nc-files" class="nav-link" data-scroll-target="#get-a-vector-of-urls-to-our-nc-files">Get a vector of urls to our nc files</a></li>
+  <li><a href="#search-data-with-the-dataset-unique-name-and-coordinatesdates" id="toc-search-data-with-the-dataset-unique-name-and-coordinatesdates" class="nav-link" data-scroll-target="#search-data-with-the-dataset-unique-name-and-coordinatesdates">Search data with the dataset unique name and coordinates/dates</a></li>
   <li><a href="#crop-and-plot-one-image" id="toc-crop-and-plot-one-image" class="nav-link" data-scroll-target="#crop-and-plot-one-image">Crop and plot one image</a></li>
   <li><a href="#apply-a-mask" id="toc-apply-a-mask" class="nav-link" data-scroll-target="#apply-a-mask">Apply a mask</a></li>
-  <li><a href="#create-a-data-cube" id="toc-create-a-data-cube" class="nav-link" data-scroll-target="#create-a-data-cube">Create a data cube</a></li>
-  <li><a href="#mask-the-polygon" id="toc-mask-the-polygon" class="nav-link" data-scroll-target="#mask-the-polygon">Mask the polygon</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><ul class="collapse"><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/edit/main/tutorials/r/3-extract-satellite-data-within-boundary.rmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/tutorials/r/3-extract-satellite-data-within-boundary.rmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
+<div class="toc-actions"><ul class="collapse"><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/edit/main/tutorials/r/3-extract-satellite-data-within-boundary.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/tutorials/r/3-extract-satellite-data-within-boundary.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -427,12 +417,6 @@ function googleTranslateElementInit() {
           </div>
   </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">August 22, 2023</p>
-    </div>
-  </div>
   
     
   </div>
@@ -442,30 +426,48 @@ function googleTranslateElementInit() {
 </header>
 
 
+<div class="callout callout-style-default callout-note callout-titled" title="Learning Objectives">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Learning Objectives
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>How to access and download sea surface temperature from NASA Earthdata</li>
+<li>How to trim satellite data to specific bounding coordinates</li>
+<li>How to cropped satellite data</li>
+<li>How to apply shapefiles as masks to satellite data</li>
+</ol>
+</div>
+</div>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>In this example, we will utilize the earthdatalogin R package to retrieve sea surface temperature data from NASA Earthdata.</p>
+<p>The <code>earthdatalogin</code> package simplifies the process of discovering and accessing NASA Earth science data.</p>
+<p>This example is adapted from the NOAA CoastWatch Satellite Data Tutorials. To explore the full range of tutorials on accessing and utilizing oceanographic satellite data, visit the <a href="https://github.com/coastwatch-training/CoastWatch-Tutorials">NOAA CoastWatch Tutorial Github repository.</a></p>
+<p>For more on <code>earthdatalogin</code> visit the <a href="https://github.com/boettiger-lab/earthdatalogin/"><code>earthdatalogin</code> GitHub</a> page and/or the <a href="https://boettiger-lab.github.io/earthdatalogin/"><code>earthdatalogin</code> documentation</a> site. Be aware that <code>earthdatalogin</code> is under active development.</p>
+</section>
+<section id="prerequisites" class="level2">
+<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
+<p>An Earthdata Login account is required to access data from NASA Earthdata. Please visit <a href="https://urs.earthdata.nasa.gov" class="uri">https://urs.earthdata.nasa.gov</a> to register and manage your Earthdata Login account. This account is free to create and only takes a moment to set up.</p>
+<section id="import-required-packages" class="level3">
+<h3 class="anchored" data-anchor-id="import-required-packages">Import Required Packages</h3>
+<p><em>Note: See the set-up tab (in left nav bar) for instructions on getting set up on your own computer.</em></p>
+</section>
+</section>
 <section id="extract-data-within-a-boundary" class="level1">
 <h1>Extract data within a boundary</h1>
-<section id="background" class="level2">
-<h2 class="anchored" data-anchor-id="background">Background</h2>
-<p>One use for satellite observations is to supplement in situ sampling of geographical locations where the timespan, frequency measurements, spatial dimensions or remoteness of the locations, make physical sampling impossible or impractical. One drawback is that satellite data are often rectangular, whereas geographical locations can have irregular boundaries. Examples of boundaries include marine protected areas or marine physical, biological, and ecological divisions like the Longhurst Marine Provinces.</p>
-</section>
-<section id="objectives" class="level2">
-<h2 class="anchored" data-anchor-id="objectives">Objectives</h2>
-<p>In this tutorial we will learn how to download a timeseries of SST satellite data from an ERDDAP server, and then mask the data to retain only the data within an irregular geographical boundary (polygon). We will then plot a yearly seasonal cycle from within the boundary.</p>
-</section>
-<section id="the-tutorial-demonstrates-the-following-techniques" class="level2">
-<h2 class="anchored" data-anchor-id="the-tutorial-demonstrates-the-following-techniques">The tutorial demonstrates the following techniques</h2>
-<ul>
-<li>Downloading data from an ERDDAP data server for a non-rectangular region using the <em>rerddapXtracto</em> package</li>
-<li>Visualizing data on a map</li>
-<li>Plotting a time-series of mean SST</li>
-</ul>
-</section>
 <section id="datasets-used" class="level2">
 <h2 class="anchored" data-anchor-id="datasets-used">Datasets used</h2>
 <p><strong>GHRSST Level 4 AVHRR_OI Global Blended Sea Surface Temperature Analysis (GDS2) from NCEI</strong><br>
 This NOAA blended SST is a moderate resolution satellite-based gap-free sea surface temperature (SST) product. We will use the daily data. https://cmr.earthdata.nasa.gov/search/concepts/C2036881712-POCLOUD.html</p>
 <p><strong>Longhurst Marine Provinces</strong><br>
-The dataset represents the division of the world oceans into provinces as defined by Longhurst (1995; 1998; 2006). This division has been based on the prevailing role of physical forcing as a regulator of phytoplankton distribution. The Longhurst Marine Provinces dataset is available online (https://www.marineregions.org/downloads.php) and within the shapes folder associated with this repository. For this tutorial we will use the Gulf Stream province (ProvCode: GFST)</p>
+The dataset represents the division of the world oceans into provinces as defined by Longhurst (1995; 1998; 2006). This division has been based on the prevailing role of physical forcing as a regulator of phytoplankton distribution.</p>
+<p>The Longhurst Marine Provinces dataset is available online (https://www.marineregions.org/downloads.php) and within the shapes folder associated with this repository. For this exercise we will use the Gulf Stream province (ProvCode: GFST)</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../images/longhurst.png" class="img-fluid figure-img"></p>
@@ -476,22 +478,30 @@ The dataset represents the division of the world oceans into provinces as define
 <section id="load-packages" class="level2">
 <h2 class="anchored" data-anchor-id="load-packages">Load packages</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rerddapXtracto)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>terra 1.7.71</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(earthdatalogin)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</code></pre>
+</div>
 </div>
 </section>
 <section id="load-boundary-coordinates" class="level2">
 <h2 class="anchored" data-anchor-id="load-boundary-coordinates">Load boundary coordinates</h2>
-<p>The shapefile for the Longhurst marine provinces includes a list of regions. For this exercise, we will only use the boundary of one province, the Gulf Stream region (“GFST”).</p>
+<p>The shapefile for the Longhurst marine provinces includes a list of regions.<br>
+For this exercise, we will only use the boundary of one province, the Gulf Stream region (“GFST”).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set directory path</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dir_path <span class="ot">&lt;-</span> <span class="st">'../resources/longhurst_v4_2010/'</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Import shape files (Longhurst coordinates)</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>shapes <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(<span class="at">dsn =</span> dir_path, <span class="at">layer =</span> <span class="st">"Longhurst_world_v4_2010"</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Example List of all the province names</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>shapes<span class="sc">$</span>ProvCode</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set directory path for shapefile</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>dir_path <span class="ot">&lt;-</span> <span class="st">'../resources/longhurst_v4_2010/'</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Import shape files (Longhurst coordinates)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>shapes <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(<span class="at">dsn =</span> dir_path, <span class="at">layer =</span> <span class="st">"Longhurst_world_v4_2010"</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Example List of all the province names</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>shapes<span class="sc">$</span>ProvCode</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "BPLR" "ARCT" "SARC" "NADR" "GFST" "NASW" "NATR" "WTRA" "ETRA" "SATL"
 [11] "NECS" "CNRY" "GUIN" "GUIA" "NWCS" "MEDI" "CARB" "NASE" "BRAZ" "FKLD"
@@ -500,57 +510,77 @@ The dataset represents the division of the world oceans into provinces as define
 [41] "WARM" "ARCH" "ALSK" "CCAL" "CAMR" "CHIL" "CHIN" "SUND" "AUSE" "NEWZ"
 [51] "SSTC" "SANT" "ANTA" "APLR"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get boundary coordinates for Gulf Stream region (GFST)</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>GFST <span class="ot">&lt;-</span> shapes[shapes<span class="sc">$</span>ProvCode <span class="sc">==</span> <span class="st">"GFST"</span>,]</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>xcoord <span class="ot">&lt;-</span> <span class="fu">st_coordinates</span>(GFST)[,<span class="dv">1</span>]</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>ycoord <span class="ot">&lt;-</span> <span class="fu">st_coordinates</span>(GFST)[,<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get boundary coordinates for Gulf Stream region (GFST)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>GFST <span class="ot">&lt;-</span> shapes[shapes<span class="sc">$</span>ProvCode <span class="sc">==</span> <span class="st">"GFST"</span>,]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>xcoord <span class="ot">&lt;-</span> <span class="fu">st_coordinates</span>(GFST)[,<span class="dv">1</span>]</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>ycoord <span class="ot">&lt;-</span> <span class="fu">st_coordinates</span>(GFST)[,<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="get-a-vector-of-urls-to-our-nc-files" class="level2">
-<h2 class="anchored" data-anchor-id="get-a-vector-of-urls-to-our-nc-files">Get a vector of urls to our nc files</h2>
+<section id="search-data-with-the-dataset-unique-name-and-coordinatesdates" class="level2">
+<h2 class="anchored" data-anchor-id="search-data-with-the-dataset-unique-name-and-coordinatesdates">Search data with the dataset unique name and coordinates/dates</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(earthdatalogin)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">edl_netrc</span>()</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">with_gdalcubes</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Connect to NASA Earthdata with no credentials</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">edl_netrc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>short_name <span class="ot">&lt;-</span> <span class="st">'AVHRR_OI-NCEI-L4-GLOB-v2.1'</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>bbox <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">xmin=</span><span class="fu">min</span>(xcoord), <span class="at">ymin=</span><span class="fu">min</span>(ycoord), <span class="at">xmax=</span><span class="fu">max</span>(xcoord), <span class="at">ymax=</span><span class="fu">max</span>(ycoord)) </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>tbox <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"2020-01-16"</span>, <span class="st">"2020-12-16"</span>)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">edl_search</span>(</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">short_name =</span> short_name,</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">version =</span> <span class="st">"2.1"</span>,</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">temporal =</span> tbox,</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">bounding_box =</span> <span class="fu">paste</span>(bbox,<span class="at">collapse=</span><span class="st">","</span>)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dataset unique name</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>short_name <span class="ot">&lt;-</span> <span class="st">'AVHRR_OI-NCEI-L4-GLOB-v2.1'</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Set boundaries based on the shapefile</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>bbox <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">xmin=</span><span class="fu">min</span>(xcoord), <span class="at">ymin=</span><span class="fu">min</span>(ycoord), <span class="at">xmax=</span><span class="fu">max</span>(xcoord), <span class="at">ymax=</span><span class="fu">max</span>(ycoord)) </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Set time range</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>tbox <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"2020-01-01"</span>, <span class="st">"2020-04-01"</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Search data that match the boundaries and time range</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">edl_search</span>(</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">short_name =</span> short_name,</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="st">"2.1"</span>,</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">temporal =</span> tbox,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">bounding_box =</span> <span class="fu">paste</span>(bbox, <span class="at">collapse =</span> <span class="st">","</span>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Check number of files </span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 93</code></pre>
 </div>
-<p>There are 337 files.</p>
+</div>
+<p>There are 93 files.</p>
 </section>
 <section id="crop-and-plot-one-image" class="level2">
 <h2 class="anchored" data-anchor-id="crop-and-plot-one-image">Crop and plot one image</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(results[<span class="dv">1</span>], <span class="at">vsi=</span><span class="cn">TRUE</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> <span class="fu">ext</span>(<span class="fu">c</span>(<span class="fu">min</span>(xcoord), <span class="fu">max</span>(xcoord),  <span class="fu">min</span>(ycoord), <span class="fu">max</span>(ycoord) ))</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>rc <span class="ot">&lt;-</span> <span class="fu">crop</span>(ras, e)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the first result</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(results[<span class="dv">1</span>], <span class="at">vsi =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Set boundaries to crop</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> <span class="fu">ext</span>(<span class="fu">c</span>(<span class="fu">min</span>(xcoord), <span class="fu">max</span>(xcoord),  <span class="fu">min</span>(ycoord), <span class="fu">max</span>(ycoord)))</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Crop the result</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>rc <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(ras, e)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This has the following layers.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(rc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine variable names</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(rc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "analysed_sst"     "analysis_error"   "mask"             "sea_ice_fraction"</code></pre>
 </div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rc[[<span class="st">"analysed_sst"</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="images/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine the raster data</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>rc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+dimensions  : 40, 120, 4  (nrow, ncol, nlyr)
+resolution  : 0.25, 0.25  (x, y)
+extent      : -73.5, -43.5, 33.5, 43.5  (xmin, xmax, ymin, ymax)
+coord. ref. : lon/lat WGS 84 
+source(s)   : memory
+names       : analysed_sst, analysis_error, mask, sea_ice_fraction 
+min values  :       276.23,           0.12,    1,             1.28 
+max values  :       298.89,           0.62,    2,             1.28 
+time        : 2019-12-31 UTC </code></pre>
 </div>
 </div>
 </section>
@@ -558,28 +588,50 @@ The dataset represents the division of the world oceans into provinces as define
 <h2 class="anchored" data-anchor-id="apply-a-mask">Apply a mask</h2>
 <p>Apply mask to a terra raster.</p>
 <p>https://rdrr.io/cran/terra/man/mask.html</p>
-</section>
-<section id="create-a-data-cube" class="level2">
-<h2 class="anchored" data-anchor-id="create-a-data-cube">Create a data cube</h2>
-<p>We will create a data cube so that we can compute daily means over the polygon.</p>
-</section>
-<section id="mask-the-polygon" class="level2">
-<h2 class="anchored" data-anchor-id="mask-the-polygon">Mask the polygon</h2>
-<section id="plot-the-data" class="level3">
-<h3 class="anchored" data-anchor-id="plot-the-data">Plot the data</h3>
-</section>
-<section id="plot-the-mean-seasonal-temperature-for-the-province" class="level3">
-<h3 class="anchored" data-anchor-id="plot-the-mean-seasonal-temperature-for-the-province">Plot the mean seasonal temperature for the province</h3>
-<p>Not sure how to do this part.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>sst_mean<span class="ot">=</span><span class="fu">apply</span>(satdata<span class="sc">$</span>sea_surface_temperature,<span class="dv">3</span>,mean,<span class="at">na.rm=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract SST from the multi-layer raster data</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>rc_sst <span class="ot">&lt;-</span> rc[[<span class="st">"analysed_sst"</span>]]</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Vectorize shapes</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>shp <span class="ot">&lt;-</span> <span class="fu">vect</span>(shapes)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Get boundaries for GFST</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>GFST <span class="ot">&lt;-</span> shp[shp<span class="sc">$</span>ProvCode <span class="sc">==</span> <span class="st">"GFST"</span>,]</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the SST data</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rc_sst)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="3-extract-satellite-data-within-boundary_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(satdata<span class="sc">$</span>time,sst_mean,<span class="at">main=</span><span class="st">'Gulf Stream Province Monthly Mean Temperature 2020'</span>,<span class="at">ylab=</span><span class="st">'SSt (ºC)'</span>,<span class="at">xlab=</span><span class="st">''</span>,<span class="at">type=</span><span class="st">'b'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Show GFST boundaries from shapefile</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(GFST,<span class="at">col=</span><span class="st">'red'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="3-extract-satellite-data-within-boundary_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mask SST with the GFST boundarires</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>masked_rc <span class="ot">&lt;-</span> <span class="fu">mask</span>(rc_sst, GFST)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize the SST in GFST</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(masked_rc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="3-extract-satellite-data-within-boundary_files/figure-html/unnamed-chunk-6-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
 </div>
 
 
-</section>
 </section>
 </section>
 
@@ -1157,7 +1209,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>   
     <div class="nav-footer-center">
 <p><img src="https://github.com/nmfs-opensci/assets/blob/main/logo/nmfs-opensci-logo2.png?raw=true" alt="NMFS Open Science logo" style="width:150px"><br>NMFS Open Science (2023)</p>
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/edit/main/tutorials/r/3-extract-satellite-data-within-boundary.rmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/tutorials/r/3-extract-satellite-data-within-boundary.rmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/edit/main/tutorials/r/3-extract-satellite-data-within-boundary.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/tutorials/r/3-extract-satellite-data-within-boundary.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>

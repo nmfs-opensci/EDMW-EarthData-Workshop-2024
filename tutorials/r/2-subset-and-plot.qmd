@@ -19,12 +19,12 @@ library(terra)
 
 ## Get a vector of urls to our nc files
 
+Authenticate.
 ```{r}
-edl_netrc(user="eeholmes", password="C6m3U3iYTTQo")
-gdal_cloud_config()   # Optimize GDAL for cloud
-with_gdalcubes()      # Export settings to gdalcubes package
+earthdatalogin::edl_netrc() 
 ```
 
+Get the urls.
 ```{r}
 short_name <- 'MUR-JPL-L4-GLOB-v4.1'
 bbox <- c(xmin=-73.5, ymin=33.5, xmax=-43.5, ymax=43.5) 
@@ -36,29 +36,38 @@ results <- edl_search(
     temporal = tbox,
     bounding_box = paste(bbox,collapse=",")
 )
+length(results)
 ```
 
 `results` is a vector of urls pointing to our netCDF files in the cloud.
+Each netCDF file is ca 670Mb.
 ```{r}
 results[1:3]
 ```
-Each netCDF file is ca 670Mb.
 
 ## Crop and plot one netCDF file
 
-Each MUR SST netCDF file is large so I do not want to download. Instead I will use `terra::rast()` to do subset the data on the server side.
+Each MUR SST netCDF file is large so I do not want to download. Instead I will use `terra::rast()` to do subset the data on the server side. `vsi = TRUE` is letting it know that these are files in the cloud and to use GDAL functionality for that type of resource.
 
 ```{r}
-library(terra)
 ras <- terra::rast(results[1], vsi=TRUE)
-e <- ext(c(-75.5, -73.5,  33.5, 35.5 ))
-rc <- crop(ras, e)
+```
+
+Crop to a small region.
+```{r}
+e <- terra::ext(c(-75.5, -73.5,  33.5, 35.5 ))
+rc <- terra::crop(ras, e)
+rc
+```
+
+Plot.
+```{r}
 plot(rc[[c(1, 2)]])
 ```
 
 ## Crop and plot multiple netCDF files
 
-We can send multiple urls to terra.   `vsi = TRUE` is letting it know that these are files in the cloud and to use GDAL functionality for that type of resource.
+We can send multiple urls to terra. 
 
 ```{r}
 ras_all <- terra::rast(results[c(1:4)], vsi = TRUE)
@@ -66,19 +75,20 @@ ras_all <- terra::rast(results[c(1:4)], vsi = TRUE)
 
 Crop to a small extent. The numbers are lons and lats.
 ```{r}
-e <- ext(c(-75.5, -73.5,  33.5, 35.5 ))
-rc_all <- crop(ras_all, e)
+e <- terra::ext(c(-75.5, -73.5,  33.5, 35.5 ))
+rc_all <- terra::crop(ras_all, e)
 rc_sst <- rc_all["analysed_sst",]
 ```
 
 Convert Kelvin to Celcius.
+
 ```{r}
 rc_sst <- rc_sst - 273.15
 ```
 
 Now plot. We will set the range so it is the same across plots and clean up the titles to be just day without time.
 ```{r}
-titles <- time(rc_sst) |> lubridate::date() |> as.character()
+titles <- terra::time(rc_sst) |> lubridate::date() |> as.character()
 plot(
   rc_sst, 
   range = c(16, 26),
