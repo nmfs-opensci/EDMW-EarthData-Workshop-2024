@@ -147,7 +147,7 @@
     "href": "tutorials/r/2-subset-and-plot.html#load-packages",
     "title": "Subset and Plot",
     "section": "Load packages",
-    "text": "Load packages\n\nlibrary(earthdatalogin)\nlibrary(gdalcubes)\nlibrary(terra)\n\nterra 1.7.71\n\n\n\nAttaching package: 'terra'\n\n\nThe following objects are masked from 'package:gdalcubes':\n\n    animate, crop, size",
+    "text": "Load packages\n\nlibrary(earthdatalogin)\nlibrary(lubridate)\nlibrary(terra)",
     "crumbs": [
       "JupyterHub",
       "Tutorials",
@@ -160,7 +160,7 @@
     "href": "tutorials/r/2-subset-and-plot.html#get-a-vector-of-urls-to-our-nc-files",
     "title": "Subset and Plot",
     "section": "Get a vector of urls to our nc files",
-    "text": "Get a vector of urls to our nc files\n\nedl_netrc()\nwith_gdalcubes()\n\n\nshort_name &lt;- 'MUR-JPL-L4-GLOB-v4.1'\nbbox &lt;- c(xmin=-73.5, ymin=33.5, xmax=-43.5, ymax=43.5) \ntbox &lt;- c(\"2020-01-16\", \"2020-12-16\")\n\nresults &lt;- edl_search(\n    short_name = short_name,\n    version = \"4.1\",\n    temporal = tbox,\n    bounding_box = paste(bbox,collapse=\",\")\n)\n\nresults is a vector of urls pointing to our netCDF files in the cloud.\n\nresults[1:3]\n\n[1] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n[2] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200117090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n[3] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200118090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n\n\nEach netCDF file is ca 670Mb.",
+    "text": "Get a vector of urls to our nc files\n\nedl_netrc(user=\"eeholmes\", password=\"C6m3U3iYTTQo\")\ngdal_cloud_config()   # Optimize GDAL for cloud\nwith_gdalcubes()      # Export settings to gdalcubes package\n\n\nshort_name &lt;- 'MUR-JPL-L4-GLOB-v4.1'\nbbox &lt;- c(xmin=-73.5, ymin=33.5, xmax=-43.5, ymax=43.5) \ntbox &lt;- c(\"2020-01-16\", \"2020-12-16\")\n\nresults &lt;- edl_search(\n    short_name = short_name,\n    version = \"4.1\",\n    temporal = tbox,\n    bounding_box = paste(bbox,collapse=\",\")\n)\n\nresults is a vector of urls pointing to our netCDF files in the cloud.\n\nresults[1:3]\n\n[1] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n[2] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200117090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n[3] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200118090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n\n\nEach netCDF file is ca 670Mb.",
     "crumbs": [
       "JupyterHub",
       "Tutorials",
@@ -169,11 +169,11 @@
     ]
   },
   {
-    "objectID": "tutorials/r/2-subset-and-plot.html#crop-and-plot-one-image",
-    "href": "tutorials/r/2-subset-and-plot.html#crop-and-plot-one-image",
+    "objectID": "tutorials/r/2-subset-and-plot.html#crop-and-plot-one-netcdf-file",
+    "href": "tutorials/r/2-subset-and-plot.html#crop-and-plot-one-netcdf-file",
     "title": "Subset and Plot",
-    "section": "Crop and plot one image",
-    "text": "Crop and plot one image\nEach MUR SST netCDF file is large so I do not want to download. Instead I will use terra::rast() to do subset the data on the server side.\n\nlibrary(terra)\nras &lt;- terra::rast(results[1], vsi=TRUE)\ne &lt;- ext(c(-75.5, -73.5,  33.5, 35.5 ))\nrc &lt;- crop(ras, e)\nplot(rc[[c(1, 2)]])",
+    "section": "Crop and plot one netCDF file",
+    "text": "Crop and plot one netCDF file\nEach MUR SST netCDF file is large so I do not want to download. Instead I will use terra::rast() to do subset the data on the server side.\n\nlibrary(terra)\nras &lt;- terra::rast(results[1], vsi=TRUE)\ne &lt;- ext(c(-75.5, -73.5,  33.5, 35.5 ))\nrc &lt;- crop(ras, e)\nplot(rc[[c(1, 2)]])",
     "crumbs": [
       "JupyterHub",
       "Tutorials",
@@ -182,11 +182,24 @@
     ]
   },
   {
-    "objectID": "tutorials/r/2-subset-and-plot.html#stop-not-worked-below-yet",
-    "href": "tutorials/r/2-subset-and-plot.html#stop-not-worked-below-yet",
+    "objectID": "tutorials/r/2-subset-and-plot.html#crop-and-plot-multiple-netcdf-files",
+    "href": "tutorials/r/2-subset-and-plot.html#crop-and-plot-multiple-netcdf-files",
     "title": "Subset and Plot",
-    "section": "STOP NOT WORKED BELOW YET",
-    "text": "STOP NOT WORKED BELOW YET\n\nExplore earthdatalogin search response\nresults is a vector of urls to the netCDF files.\n\nresults[1:3]\n\n[1] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n[2] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200117090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n[3] \"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200118090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc\"\n\n\nNotice it will start with https: or s3:. The former is a slower from of access while the latter allows faster access, like having a cloud bucket attached as a drive to your browser.\n\nlength(results)\n\n[1] 336\n\n\n\nr &lt;- terra::rast(results[1], vsi=TRUE)\n\n\n\nOpen results in a data cube\nBased on: https://boettiger-lab.github.io/nasa-topst-env-justice/tutorials/R/2-earthdata.html\nUnfortunately these netCDF files lack appropriate metadata (projection, extent) that GDAL expects. We can provide this manually using the GDAL VRT mechanism:\n\nvrt &lt;- function(url) {\n  prefix &lt;-  \"vrt://NETCDF:/vsicurl/\"\n  suffix &lt;- \":analysed_sst?a_srs=OGC:CRS84&a_ullr=-180,90,180,-90\"\n  paste0(prefix, url, suffix)\n}\n\n# date associated with each file\nurl_dates &lt;- as.Date(gsub(\".*(\\\\d{8})\\\\d{6}.*\", \"\\\\1\", results), format=\"%Y%m%d\")",
+    "section": "Crop and plot multiple netCDF files",
+    "text": "Crop and plot multiple netCDF files\nWe can send multiple urls to terra. vsi = TRUE is letting it know that these are files in the cloud and to use GDAL functionality for that type of resource.\n\nras_all &lt;- terra::rast(results[c(1:4)], vsi = TRUE)\n\nCrop to a small extent. The numbers are lons and lats.\n\ne &lt;- ext(c(-75.5, -73.5,  33.5, 35.5 ))\nrc_all &lt;- crop(ras_all, e)\nrc_sst &lt;- rc_all[\"analysed_sst\",]\n\nConvert Kelvin to Celcius.\n\nrc_sst &lt;- rc_sst - 273.15\n\nNow plot. We will set the range so it is the same across plots and clean up the titles to be just day without time.\n\ntitles &lt;- time(rc_sst) |&gt; lubridate::date() |&gt; as.character()\nplot(\n  rc_sst, \n  range = c(16, 26),\n  main = titles\n)",
+    "crumbs": [
+      "JupyterHub",
+      "Tutorials",
+      "Tutorials in R",
+      "Subset"
+    ]
+  },
+  {
+    "objectID": "tutorials/r/2-subset-and-plot.html#reading-in-a-zarr-file",
+    "href": "tutorials/r/2-subset-and-plot.html#reading-in-a-zarr-file",
+    "title": "Subset and Plot",
+    "section": "Reading in a Zarr file",
+    "text": "Reading in a Zarr file\nhttps://www.r-bloggers.com/2022/09/reading-zarr-files-with-r-package-stars/",
     "crumbs": [
       "JupyterHub",
       "Tutorials",
@@ -199,20 +212,7 @@
     "href": "tutorials/r/2-subset-and-plot.html#conclusions",
     "title": "Subset and Plot",
     "section": "Conclusions",
-    "text": "Conclusions\nSome really cool things just happened here! Not only were we able to seamlessly stream our earthaccess search results into a xarray dataset using the open_mfdataset() (multi-file) method, but earthaccess determined that we were working from within AWS us-west-2 and accessed the data via direct S3 access! We didn’t have to create a session or a filesystem to authenticate and connect to the data. earthaccess did this for us using the auth object we created at the beginning of this tutorial. If we were not working in AWS us-west-2, earthaccess would “automagically” switch to accessing the data via the HTTPS endpoints and would again handle the authentication for us.",
-    "crumbs": [
-      "JupyterHub",
-      "Tutorials",
-      "Tutorials in R",
-      "Subset"
-    ]
-  },
-  {
-    "objectID": "tutorials/r/2-subset-and-plot.html#resources",
-    "href": "tutorials/r/2-subset-and-plot.html#resources",
-    "title": "Subset and Plot",
-    "section": "Resources",
-    "text": "Resources\n\nNASA’s Common Metadata Repository (CMR) API\n\nearthaccess repository\nearthaccess documentation\nEarthdata Search",
+    "text": "Conclusions\nSome really cool things just happened here! You connected to multiple remote-sensing files (netCDF) in the cloud and worked with them without directly downloading them.",
     "crumbs": [
       "JupyterHub",
       "Tutorials",

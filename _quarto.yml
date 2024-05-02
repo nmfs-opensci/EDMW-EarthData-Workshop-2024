@@ -4,6 +4,7 @@ project:
   render:
     - "*.*"
     - "!tutorials/python-notebooks/*.ipynb"
+    - "!tutorials/r/gdalcubes.qmd"
 
 execute:
   freeze: auto

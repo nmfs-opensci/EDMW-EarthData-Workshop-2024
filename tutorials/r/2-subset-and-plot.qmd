@@ -4,24 +4,25 @@ title: Subset and Plot
 
 ::: {.callout-note title="Learning Objectives"}
 
-1. How to plot a subset of a data file
-2. How to create a data cube
-3. How to subset and aggregate a data cube
+1. How to crop a single data file
+2. How to create a data cube with terra
+3. How to crop a data cube to a box
 :::
 
 ## Load packages
 
-```{r}
+```{r message=FALSE}
 library(earthdatalogin)
-library(gdalcubes)
+library(lubridate)
 library(terra)
 ```
 
 ## Get a vector of urls to our nc files
 
 ```{r}
-edl_netrc()
-with_gdalcubes()
+edl_netrc(user="eeholmes", password="C6m3U3iYTTQo")
+gdal_cloud_config()   # Optimize GDAL for cloud
+with_gdalcubes()      # Export settings to gdalcubes package
 ```
 
 ```{r}
@@ -43,7 +44,7 @@ results[1:3]
 ```
 Each netCDF file is ca 670Mb.
 
-## Crop and plot one image
+## Crop and plot one netCDF file
 
 Each MUR SST netCDF file is large so I do not want to download. Instead I will use `terra::rast()` to do subset the data on the server side.
 
@@ -55,51 +56,42 @@ rc <- crop(ras, e)
 plot(rc[[c(1, 2)]])
 ```
 
-## STOP NOT WORKED BELOW YET
+## Crop and plot multiple netCDF files
 
-#### Explore `earthdatalogin` search response
-
-`results` is a vector of urls to the netCDF files.
-```{r}
-results[1:3]
-```
-Notice it will start with `https:` or `s3:`. The former is a slower from of access while the latter allows faster access, like having a cloud bucket attached as a drive to your browser.
+We can send multiple urls to terra.   `vsi = TRUE` is letting it know that these are files in the cloud and to use GDAL functionality for that type of resource.
 
 ```{r}
-length(results)
+ras_all <- terra::rast(results[c(1:4)], vsi = TRUE)
 ```
 
+Crop to a small extent. The numbers are lons and lats.
 ```{r}
-r <- terra::rast(results[1], vsi=TRUE)
+e <- ext(c(-75.5, -73.5,  33.5, 35.5 ))
+rc_all <- crop(ras_all, e)
+rc_sst <- rc_all["analysed_sst",]
 ```
 
-#### Open results in a data cube
-
-Based on: https://boettiger-lab.github.io/nasa-topst-env-justice/tutorials/R/2-earthdata.html
-
-Unfortunately these netCDF files lack appropriate metadata (projection, extent) that GDAL expects. We can provide this manually using the GDAL VRT mechanism:
+Convert Kelvin to Celcius.
 ```{r}
-vrt <- function(url) {
-  prefix <-  "vrt://NETCDF:/vsicurl/"
-  suffix <- ":analysed_sst?a_srs=OGC:CRS84&a_ullr=-180,90,180,-90"
-  paste0(prefix, url, suffix)
-}
-
-# date associated with each file
-url_dates <- as.Date(gsub(".*(\\d{8})\\d{6}.*", "\\1", results), format="%Y%m%d")
+rc_sst <- rc_sst - 273.15
 ```
+
+Now plot. We will set the range so it is the same across plots and clean up the titles to be just day without time.
+```{r}
+titles <- time(rc_sst) |> lubridate::date() |> as.character()
+plot(
+  rc_sst, 
+  range = c(16, 26),
+  main = titles
+)
+```
+
+## Reading in a Zarr file
+
+https://www.r-bloggers.com/2022/09/reading-zarr-files-with-r-package-stars/
 
 
 ## Conclusions
 
-Some really cool things just happened here! Not only were we able to seamlessly stream our `earthaccess` search results into a `xarray` `dataset` using the `open_mfdataset()` (multi-file) method, but `earthaccess` determined that we were working from within AWS us-west-2 and accessed the data via direct S3 access! We didn't have to create a session or a filesystem to authenticate and connect to the data. `earthaccess` did this for us using the `auth` object we created at the beginning of this tutorial. If we were not working in AWS us-west-2, `earthaccess` would "automagically" switch to accessing the data via the HTTPS endpoints and would again handle the authentication for us.
+Some really cool things just happened here! You connected to multiple remote-sensing files (netCDF) in the cloud and worked with them without directly downloading them.
 
-
----
-
-## Resources  
-
-- NASA’s [Common Metadata Repository (CMR) API](https://cmr.earthdata.nasa.gov/search/site/docs/search/api.html)   
-- [`earthaccess` repository](https://github.com/nsidc/earthaccess)
-- [`earthaccess` documentation](https://nsidc.github.io/earthaccess/)
-- [Earthdata Search](https://search.earthdata.nasa.gov/search)
