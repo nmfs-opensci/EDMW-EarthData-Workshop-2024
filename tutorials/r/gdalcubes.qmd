@@ -2,6 +2,18 @@
 title: gdalcubes
 ---
 
+Because the `gdalcubes` package, which we need for working with data cubes, doesn't respect global environmental variables, we use a helper utility to export those into its configuration as well.
+
+```{r}
+library(earthdatalogin)
+library(gdalcubes)
+library(here)
+gdalcubes::gdalcubes_options(parallel = TRUE) 
+earthdatalogin::with_gdalcubes()
+```
+
+
+
 ## STOP NOT WORKED BELOW YET
 
 

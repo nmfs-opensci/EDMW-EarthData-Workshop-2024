@@ -11,37 +11,26 @@ title: Earthdata Search and Discovery
 
 ## Summary
 
-In this example we will use the `earthdatalogin` R package to search for data collections from NASA Earthdata. `earthdatalogin` is a R package that simplifies data discovery and access to NASA Earth science data by providing an abstraction layer for NASA’s [Common Metadata Repository (CMR) API](https://cmr.earthdata.nasa.gov/search/site/docs/search/api.html) Search API. The library makes searching for data more approachable by using a simpler notation instead of low level HTTP queries. `earthdatalogin` takes the trouble out of Earthdata Login **authentication**, makes **search** easier, and provides a stream-lined way to download or stream search results into R data objects.
+In this example we will use the `earthdatalogin` R package to search for data collections from NASA Earthdata. `earthdatalogin` is a R package that simplifies data discovery and access to NASA’s [Common Metadata Repository (CMR) API](https://cmr.earthdata.nasa.gov/search/site/docs/search/api.html) Search API for [NASA Earthdata](https://search.earthdata.nasa.gov/search). Despite the name, the NASA Earthdata also holds NOAA data (which we will use today).
 
 For more on `earthdatalogin` visit the [`earthdatalogin` GitHub](https://github.com/boettiger-lab/earthdatalogin/) page and/or the [`earthdatalogin` documentation](https://boettiger-lab.github.io/earthdatalogin/) site. Be aware that `earthdatalogin` is under active development. 
 
 ## Prerequisites
 
-An Earthdata Login account is required to access data from NASA Earthdata. Please visit <https://urs.earthdata.nasa.gov> to register and manage your Earthdata Login account. This account is free to create and only takes a moment to set up.  
-
+An Earthdata Login account is required to access data from NASA Earthdata. Please visit <https://urs.earthdata.nasa.gov> to register as a new user and manage your Earthdata Login account. This account is free to create and only takes a moment to set up.  
 
 ### Import Required Packages  
 
 *Note: See the set-up tab (in left nav bar) for instructions on getting set up on your own computer.*
 
 ```{r}
-# devtools::install_github("boettiger-lab/earthdatalogin")
-# install.packages("rstac")
-# install.packages("gdalcubes")
-
 library(earthdatalogin)
-library(rstac)
-library(gdalcubes)
-library(here)
-
-gdalcubes::gdalcubes_options(parallel = TRUE) 
+library(terra)
 ```
 
 ### Authentication for NASA Earthdata  
 
 We will start by authenticating using our Earthdata Login credentials. Authentication is not necessarily needed to search for publicly available data collections in Earthdata, but is always needed to download or access data from the NASA Earthdata archives. We can use `edl_netrc()` from the `earthdatalogin` package to create a `.netrc` file that will store our credentials. 
-
-You will have to register at [https://urs.earthdata.nasa.gov/](https://urs.earthdata.nasa.gov/) as a [new user](https://urs.earthdata.nasa.gov/users/new). 
 
 The first time you run authentication use:
 
@@ -50,26 +39,26 @@ earthdatalogin::edl_netrc(
   username = "user", # add your user name
   password = "password" # add you password
 )
-earthdatalogin::edl_netrc_path()
 ```
 
-To see if you've been able to properly log in, find the `.netrc` file in your path by putting these into your terminal line:
-
-`cd ~`
-
-`ls -la`
-
-This will save your `.netrc` file. After this you can run:
+This will put your login info in a  `netrc` located at:
 
 ```{r}
-earthdatalogin::edl_netrc() # will use a default example log in
+earthdatalogin:::edl_netrc_path()
 ```
 
-Because the `gdalcubes` package, which we need for working with data cubes, doesn't respect global environmental variables, we use a helper utility to export those into its configuration as well.
+You can open a terminal and run this to see that it has your username and login.
+```
+cat /home/jovyan/.local/share/R/earthdatalogin/netrc
+```
 
+Once your netrc file is saved, you can use
 ```{r}
-earthdatalogin::with_gdalcubes()
+earthdatalogin::edl_netrc()
 ```
+to authenticate.
+
+*For the purposes of this workshop, `edl_netrc()` will work but it will use a default public account. Don't use that if you have a NASA Earthdata account.*
 
 ### Search for data  
 
@@ -170,7 +159,7 @@ oi <- earthdatalogin::edl_search(
 oi
 ```
 
-Let's try plotting this. I am going to authenticate again just to make sure my token did not expire.
+Let's try plotting this. I am going to authenticate again just to make sure my token did not expire. To search, we don't need to authenticate but to plot or download, we do.
 
 ```{r}
 # Re-authenticate (just in case)
@@ -178,20 +167,20 @@ earthdatalogin::edl_netrc()
 ```
 
 ```{r message=FALSE}
-# install.packages("terra")
 library(terra)
-
 ras <- terra::rast(x = oi[1], vsi=TRUE)
 plot(ras)
 ```
 
-If that doesn't work, it is likely because you do not have the  End User Licence Agreement (EULA)/permissions to use that dataset or are properly logged in. Try this example script from the `?earthdatalogin::edl_netrc` documentation: 
+If that doesn't work, it is likely because you do not have the  End User Licence Agreement (EULA)/permissions to use that dataset or are not properly logged in. Try this example script from the `?earthdatalogin::edl_netrc` documentation: 
 
 ```{r}
 url <- lpdacc_example_url()
 ras <- terra::rast(url, vsi=TRUE)
 plot(ras)
 ```
+
+How to you accept EULA's? Go to [https://urs.earthdata.nasa.gov/profile](https://urs.earthdata.nasa.gov/profile). Look for the EULA tab and accept the one that looks likely. Unfortunately, it is hard to find out which one you need. You can just accept all of them (or all that look possible). Then try your code again.
 
 ## Conclusion
 

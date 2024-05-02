@@ -6,7 +6,7 @@ subtitle: "Introduction to using earth data in the cloud for scientific workflow
 <img src="images/cloud-overview.png" style="width:250px; float:right;">
 Welcome to the NOAA Fisheries workshop focused on geospatial analysis using ocean 'big data'. Today, we are focused on using data from NASA [EarthData](https://www.earthdata.nasa.gov/) but the skills you will learn are transferable to other ways that you might get earth data, e.g. NESDIS, NCEI, ERDDAP servers, Copernicus, etc.
 
-This session will also introduce to working with JupyterHubs. We will use both Jupyter Lab (Python) and RStudio (R) within our JupyterHub. Go to [set-up](setup.html) for the basic orientation and how to get on the JupyterHub.
+This workshop is focused on those who are brand new to working with earth data in the cloud and with geospatial packages. R users will be introduced to the earthdatalogin, terra and sf packages, while Python users will be introduced to the earthaccess and xarray packages.  This workshop will also introduce to working with JupyterHubs. We will use both Jupyter Lab (Python) and RStudio (R) within our JupyterHub. 
 
 ## Topics for May 15, 2024
 

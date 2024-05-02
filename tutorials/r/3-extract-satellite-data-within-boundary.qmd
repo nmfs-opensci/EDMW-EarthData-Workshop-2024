@@ -138,7 +138,7 @@ There are `r length(results)` files.
 ras <- terra::rast(results[1], vsi = TRUE)
 
 # Extract SST from the multi-layer raster data
-ras_sst <- rc[["analysed_sst"]]
+ras_sst <- ras[["analysed_sst"]]
 
 # Vectorize shapes
 shp <- vect(shapes)
