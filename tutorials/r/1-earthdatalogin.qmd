@@ -51,9 +51,10 @@ earthdatalogin::edl_netrc(
 )
 earthdatalogin::edl_netrc_path()
 ```
-To see if you've been able to 
 
-```{}
+To see if you've been able to properly log in, find the .netrc file in your path by putting these into your terminal line:
+
+```{r, eval = FALSE}
 cd ~
 ls -la
 ```
@@ -181,8 +182,11 @@ earthdatalogin::edl_netrc()
 library(terra)
 ras <- terra::rast(x = oi[1], vsi=TRUE)
 plot(ras)
+```
 
+If that doesn't work, it is likely because you do not have permissions to use that dataset or are properly logged in. Try this: 
 
+```{r}
 url <- lpdacc_example_url()
 ras <- terra::rast(url, vsi=TRUE)
 plot(ras)
