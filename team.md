@@ -78,7 +78,7 @@ title: Our Team
 
 <div>
 ### Songzhi Liu
-<img src="images/songzhi.png" alt="Songzhi Liu" style="width:75%; ; border-radius: 50%;">
+<img src="images/songzhi.jpg" alt="Songzhi Liu" style="width:75%; ; border-radius: 50%;">
     
 [NOAA CoastWatch Great Lakes Node]([https://www.fisheries.noaa.gov/](https://coastwatch.glerl.noaa.gov/)
 
