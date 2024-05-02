@@ -72,6 +72,7 @@ For this exercise we will use the Gulf Stream province (ProvCode: GFST)
 library(terra)
 library(earthdatalogin)
 library(sf)
+
 ```
 
 
@@ -189,36 +190,3 @@ masked_rc <- mask(rc_sst, GFST)
 plot(masked_rc)
 ```
 
-
-## Create a data cube
-
-We will create a data cube so that we can compute daily means over the polygon.
-```{r}
-
-# Select the first result
-ras_all <- terra::rast(results[c(1:10)], vsi = TRUE)
-
-# Set boundaries to crop
-e <- ext(c(min(xcoord), max(xcoord),  min(ycoord), max(ycoord) ))
-
-# Crop
-rc_all <- terra::crop(ras_all, e)
-
-rc_sst <- rc_all["analysed_sst",]
-
-# Function to convert names to year-month format
-year_month <- function(x) {
-  format(as.Date(time(x), format="%Y-%m-%d"), "%Y-%m")
-}
-
-temp_time <- format(as.Date(time(rc_sst), format="%Y-%m-%d"), "%Y-%m")
-unique(temp_time)
-
-# Apply the mean calculation across months
-monthly_mean_rast <- terra::tapp(rc_all, year_month, fun=mean)
-monthly_mean_rast
-
-# Apply the mean calculation across 
-global_means <- global(monthly_mean_rast, fun=mean, na.rm=TRUE)
-global_means
-```
