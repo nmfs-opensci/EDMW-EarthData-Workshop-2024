@@ -60,7 +60,7 @@ title: Our Team
 ### Matt Grossi
 
 <!--
- ![](images/matt.png){width=75% fig-alt="Matt Grossi"}
+ ![](images/matt-head.jpg){width=75% fig-alt="Matt Grossi"}
 -->
 
 [NOAA Fisheries](https://www.fisheries.noaa.gov/)
