@@ -199,7 +199,7 @@
     "href": "tutorials/r/2-subset-and-plot.html#reading-in-a-zarr-file",
     "title": "Subset and Plot",
     "section": "Reading in a Zarr file",
-    "text": "Reading in a Zarr file\nhttps://www.r-bloggers.com/2022/09/reading-zarr-files-with-r-package-stars/",
+    "text": "Reading in a Zarr file\nhttps://www.r-bloggers.com/2022/09/reading-zarr-files-with-r-package-stars/\n\nlibrary(stars)\n## Loading required package: abind\n## Loading required package: sf\n## Linking to GEOS 3.10.2, GDAL 3.4.3, PROJ 8.2.0; sf_use_s2() is TRUE\ndsn = 'ZARR:\"/vsicurl/https://ncsa.osn.xsede.org/Pangeo/pangeo-forge/gpcp-feedstock/gpcp.zarr\"'\nbounds = c(longitude = \"lon_bounds\", latitude = \"lat_bounds\")\nr = read_mdim(dsn, bounds = bounds)\nr\n\nRead one file.\n\nurl &lt;- \"https://mur-sst.s3.us-west-2.amazonaws.com/zarr-v1\"\nprefixes &lt;- 'ZARR:\\\"/vsicurl/'\nslice &lt;- '\\\":/analysed_sst:0\"'\naddr &lt;- paste0(prefixes, url, slice)\ny = terra::rast(addr)\n\nRead multiple files.\n\nvrt &lt;- function(i) {\n  prefix &lt;-  'ZARR:\\\"/vsicurl/'\n  url &lt;- \"https://mur-sst.s3.us-west-2.amazonaws.com/zarr-v1\"\n  slice &lt;- paste0('\\\":/analysed_sst:',i,'\"')\n  paste0(prefix, url, slice)\n}\n\n\ny &lt;- terra::rast(vrt(0:2))\ny |&gt; terra::crop(e) |&gt; plot()\n\n\n\n\n\n\n\n\n\nlibrary(gdalcubes)\ndata_gd &lt;- gdalcubes::stack_cube(vrt(0:2), datetime_values = as.Date(c(\"2022-01-01\", \"2022-01-02\",\"2022-01-03\")))\n#extent = list(left=-75.5, right=-73.5, bottom=33.5, top=35.5, t0=\"2022-01-01\", t1=\"2022-01-02\")\nextent = list(left=-75.5, right=-73.5, bottom=33.5, top=35.5)\ntest &lt;- data_gd |&gt; gdalcubes::crop(extent) |&gt; \n    gdalcubes::aggregate_time(dt=\"P2D\", method=\"mean\") |&gt; \n    plot(col = viridisLite::viridis(10))",
     "crumbs": [
       "JupyterHub",
       "Tutorials",
@@ -213,6 +213,19 @@
     "title": "Subset and Plot",
     "section": "Conclusions",
     "text": "Conclusions\nSome really cool things just happened here! You connected to multiple remote-sensing files (netCDF) in the cloud and worked with them without directly downloading them.",
+    "crumbs": [
+      "JupyterHub",
+      "Tutorials",
+      "Tutorials in R",
+      "Subset and Crop"
+    ]
+  },
+  {
+    "objectID": "tutorials/r/2-subset-and-plot.html#appendix",
+    "href": "tutorials/r/2-subset-and-plot.html#appendix",
+    "title": "Subset and Plot",
+    "section": "Appendix",
+    "text": "Appendix\nAlternatively we might get our bounding box from a shape. Here I get a bounding box around Indonesia. I am going to use a smaller dataset, the OI SST dataset.\n\noi &lt;- earthdatalogin::edl_search(\n    short_name = \"AVHRR_OI-NCEI-L4-GLOB-v2.1\",\n    version = \"2.1\",\n    temporal = c(\"2020-01-16\", \"2020-01-17\")\n)\nearthdatalogin::edl_netrc()\nio_ras &lt;- terra::rast(x = oi[1], vsi=TRUE)\n\nGet the shape, then bounding box, then plot.\n\nlibrary(tmap)\n\n\nAttaching package: 'tmap'\n\n\nThe following object is masked from 'package:datasets':\n\n    rivers\n\ndata(World)\nind_shp &lt;- World$geometry[World$name == \"Indonesia\"]\nind &lt;-sf::st_bbox( ind_shp )\n(io_ras['analysed_sst'] - 273.15) |&gt;\n  crop(ind) |&gt;\n  plot()\npolys( ind_shp |&gt; vect(), \"blue\")",
     "crumbs": [
       "JupyterHub",
       "Tutorials",
