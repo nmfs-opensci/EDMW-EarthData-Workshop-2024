@@ -22,7 +22,7 @@ require(mapview)
 require(readr)
 require(readxl)
 library(dplyr)
-here::i_am("tutorials/r/05-r-geospatial.qmd")
+# here::i_am("tutorials/r/05-r-geospatial.qmd")
 dir_data <- here::here("tutorials", "data")
 ```
 

@@ -44,7 +44,7 @@ This is a merged product combining data from many ocean color sensors to create 
 
 The turtle was raised in captivity in Japan, then tagged and released on 05/04/2005 in the Central Pacific.
 Its tag transmitted for over 3 years and went all the way to the Southern tip of Baja California.
-This dataset has been subsampled to reduce the data requests needed for this tutorial from over 1200 to 25.
+This data set has been subsampled to reduce the data requests needed for this tutorial from over 1200 to 25.
 The track data are stored in the data folder in this project folder.
 
 ## Install required packages and load libraries
@@ -60,7 +60,6 @@ pkgTest <- function(x)
     if(!require(x,character.only = TRUE)) stop(x, " :Package not found")
   }
 }
-
 
 # Create list of required packages
 list.of.packages <- c("rerddap", "plotdap", "parsedate", "ggplot2", "rerddapXtracto",

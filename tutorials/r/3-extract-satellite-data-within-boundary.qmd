@@ -99,7 +99,7 @@ ycoord <- st_coordinates(GFST)[,2]
 
 ## Search data from NASA Earthdata with the dataset unique name and coordinates/dates 
 
-Connect to NASA Earthdata with no credentials
+First, connect to NASA Earthdata with no credentials
 
 ```{r}
 earthdatalogin::edl_netrc()
@@ -206,6 +206,7 @@ monthly_means <- global(monthly_mean_rast, fun = mean, na.rm=TRUE)
 ```
 
 ## Convert raster into data frame 
+
 ```{r}
 
 # Convert raster into data.frame

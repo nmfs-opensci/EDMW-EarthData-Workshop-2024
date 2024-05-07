@@ -37,15 +37,30 @@ The environment we are using today is the `py-rocket-geospatial` image. This is 
 # R Version Metadata
 
 ```{r}
-library("earthdatalogin")
-library("terra")
-library("rstac")
-library("gdalcubes")
-library("here")
-library("sf")
-library("dplyr")
-library("stars")
-library("tmap")
+
+# Function to check if pkgs are installed, and install any missing pkgs
+pkgTest <- function(x)
+{
+  if (!require(x,character.only = TRUE))
+  {
+    install.packages(x,dep=TRUE,repos='http://cran.us.r-project.org')
+    if(!require(x,character.only = TRUE)) stop(x, " :Package not found")
+  }
+}
+
+# Create list of required packages
+list.of.packages <- c(
+  "earthdatalogin", "terra", "rstac", "gdalcubes", "here", "sf", "dplyr", "stars", "tmap", 
+  "rerddap", "plotdap", "parsedate", "ggplot2", "rerddapXtracto",
+  "date", "maps", "mapdata", "RColorBrewer","viridis")
+
+# Create list of installed packages
+pkges = installed.packages()[,"Package"]
+
+# Install and load all required pkgs
+for (pk in list.of.packages) {
+  pkgTest(pk)
+}
 
 sessionInfo()
 ```
