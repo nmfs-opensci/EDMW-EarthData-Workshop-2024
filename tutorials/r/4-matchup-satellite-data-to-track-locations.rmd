@@ -49,7 +49,7 @@ The track data are stored in the data folder in this project folder.
 
 ## Install required packages and load libraries
 
-```{r install,message=FALSE,warning=FALSE}
+```{r install-libraries, message=FALSE,warning=FALSE}
 
 # Function to check if pkgs are installed, and install any missing pkgs
 pkgTest <- function(x)
@@ -242,7 +242,7 @@ plotTrack(chl_track, make180(xcoords), ycoords, tcoords, plotColor = 'viridis',
 If we to do an customization of the plot, its better to plot the dat ausing ggplot.
 We will first create a data frame that contains longitudes and latitudes from the turtle and associated satellite chlor-a values.
 
-```{r create dataframe}
+```{r create-dataframe}
 
 # Create a data frame of coords from turtle and chlor_a values 
 new_df <- as.data.frame(cbind(xcoords, ycoords,  
@@ -260,7 +260,7 @@ write.csv(new_df, "matchup_df.csv")
 
 ### Plot using ggplot
 
-```{r ggplot_track}
+```{r ggplot-track}
 
 # Import world map
 mapWorld <- map_data("world", wrap=c(0,360))
@@ -287,7 +287,7 @@ Ideally, we would work with daily data since we have one location per day.
 But chlorophyll data is severely affected by clouds (i.e. lots of missing data), so you might need to use weekly or even monthly data to get sufficient non-missing data.
 We will start with the monthly chl-a data since it contains fewer gaps.
 
-```{r manually create url for data extraction }
+```{r manually-create-url-for-data-extraction }
  
 # Set erddap address
 erddap <- "https://oceanwatch.pifsc.noaa.gov/erddap/griddap/aqua_chla_monthly_2018_0.csv?chlor_a"
@@ -332,8 +332,7 @@ write.csv(chl_track2, 'turtle-track-chl.m.csv', row.names = FALSE)
 
 ### Make a map of the data extracted using the second method
 
-```{r ggplot_track 2}
-
+```{r ggplot-track-2}
 
 # Draw the track positions with associated chlora values
 ggplot(chl_track2) +
@@ -356,8 +355,7 @@ First we will get a 3D block of chl data from the region and of the turtle track
 We will use the 'xtracto_3d' function of rerddapXtracto to get the data.
 This data call will take a few minutes.
 
-```{r get grid of chlorophyll data }
-
+```{r get-grid-of-chlorophyll-data }
 
 chl_grid <- rxtracto_3D(dataInfo, 
                   parameter=parameter, 
@@ -380,7 +378,7 @@ chl_turtle <- chl_track$`mean chlor_a`
 Now we we plot histograms of all the chlorphyll values in the area, and those of the turtle track.
 Since we subset the turtletrack, and only have 25 points for this subsampopled dataset the turtle histogram isn't as useful as it would be with a larger dataset.
 
-```{r Plot histogram of chlorophyll}
+```{r plot-histogram-of-chlorophyll}
 
 ggplot(as.data.frame(chl_area)) + 
       geom_histogram(aes(x=chl_area,y=after_stat(density),color = "darkgray",fill='Area'),color='black', bins=50) + 

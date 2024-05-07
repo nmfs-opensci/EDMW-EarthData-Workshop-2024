@@ -159,7 +159,16 @@ masked_rc <- mask(ras_sst, GFST)
 plot(masked_rc)
 ```
 
+::: {.callout-note title="Troubleshooting"}
+
+If you get the following error:
+
+> Warning: Opening a /vsi file with the netCDF driver requires Linux userfaultfd to be available. Or you may set the GDAL_SKIP=netCDF configuration option to force the use of the HDF5 driver. (GDAL error 1)Error: [rast] file does not exist: /vsicurl/https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20191231120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc
 ## Compute monthly average of SST
+
+[insert solve]
+
+:::
 
 We will construct a data cube to compute monthly average for sea surface
 temperature data within the boundary.

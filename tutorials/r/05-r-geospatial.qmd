@@ -21,6 +21,7 @@ require(sf)
 require(mapview)
 require(readr)
 require(readxl)
+library(dplyr)
 here::i_am("tutorials/r/05-r-geospatial.qmd")
 dir_data <- here::here("tutorials", "data")
 ```
@@ -122,7 +123,7 @@ mapview::mapview(sdf)
 
 If you want state labels, you need to only have the geometry and label columns in the dataframe.
 ```{r eval=FALSE}
-sdf2 <- sdf %>% select(geometry, State)
+sdf2 <- sdf %>% dplyr::select(geometry, State)
 mapview::mapview(sdf2, label = sdf2$State)
 ```
 
