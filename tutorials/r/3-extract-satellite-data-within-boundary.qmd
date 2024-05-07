@@ -64,13 +64,13 @@ For this exercise we will use the Gulf Stream province (ProvCode: GFST)
 ![../images/longhurst.png](../images/longhurst.png)
 
 ## Load packages
+
 ```{r}
 library(terra)
 library(earthdatalogin)
 library(sf)
 library(ggplot2)
 ```
-
 
 ## Load boundary coordinates 
 
@@ -99,9 +99,10 @@ ycoord <- st_coordinates(GFST)[,2]
 
 ## Search data from NASA Earthdata with the dataset unique name and coordinates/dates 
 
+Connect to NASA Earthdata with no credentials
+
 ```{r}
-# Connect to NASA Earthdata with no credentials
-edl_netrc()
+earthdatalogin::edl_netrc()
 ```
 
 ```{r}

@@ -65,7 +65,9 @@ website:
               - text: Mask and Aggregate
                 href: tutorials/r/3-extract-satellite-data-within-boundary.qmd
               - text: Get Points
-                href: tutorials/r/4-matchup-satellite-data-to-track-locations.rmd
+                href: tutorials/r/4-matchup-satellite-data-to-track-locations.qmd
+              - text: "Bonus: Geospatial Data"
+                href: tutorials/r/5-r-geospatial.qmd
           - section: "Tutorials in Python"
             contents:
               - text: Search
