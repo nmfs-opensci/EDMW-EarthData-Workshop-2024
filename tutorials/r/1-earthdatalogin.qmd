@@ -54,10 +54,10 @@ cat /home/jovyan/.local/share/R/earthdatalogin/netrc
 ```
 
 Once your netrc file is saved, you can use `earthdatalogin::edl_netrc()` to authenticate.
+
 ```{r}
 earthdatalogin::edl_netrc()
 ```
-
 
 *For the purposes of this workshop, `edl_netrc()` will work but it will use a default public account. Don't use that if you have a NASA Earthdata account.*
 
@@ -178,7 +178,7 @@ If you get the following error:
 
 > Error: [rast] file does not exist: /vsicurl/https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc
 
-It is likely because you do not have the End User Licence Agreement (EULA)/permissions to use that data set or are not properly logged in. 
+It is likely because you do not have the End User Licence Agreement (EULA)/permissions to use that data set or are not properly logged in usig `earthdatalogin::edl_netrc()`. 
 :::
 
 Also try this example script from the `?earthdatalogin::edl_netrc` documentation: 

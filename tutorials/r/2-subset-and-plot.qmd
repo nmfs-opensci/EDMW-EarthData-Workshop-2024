@@ -54,14 +54,22 @@ Each MUR SST netCDF file is large so I do not want to download. Instead I will u
 ras <- terra::rast(results[1], vsi=TRUE)
 ```
 
-::: {.callout-note title="Troubleshooting"}
+::: {.callout-note title="Troubleshooting 1"}
 
 If you get the following error:
 
-> Warning: Opening a /vsi file with the netCDF driver requires Linux userfaultfd to be available. Or you may set the GDAL_SKIP=netCDF configuration option to force the use of the HDF5 driver. (GDAL error 1)Error: [rast] file does not exist: /vsicurl/https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc
+> Warning: Opening a /vsi file with the netCDF driver requires Linux userfaultfd to be available. Or you may set the GDAL_SKIP=netCDF configuration option to force the use of the HDF5 driver. (GDAL error 1)
 
 [insert solve]
+:::
 
+::: {.callout-note title="Troubleshooting 2"}
+
+If you get the following error:
+
+> Error: [rast] file does not exist: /vsicurl/https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc
+
+It is likely because you do not have the End User Licence Agreement (EULA)/permissions to use that data set or are not properly logged in usig `earthdatalogin::edl_netrc()`.
 :::
 
 Crop to a small region.
@@ -160,9 +168,6 @@ test <- data_gd |> gdalcubes::crop(extent) |>
     plot(col = viridisLite::viridis(10))
 ```
 
-
-
-
 ## Conclusions
 
 Some really cool things just happened here! You connected to multiple remote-sensing files (netCDF) in the cloud and worked with them without directly downloading them.
@@ -171,6 +176,7 @@ Some really cool things just happened here! You connected to multiple remote-sen
 ## Appendix
 
 Alternatively we might get our bounding box from a shape. Here I get a bounding box around Indonesia. I am going to use a smaller dataset, the OI SST dataset.
+
 ```{r}
 oi <- earthdatalogin::edl_search(
     short_name = "AVHRR_OI-NCEI-L4-GLOB-v2.1",
