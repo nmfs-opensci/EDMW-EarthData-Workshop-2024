@@ -5,6 +5,7 @@ project:
     - "*.*"
     - "!tutorials/python-notebooks/*.ipynb"
     - "!tutorials/r/gdalcubes.qmd"
+    - "!tutorials/r/05-r-geospatial.qmd"
 
 execute:
   freeze: auto
@@ -39,8 +40,12 @@ website:
               href: content/02-rstudio.qmd
             - text: Earthdata login
               href: content/02-earthdata.md
-            - text: Local set-up
-              href: content/02-local-setup.qmd
+            - text: Local set-up - R
+              href: content/02-local-setup-r.qmd
+            - text: Local set-up - Python
+              href: content/02-local-setup-python.qmd
+            - text: Git-Authentication
+              href: content/02-git.md
             - text: Git-JupyterLab
               href: content/02-git-jupyter.md
             - text: Git-RStudio

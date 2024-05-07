@@ -1,5 +1,5 @@
 ---
-title: Setting up on your computer
+title: Setting up on your computer - R users
 ---
 
 
