@@ -10,6 +10,30 @@ author: Eli Holmes
 3. How to crop a data cube to a box
 :::
 
+## Summary
+
+In this example, we will utilize the `earthdatalogin` R package to retrieve, subset, and crop sea surface temperature data as a file and as a datacube from [NASA Earthdata search](https://search.earthdata.nasa.gov/search). The `earthdatalogin` R package simplifies the process of discovering and accessing NASA Earth science data.
+
+For more on `earthdatalogin` visit the [`earthdatalogin` GitHub](https://github.com/boettiger-lab/earthdatalogin/) page and/or the [`earthdatalogin` documentation](https://boettiger-lab.github.io/earthdatalogin/) site. Be aware that `earthdatalogin` is under active development and that we are using the development version on GitHub.
+
+## Terminology
+
+- **`Zarr` files**: is a community project to develop specifications and software for storage of large N-dimensional typed arrays, also commonly known as tensors. A particular focus of Zarr is to provide support for storage using distributed systems like cloud object stores, and to enable efficient I/O for parallel computing applications. Learn more [here](https://zarr.dev/). 
+- **Open Data Cube (ODC)**: is an Open Source Geospatial Data Management and Analysis Software project that helps you harness the power of Satellite data. At its core, the ODC is a set of Python libraries and PostgreSQL database that helps you work with geospatial raster data. The ODC seeks to increase the value and impact of global Earth observation satellite data by providing an open and freely accessible exploitation architecture. Learn more [here](https://www.opendatacube.org/). 
+
+## Prerequisites
+
+The tutorials today can be run with the guest Earthdata Login that is in `earthdatalogin`. 
+However, if you will be using the NASA Earthdata portal more regularly, please register for an 
+Earthdata Login account. Please <https://urs.earthdata.nasa.gov> to register and manage your 
+Earthdata Login account. This account is free to create and only takes a moment to set up.
+
+### Import Required Packages
+
+*Note: See the set-up tab (in left nav bar) for instructions on getting set up on your own computer, but
+be aware that getting it is common to run into trouble getting GDAL set up properly to handle
+netCDF files. Using a Docker image (and Python) is often less aggravating.*
+
 ## Load packages
 
 ```{r message=FALSE}
@@ -101,9 +125,9 @@ plot(rc_sst,
      main = titles)
 ```
 
-## Reading in a Zarr file
+## Reading in a `Zarr` file
 
-Reading in Zarr files is easy in Python with `xarray` but currently this is difficult in R. See the `gdalcubes.qmd` file in the `tutorials/r` directory. However we can open individual files from a Zarr file. 
+Reading in `Zarr` files is easy in Python with [`xarray`](https://docs.xarray.dev/en/latest/index.html) but currently this is difficult in R. See the [`gdalcubes.qmd` file](https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/tutorials/r/gdalcubes.qmd) in the [`tutorials/r`](https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/tree/main/tutorials/r) directory of this GitHub repository. However we can open individual files from a `Zarr` file. 
 
 Read one file.
 
@@ -115,7 +139,8 @@ addr <- paste0(prefixes, url, slice)
 y = terra::rast(addr)
 ```
 
-Plot
+Plot.
+
 ```{r}
 e <- terra::ext(c(xmin=-75.5, xmax=-73.5,  ymin=33.5, ymax=35.5 ))
 y |> terra::crop(e) |> terra::plot()
