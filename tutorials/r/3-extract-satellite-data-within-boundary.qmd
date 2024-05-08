@@ -1,17 +1,6 @@
 ---
 title: Extract data within a boundary
 author: 'NOAA CoastWatch, NOAA Openscapes'
-jupyter:
-  jupytext:
-    text_representation:
-      extension: .qmd
-      format_name: quarto
-      format_version: '1.0'
-      jupytext_version: 1.16.1
-  kernelspec:
-    display_name: Python 3 (ipykernel)
-    language: python
-    name: python3
 ---
 
 ::: {.callout-note title="Learning Objectives"}
@@ -22,17 +11,15 @@ jupyter:
 
 ## Summary
 
-In this example, we will utilize the earthdatalogin R package to retrieve sea surface temperature data from NASA Earthdata.
-
-The `earthdatalogin` package simplifies the process of discovering and accessing NASA Earth science data.
+In this example, we will utilize the earthdatalogin R package to retrieve sea surface temperature data from [NASA Earthdata search](https://search.earthdata.nasa.gov/search). The `earthdatalogin` package simplifies the process of discovering and accessing NASA Earth science data.
 
 This example is adapted from the NOAA CoastWatch Satellite Data Tutorials. To explore the full range of tutorials on accessing and utilizing oceanographic satellite data, visit the [NOAA CoastWatch Tutorial Github repository.](https://github.com/coastwatch-training/CoastWatch-Tutorials)
 
-For more on `earthdatalogin` visit the [`earthdatalogin` GitHub](https://github.com/boettiger-lab/earthdatalogin/) page and/or the [`earthdatalogin` documentation](https://boettiger-lab.github.io/earthdatalogin/) site. Be aware that `earthdatalogin` is under active development.
+For more on `earthdatalogin` visit the [`earthdatalogin` GitHub](https://github.com/boettiger-lab/earthdatalogin/) page and/or the [`earthdatalogin` documentation](https://boettiger-lab.github.io/earthdatalogin/) site. Be aware that `earthdatalogin` is under active development and that we are using the development version on GitHub.
 
 ## Prerequisites
 
-An Earthdata Login account is required to access data from NASA Earthdata. Please visit <https://urs.earthdata.nasa.gov> to register and manage your Earthdata Login account. This account is free to create and only takes a moment to set up.
+The tutorials today can be run with the guest Earthdata Login that is in `earthdatalogin`. However, if you will be using the NASA Earthdata portal more regularly, please register for an Earthdata Login account. Please <https://urs.earthdata.nasa.gov> to register and manage your Earthdata Login account. This account is free to create and only takes a moment to set up.
 
 ### Import Required Packages
 
@@ -139,9 +126,8 @@ plot(GFST,col='red')
 # Mask SST with the GFST boundaries
 masked_rc <- mask(ras_sst, GFST)
 
-# Visualize the SST in GFST Province
+# Visualize the SST in GFST Province and crop to the GFST extent
 plot(masked_rc, ext = GFST)
-ext(GFST)
 ```
 
 ## Compute monthly average of SST
@@ -151,8 +137,8 @@ We will construct a data cube to compute monthly average for sea surface tempera
 To minimize data loading times, the first 10 results, which correspond to approximately two months of data, will be used for this exercise.
 
 ```{r}
-# Select the first 10 SST results
-ras_all <- terra::rast(results[c(1:10)], vsi = TRUE)
+# Select the SST results for end of Jan and beginning of Feb
+ras_all <- terra::rast(results[c(20:40)], vsi = TRUE)
 
 # Trim the SST data to the boundaries of GFST
 rc_all <- terra::mask(ras_all, GFST)

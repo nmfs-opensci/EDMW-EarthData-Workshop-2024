@@ -1,5 +1,6 @@
 ---
 title: Earthdata Search and Discovery
+author: Eli Holmes adapted from work by Luis Lopez and Carl Boettiger
 ---
 
 ::: {.callout-note title="Learning Objectives"}
