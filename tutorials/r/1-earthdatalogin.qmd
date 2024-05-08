@@ -184,7 +184,7 @@ It is likely because you do not have the End User Licence Agreement (EULA)/permi
 Also try this example script from the `?earthdatalogin::edl_netrc` documentation: 
 
 ```{r}
-url <- lpdacc_example_url()
+url <- earthdatalogin::lpdacc_example_url()
 ras <- terra::rast(url, vsi=TRUE)
 plot(ras)
 ```
