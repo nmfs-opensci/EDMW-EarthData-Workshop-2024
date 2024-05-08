@@ -1,5 +1,13 @@
 ---
 title: Earthdata Search and Discovery
+author: NOAA CoastWatch, NOAA Openscapes
+date: "`r paste0(Last run format(Sys.Date(), format='%B %d %Y')) `"
+output:
+  md_document:
+    variant: gfm
+editor_options: 
+  markdown: 
+    wrap: sentence
 ---
 
 ::: {.callout-note title="Learning Objectives"}
@@ -19,9 +27,9 @@ For more on `earthdatalogin` visit the [`earthdatalogin` GitHub](https://github.
 
 An Earthdata Login account is required to access data from NASA Earthdata. Please visit <https://urs.earthdata.nasa.gov> to register as a new user and manage your Earthdata Login account. This account is free to create and only takes a moment to set up.  
 
-### Import Required Packages  
+## Load packages
 
-*Note: See the set-up tab (in left nav bar) for instructions on getting set up on your own computer.*
+*Note: See the [Earthdata login set-up tab](https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/02-earthdata.html) (in left nav bar) for instructions on getting set up on your own computer.*
 
 ```{r}
 library(earthdatalogin)
@@ -41,7 +49,7 @@ earthdatalogin::edl_netrc(
 )
 ```
 
-This will put your login info in a `netrc` located at:
+This will put your login info in a `netrc` file located at:
 
 ```{r}
 earthdatalogin:::edl_netrc_path()
@@ -53,37 +61,33 @@ You can open a terminal and run this to see that it has your username and login.
 cat /home/jovyan/.local/share/R/earthdatalogin/netrc
 ```
 
-Once your netrc file is saved, you can use `earthdatalogin::edl_netrc()` to authenticate.
+Once your `netrc` file is saved, you can use `earthdatalogin::edl_netrc()` to authenticate.
 
 ```{r}
 earthdatalogin::edl_netrc()
 ```
 
-*For the purposes of this workshop, `edl_netrc()` will work but it will use a default public account. Don't use that if you have a NASA Earthdata account.*
+*For the purposes of this workshop, `edl_netrc()` will work by using a default public account login. Feel free to login with your own [NASA Earthdata account](https://urs.earthdata.nasa.gov/home.*
 
 ### Search for data  
 
-There are multiple keywords we can use to discovery data from collections. The table below contains the `short_name`, `concept_id`, and `doi` for some collections we are interested in for the tutorials today. Each of these can be 
-used to search for data or information related to the collection we are interested in.  
+There are multiple keywords we can use to discover data from collections. The table below contains the `short_name`, `concept_id`, and `doi` for some collections we are interested in for the tutorials today. Each of these can be used to search for data or information related to the collection we are interested in.  
 
 | Shortname | Collection Concept ID | DOI |
 | --- | --- | --- |
 | MUR-JPL-L4-GLOB-v4.1 | C1996881146-POCLOUD | 10.5067/GHGMR-4FJ04 |
 | AVHRR_OI-NCEI-L4-GLOB-v2.1 | C2036881712-POCLOUD | 10.5067/GHAAO-4BC21 |
 
-How can we find the `shortname`, `concept_id`, and `doi` for collections not in the table above?. Let's take a quick detour.
+How can we find the `shortname`, `concept_id`, and `doi` for collections not in the table above? Let's take a quick detour: 
 
-https://search.earthdata.nasa.gov/search
-
-Let's search for "GHRSST Level 4 MUR Global Foundation Sea Surface Temperature Analysis". 
-
-[Link to the search](https://search.earthdata.nasa.gov/search?q=GHRSST%20Level%204%20MUR%20Global%20Foundation%20Sea%20Surface%20Temperature%20Analysis)
+1. Navigate to https://search.earthdata.nasa.gov/search
+2: Search for "GHRSST Level 4 MUR Global Foundation Sea Surface Temperature Analysis" or click this [link](https://search.earthdata.nasa.gov/search?q=GHRSST%20Level%204%20MUR%20Global%20Foundation%20Sea%20Surface%20Temperature%20Analysis) (screenshot below).
 
 ![](images/SST_Blended_Earthdata_Search.png){width=50%}
 
-If we hover over the top box, we will see an i with a circle around it. Click that. On this page, you will see the DOI. Now click "View More Info" to get to https://cmr.earthdata.nasa.gov/search/concepts/C1996881146-POCLOUD.html
+If we hover over the top box, find and click on the more information button (an i with a circle around it). On this page, you will see the `DOI`. Now click "View More Info" to get to https://cmr.earthdata.nasa.gov/search/concepts/C1996881146-POCLOUD.html. 
 
-On that page you will see the "short name". Note the short name was also on the first search page, but was not noted as the short name.
+On that page you will see the **"short name"** `MUR-JPL-L4-GLOB-v4.1`. Note the short name was also on the first search page (though it wasn't labeled as the short name, there).
 
 #### Search by short name
 
@@ -97,6 +101,8 @@ Let's set some time bounds.
 tbox <- c("2020-01-16", "2020-12-16")
 ```
 
+And now we search!
+
 ```{r}
 results <- earthdatalogin::edl_search(
     short_name = short_name,
@@ -109,9 +115,9 @@ results[1:3]
 
 In this example we used the `short_name` parameter to search from our desired data set. However, there are multiple ways to specify the collection(s) we are interested in. Alternative parameters include:  
 
-- `doi` - request collection by digital object identifier (e.g., `doi` = '10.5067/GHAAO-4BC21')  
+- `doi`: request collection by digital object identifier (e.g., `doi = '10.5067/GHAAO-4BC21'`)  
 
-**NOTE:** Each Earthdata collect has a unique `concept_id` and `doi`. This is not the case with `short_name`. A **shortname** can be associated with multiple versions of a collection. If multiple versions of a collection are publicaly available, using the `short_name` parameter with return all versions available. It is advised to use the `version` parameter in conjunction with the `short_name` parameter with searching.
+**NOTE:** Each Earthdata collect has a unique `concept_id` and `doi`. This is not the case with `short_name`. A **shortname** can be associated with multiple versions of a collection. If multiple versions of a collection are publicly available, using the `short_name` parameter with return all versions available. It is advised to use the `version` parameter in conjunction with the `short_name` parameter with searching.
 
 We can refine our search by passing more parameters that describe the spatiotemporal domain of our use case. Here, we use the `temporal` parameter to request a date range and the `bounding_box` parameter to request granules that intersect with a bounding box.  
 
@@ -137,7 +143,7 @@ Following the search for data, you'll likely take one of two pathways with those
 
 #### Download `earthdatalogin` results
 
-In some cases you may want to download your assets. `earthdatalogin` makes downloading the data from the search results is very easy using the `edl_download()` function. The MUR SST files are 673Gb file so I would prefer not to download. But you could.
+In some cases you may want to download your assets. `earthdatalogin` makes downloading the data from the search results is very easy using the `earthdatalogin::edl_download()` function. The MUR SST files are 673 Gb file so I would prefer not to download. But you could.
 
 ```{r eval=FALSE}
 earthdatalogin::edl_download(
@@ -148,8 +154,7 @@ earthdatalogin::edl_download(
 
 #### Work in the cloud
 
-We do not have to download the data to work with it or at least not until we need to compute with it or plot it.
-Let's look at a smaller dataset.
+We do not have to download the data to work with it or at least not until we need to compute with it or plot it. Let's look at a smaller dataset.
 
 ```{r}
 oi <- earthdatalogin::edl_search(
@@ -178,7 +183,7 @@ If you get the following error:
 
 > Error: [rast] file does not exist: /vsicurl/https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc
 
-It is likely because you do not have the End User Licence Agreement (EULA)/permissions to use that data set or are not properly logged in usig `earthdatalogin::edl_netrc()`. 
+It is likely because you do not have the End User Licence Agreement (EULA)/permissions to use that data set or are not properly logged in using `earthdatalogin::edl_netrc()`. 
 :::
 
 Also try this example script from the `?earthdatalogin::edl_netrc` documentation: 

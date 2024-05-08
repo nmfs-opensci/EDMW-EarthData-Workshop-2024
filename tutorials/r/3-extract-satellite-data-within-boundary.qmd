@@ -1,6 +1,13 @@
 ---
 title: Extract data within a boundary
 author: NOAA CoastWatch, NOAA Openscapes
+date: "`r paste0(Last run format(Sys.Date(), format='%B %d %Y')) `"
+output:
+  md_document:
+    variant: gfm
+editor_options: 
+  markdown: 
+    wrap: sentence
 ---
 
 ::: {.callout-note title="Learning Objectives"}
@@ -13,15 +20,12 @@ author: NOAA CoastWatch, NOAA Openscapes
 
 ## Summary
 
-In this example, we will utilize the earthdatalogin R package 
-to retrieve sea surface temperature data from NASA Earthdata. 
+In this example, we will utilize the `earthdatalogin` R package to retrieve sea surface temperature data from NASA Earthdata. 
 
-The `earthdatalogin` package simplifies the process of discovering and 
-accessing NASA Earth science data.
+The `earthdatalogin` package simplifies the process of discovering and accessing NASA Earth science data.
 
 
-This example is adapted from the NOAA CoastWatch 
-Satellite Data Tutorials. To explore the full range of 
+This example is adapted from the NOAA CoastWatch Satellite Data Tutorials. To explore the full range of 
 tutorials on accessing and utilizing oceanographic satellite data, 
 visit the [NOAA CoastWatch Tutorial Github repository.](https://github.com/coastwatch-training/CoastWatch-Tutorials)
 
@@ -38,11 +42,7 @@ Please visit <https://urs.earthdata.nasa.gov> to register and manage
 your Earthdata Login account. This account is free to create and 
 only takes a moment to set up.  
 
-
-### Import Required Packages  
-
-*Note: See the set-up tab (in left nav bar) for instructions on getting set up on your own computer.*
-
+*Note: See the [Earthdata login set-up tab](https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/02-earthdata.html) (in left nav bar) for instructions on getting set up on your own computer.*
 
 ## Datasets used
 __GHRSST Level 4 AVHRR_OI Global Blended Sea Surface Temperature Analysis (GDS2) from NCEI__    
@@ -64,6 +64,7 @@ For this exercise we will use the Gulf Stream province (ProvCode: GFST)
 ![../images/longhurst.png](../images/longhurst.png)
 
 ## Load packages
+
 ```{r}
 library(terra)
 library(earthdatalogin)
@@ -71,15 +72,12 @@ library(sf)
 library(ggplot2)
 ```
 
-
 ## Load boundary coordinates 
 
 The shapefile for the Longhurst marine provinces includes a list of regions.  
-For this exercise, we will only use the boundary of one province, 
-the Gulf Stream region ("GFST"). 
+For this exercise, we will only use the boundary of one province, the Gulf Stream region ("GFST"). 
 
 ```{r read province boundaries from shapefiles}
-
 # Set directory path for shapefile
 dir_path <- '../resources/longhurst_v4_2010/'
 
@@ -94,15 +92,17 @@ GFST <- shapes[shapes$ProvCode == "GFST",]
 
 xcoord <- st_coordinates(GFST)[,1]
 ycoord <- st_coordinates(GFST)[,2]
-
 ```
 
 ## Search data from NASA Earthdata with the dataset unique name and coordinates/dates 
 
+First, connect to NASA Earthdata with no credentials
+
 ```{r}
-# Connect to NASA Earthdata with no credentials
-edl_netrc()
+earthdatalogin::edl_netrc()
 ```
+
+Then, define your search and cropping criteria
 
 ```{r}
 # Dataset unique name
@@ -125,15 +125,9 @@ results <- edl_search(
 # Check number of files 
 length(results)
 ```
-
-There are `r length(results)` files.
-
-
 ## Apply shapefiles as mask to satellite data
 
-
 ```{r}
-
 # Select the first result
 ras <- terra::rast(results[1], vsi = TRUE)
 
@@ -160,21 +154,18 @@ plot(masked_rc)
 ```
 
 ::: {.callout-note title="Troubleshooting"}
-
 If you get the following error:
 
 > Warning: Opening a /vsi file with the netCDF driver requires Linux userfaultfd to be available. Or you may set the GDAL_SKIP=netCDF configuration option to force the use of the HDF5 driver. (GDAL error 1)Error: [rast] file does not exist: /vsicurl/https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20191231120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc
-## Compute monthly average of SST
 
 [insert solve]
-
 :::
 
-We will construct a data cube to compute monthly average for sea surface
-temperature data within the boundary.
+## Compute monthly average of SST
 
-To minimize data loading times, the first 10 results, which correspond to 
-approximately two months of data, will be used for this exercise.
+We will construct a data cube to compute monthly average for sea surface temperature data within the boundary.
+
+To minimize data loading times, the first 10 results, which correspond to approximately two months of data, will be used for this exercise.
 
 
 ```{r}
@@ -200,19 +191,18 @@ monthly_mean_rast <- terra::tapp(rc_all, ym, fun = mean)
 
 # Compute mean across raster grouped by Year-month
 monthly_means <- global(monthly_mean_rast, fun = mean, na.rm=TRUE)
-
-
 ```
 
 ## Convert raster into data frame 
-```{r}
 
+```{r}
 # Convert raster into data.frame
 monthly_means_df <- as.data.frame(monthly_means)
 
 # Convert year_month to a column
 monthly_means_df$year_month <- sub("X", "", rownames(monthly_means_df))
 ```
+
 ## Plot monthly mean of sea surface temperature within GFST province
 
 ```{r}

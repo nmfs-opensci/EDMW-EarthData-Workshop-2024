@@ -2,7 +2,6 @@
 title: Setting up on your computer - R users
 ---
 
-
 Here are instructions for installing on your own computer.
 
 Install the development version of earthdatalogin and update terra.
@@ -23,19 +22,44 @@ library("here")
 
 You will need GDAL installed. See these instructions if you do not have it installed:  https://developers.planet.com/docs/integrations/qgis/install-qgis-gdal/
 
+> At NOAA Fisheries Alaska Fisheries Science Center, @EmilyMarkowitz-NOAA did not need IT support to install GDAL!
+
 You may need to install `terra` and `sf` from source to get them to use the latest GDAL installation. 
 
 ```{r eval=FALSE}
 install.packages("terra", type = "source")
 install.packages("sf", type = "source")
-sf_extSoftVersion()
+sf::sf_extSoftVersion()
 ```
 
 The environment we are using today is the `py-rocket-geospatial` image. This is part of work on a [Data Science Docker Stack](https://github.com/nmfs-opensci/container-images) for NOAA Fisheries.
 
-
-# R Version Metadata
+## Load packages
 
 ```{r}
+# Function to check if pkgs are installed, and install any missing pkgs
+pkgTest <- function(x)
+{
+  if (!require(x,character.only = TRUE))
+  {
+    install.packages(x,dep=TRUE,repos='http://cran.us.r-project.org')
+    if(!require(x,character.only = TRUE)) stop(x, " :Package not found")
+  }
+}
+
+# Create list of required packages
+list.of.packages <- c(
+  "earthdatalogin", "terra", "rstac", "gdalcubes", "here", "sf", "dplyr", "stars", "tmap", 
+  "rerddap", "plotdap", "parsedate", "ggplot2", "rerddapXtracto",
+  "date", "maps", "mapdata", "RColorBrewer","viridis")
+
+# Create list of installed packages
+pkges = installed.packages()[,"Package"]
+
+# Install and load all required pkgs
+for (pk in list.of.packages) {
+  pkgTest(pk)
+}
+
 sessionInfo()
 ```
