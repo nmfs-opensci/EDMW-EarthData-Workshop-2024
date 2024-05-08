@@ -34,10 +34,9 @@ sf::sf_extSoftVersion()
 
 The environment we are using today is the `py-rocket-geospatial` image. This is part of work on a [Data Science Docker Stack](https://github.com/nmfs-opensci/container-images) for NOAA Fisheries.
 
-# R Version Metadata
+## Load packages
 
 ```{r}
-
 # Function to check if pkgs are installed, and install any missing pkgs
 pkgTest <- function(x)
 {

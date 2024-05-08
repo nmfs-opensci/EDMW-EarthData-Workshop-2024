@@ -1,9 +1,16 @@
 ---
-title: Geospatial in R - lab 1
+title: Geospatial in R
+author: NOAA CoastWatch, NOAA Openscapes
+date: "`r paste0(Last run format(Sys.Date(), format='%B %d %Y')) `"
+output:
+  md_document:
+    variant: gfm
+editor_options: 
+  markdown: 
+    wrap: sentence
 ---
 
 ::: {.callout-note icon=false}
-
 ## Goals
 
 In this lab, you will learn basic skills of working with points in space.
@@ -13,7 +20,6 @@ In this lab, you will learn basic skills of working with points in space.
 * Plot your points with mapview and ggplot
 * Apply different coordinate systems
 * Tips for getting help from AI
-
 :::
 
 ```{r message=FALSE}
@@ -35,20 +41,24 @@ But the columns names are often shortened to lon, lat or lng, latd or anything e
 
 In addition they will have other info in other columns.
 
-## Create a data frame of points
+## Load packages
 
 ```{r}
 library(mapview)
-  
+```
+
+## Create a data frame of points
+
+```{r}
 # Create example data of points
 lon <- c(85.21, 80.23, 77.28)
 lat = c(25.59, 12.99, 28.56)
 names = c("Patna", "Chennai", "New Delhi")
-  
+
 # Create a data frame with the point data
 df <- data.frame(lon, lat, names)
 ```
-  
+
 ## Convert to a spatial points data frame
 
 ::: {.callout-important}
@@ -57,19 +67,19 @@ df <- data.frame(lon, lat, names)
 Convert data frame with latitude and longitude columns to a geospatial object with a geometry column and coordinate system. We are setting the coordinate system to [WGS 84](https://epsg.io/4326) with `crs = 4326`.
 
 * `sf::st_as_sf()` function
-
 :::
 
 This is a special data frame where the location data is converted to a single point object. 
 
 ```{r}
 cities3 <- sf::st_as_sf(
-    df, # the data frame
-    coords = c("lon", "lat"), # what are the x and y dimension names
-    crs = 4326)
+  df, # the data frame
+  coords = c("lon", "lat"), # what are the x and y dimension names
+  crs = 4326)
 ```
 
 Look at the class of the object
+
 ```{r}
 class(cities3)
 ```
@@ -110,9 +120,9 @@ Convert to spatial data frame. **Notice, I had to change the latitude and longit
 
 ```{r}
 sdf <- sf::st_as_sf(
-    df2, 
-    coords = c("Longitude", "Latitude"), # what are the x and y dimension names
-    crs = 4326)
+  df2, 
+  coords = c("Longitude", "Latitude"), # what are the x and y dimension names
+  crs = 4326)
 ```
 
 Map. You can click on the points to get more info.
@@ -140,9 +150,9 @@ Convert to spatial points.
 
 ```{r}
 sdf = sf::st_as_sf(
-    df3, 
-    coords = c("Longitude", "Latitude"), 
-    crs = 4326)
+  df3, 
+  coords = c("Longitude", "Latitude"), 
+  crs = 4326)
 ```
 
 ```{r}
