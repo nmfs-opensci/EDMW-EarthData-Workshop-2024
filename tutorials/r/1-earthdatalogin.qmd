@@ -1,13 +1,6 @@
 ---
 title: Earthdata Search and Discovery
-author: NOAA CoastWatch, NOAA Openscapes
-date: "`r paste0(Last run format(Sys.Date(), format='%B %d %Y')) `"
-output:
-  md_document:
-    variant: gfm
-editor_options: 
-  markdown: 
-    wrap: sentence
+author: Eli Holmes adapted from work by Luis Lopez and Carl Boettiger
 ---
 
 ::: {.callout-note title="Learning Objectives"}
@@ -183,10 +176,11 @@ If you get the following error:
 
 > Error: [rast] file does not exist: /vsicurl/https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc
 
-It is likely because you do not have the End User Licence Agreement (EULA)/permissions to use that data set or are not properly logged in using `earthdatalogin::edl_netrc()`. 
+It is likely because you do not have the End User Licence Agreement (EULA)/permissions to use that data set or are not properly logged in using `earthdatalogin::edl_netrc()`. Another reason may be that your
+GDAL installation is not properly handling netCDF files.
 :::
 
-Also try this example script from the `?earthdatalogin::edl_netrc` documentation: 
+Also try this example script from the `?earthdatalogin::edl_netrc` documentation that uses a tif file instead of netCDF. 
 
 ```{r}
 url <- earthdatalogin::lpdacc_example_url()

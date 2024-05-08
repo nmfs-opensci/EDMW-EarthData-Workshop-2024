@@ -1,67 +1,46 @@
 ---
 title: Extract data within a boundary
-author: NOAA CoastWatch, NOAA Openscapes
-date: "`r paste0(Last run format(Sys.Date(), format='%B %d %Y')) `"
-output:
-  md_document:
-    variant: gfm
-editor_options: 
-  markdown: 
-    wrap: sentence
+author: 'NOAA CoastWatch, NOAA Openscapes'
 ---
 
 ::: {.callout-note title="Learning Objectives"}
-
-1. How to access and download sea surface temperature from NASA Earthdata
-2. How to apply shapefiles as masks to satellite data
-3. How to compute monthly average sea surface temperature
+1.  How to access and download sea surface temperature from NASA Earthdata
+2.  How to apply shapefiles as masks to satellite data
+3.  How to compute monthly average sea surface temperature
 :::
-
 
 ## Summary
 
-In this example, we will utilize the `earthdatalogin` R package to retrieve sea surface temperature data from NASA Earthdata. 
+In this example, we will utilize the earthdatalogin R package to retrieve sea surface temperature data from [NASA Earthdata search](https://search.earthdata.nasa.gov/search). The `earthdatalogin` package simplifies the process of discovering and accessing NASA Earth science data.
 
-The `earthdatalogin` package simplifies the process of discovering and accessing NASA Earth science data.
+This example is adapted from the NOAA CoastWatch Satellite Data Tutorials. To explore the full range of tutorials on accessing and utilizing oceanographic satellite data, visit the [NOAA CoastWatch Tutorial Github repository.](https://github.com/coastwatch-training/CoastWatch-Tutorials)
 
-
-This example is adapted from the NOAA CoastWatch Satellite Data Tutorials. To explore the full range of 
-tutorials on accessing and utilizing oceanographic satellite data, 
-visit the [NOAA CoastWatch Tutorial Github repository.](https://github.com/coastwatch-training/CoastWatch-Tutorials)
-
-
-For more on `earthdatalogin` visit the 
-[`earthdatalogin` GitHub](https://github.com/boettiger-lab/earthdatalogin/) 
-page and/or the [`earthdatalogin` documentation](https://boettiger-lab.github.io/earthdatalogin/) site. 
-Be aware that `earthdatalogin` is under active development. 
+For more on `earthdatalogin` visit the [`earthdatalogin` GitHub](https://github.com/boettiger-lab/earthdatalogin/) page and/or the [`earthdatalogin` documentation](https://boettiger-lab.github.io/earthdatalogin/) site. Be aware that `earthdatalogin` is under active development and that we are using the development version on GitHub.
 
 ## Prerequisites
 
-An Earthdata Login account is required to access data from NASA Earthdata. 
-Please visit <https://urs.earthdata.nasa.gov> to register and manage 
-your Earthdata Login account. This account is free to create and 
-only takes a moment to set up.  
+The tutorials today can be run with the guest Earthdata Login that is in `earthdatalogin`. 
+However, if you will be using the NASA Earthdata portal more regularly, please register for an 
+Earthdata Login account. Please <https://urs.earthdata.nasa.gov> to register and manage your 
+Earthdata Login account. This account is free to create and only takes a moment to set up.
 
-*Note: See the [Earthdata login set-up tab](https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/02-earthdata.html) (in left nav bar) for instructions on getting set up on your own computer.*
+### Import Required Packages
+
+*Note: See the set-up tab (in left nav bar) for instructions on getting set up on your own computer, but
+be aware that getting it is common to run into trouble getting GDAL set up properly to handle
+netCDF files. Using a Docker image (and Python) is often less aggravating.*
 
 ## Datasets used
-__GHRSST Level 4 AVHRR_OI Global Blended Sea Surface Temperature Analysis (GDS2) from NCEI__    
-This NOAA blended SST is a moderate resolution satellite-based gap-free 
-sea surface temperature (SST) product. We will use the daily data.
-https://cmr.earthdata.nasa.gov/search/concepts/C2036881712-POCLOUD.html
 
-__Longhurst Marine Provinces__  
-The dataset represents the division of the world oceans 
-into provinces as defined by Longhurst (1995; 1998; 2006). 
-This division has been based on the prevailing role of physical 
-forcing as a regulator of phytoplankton distribution. 
+**GHRSST Level 4 AVHRR_OI Global Blended Sea Surface Temperature Analysis (GDS2) from NCEI**\
+This NOAA blended SST is a moderate resolution satellite-based gap-free sea surface temperature (SST) product. We will use the daily data. https://cmr.earthdata.nasa.gov/search/concepts/C2036881712-POCLOUD.html
 
-The Longhurst Marine Provinces dataset is available online 
-(https://www.marineregions.org/downloads.php) and 
-within the shapes folder associated with this repository. 
-For this exercise we will use the Gulf Stream province (ProvCode: GFST)  
+**Longhurst Marine Provinces**\
+The dataset represents the division of the world oceans into provinces as defined by Longhurst (1995; 1998; 2006). This division has been based on the prevailing role of physical forcing as a regulator of phytoplankton distribution.
 
-![../images/longhurst.png](../images/longhurst.png)
+The Longhurst Marine Provinces dataset is available online (https://www.marineregions.org/downloads.php) and within the shapes folder associated with this repository. For this exercise we will use the Gulf Stream province (ProvCode: GFST)
+
+![](../images/longhurst.png)
 
 ## Load packages
 
@@ -72,10 +51,11 @@ library(sf)
 library(ggplot2)
 ```
 
-## Load boundary coordinates 
+## Load boundary coordinates
 
-The shapefile for the Longhurst marine provinces includes a list of regions.  
-For this exercise, we will only use the boundary of one province, the Gulf Stream region ("GFST"). 
+The shapefile for the Longhurst marine provinces includes a list of regions.\
+For this exercise, we will only use the boundary of one province, the Gulf Stream region ("GFST").
+
 
 ```{r read province boundaries from shapefiles}
 # Set directory path for shapefile
@@ -94,7 +74,7 @@ xcoord <- st_coordinates(GFST)[,1]
 ycoord <- st_coordinates(GFST)[,2]
 ```
 
-## Search data from NASA Earthdata with the dataset unique name and coordinates/dates 
+## Search data from NASA Earthdata with the dataset unique name and coordinates/dates
 
 First, connect to NASA Earthdata with no credentials
 
@@ -125,6 +105,9 @@ results <- edl_search(
 # Check number of files 
 length(results)
 ```
+
+There are `r length(results)` files.
+
 ## Apply shapefiles as mask to satellite data
 
 ```{r}
@@ -149,8 +132,8 @@ plot(GFST,col='red')
 # Mask SST with the GFST boundaries
 masked_rc <- mask(ras_sst, GFST)
 
-# Visualize the SST in GFST Province
-plot(masked_rc)
+# Visualize the SST in GFST Province and crop to the GFST extent
+plot(masked_rc, ext = GFST)
 ```
 
 ::: {.callout-note title="Troubleshooting"}
@@ -164,17 +147,18 @@ If you get the following error:
 ## Compute monthly average of SST
 
 We will construct a data cube to compute monthly average for sea surface temperature data within the boundary.
+To minimize data loading times, the first 10 results, which correspond to approximately two months 
+of data, will be used for this exercise.
 
-To minimize data loading times, the first 10 results, which correspond to approximately two months of data, will be used for this exercise.
-
-
+Select the SST results for end of Jan and beginning of Feb
 ```{r}
-# Select the first 10 SST results
-ras_all <- terra::rast(results[c(1:10)], vsi = TRUE)
+ras_all <- terra::rast(results[c(20:40)], vsi = TRUE)
+```
 
-# Trim the SST data to the boundaries of GFST
+Trim the SST data to the boundaries of GFST
+```{r}
 rc_all <- terra::mask(ras_all, GFST)
-
+```
 # SST data
 rc_sst <- rc_all["analysed_sst", ]
 
@@ -184,16 +168,16 @@ year_month <- function(x) {
 }
 
 # Convert time to Year-month format for aggregation
-ym <- year_month(rc_all)
+ym <- year_month(rc_sst)
 
 # Compute raster mean grouped by Year-month
-monthly_mean_rast <- terra::tapp(rc_all, ym, fun = mean)
+monthly_mean_rast <- terra::tapp(rc_sst, ym, fun = mean)
 
 # Compute mean across raster grouped by Year-month
 monthly_means <- global(monthly_mean_rast, fun = mean, na.rm=TRUE)
 ```
 
-## Convert raster into data frame 
+## Convert raster into data frame
 
 ```{r}
 # Convert raster into data.frame
@@ -206,12 +190,9 @@ monthly_means_df$year_month <- sub("X", "", rownames(monthly_means_df))
 ## Plot monthly mean of sea surface temperature within GFST province
 
 ```{r}
-
-# Plot monthly mean
 ggplot(data = monthly_means_df, aes(x = year_month, y = mean, group = 1)) +
   geom_line() +
   geom_point() +
   xlab("Year.Month") + 
   ylab("Mean SST (F)")
-
 ```
