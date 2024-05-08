@@ -1,10 +1,8 @@
 ---
-title: Set-up
+title: Set-up - To work on JupyterHub
 ---
 
-To work on the JupyterHub for the workshop:
-
-# User Accounts
+If you want to follow along, you can also see [setup - R](content/02-local-setup-r.html) and [setup - Python](content/02-local-setup-python.html) to attempt local set up on your computer.
 
 ## GitHub username (required to get on JupyterHub)
 
