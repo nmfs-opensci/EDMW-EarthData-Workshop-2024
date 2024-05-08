@@ -44,7 +44,7 @@ The Longhurst Marine Provinces dataset is available online (https://www.marinere
 
 ## Load packages
 
-```{r}
+```{r message=FALSE}
 library(terra)
 library(earthdatalogin)
 library(sf)
@@ -122,27 +122,26 @@ shp <- vect(shapes)
 
 # Get boundaries for GFST
 GFST <- shp[shp$ProvCode == "GFST",]
+```
 
-# Plot the SST data
+Plot the SST data
+```{r plot_SST}
 plot(ras_sst)
+```
 
-# Plot GFST boundaries from shapefile
+Plot GFST boundaries from shapefile
+```{r plot_GFST}
 plot(GFST,col='red')
+```
 
-# Mask SST with the GFST boundaries
+Mask SST with the GFST boundaries and plot
+```{r mask_SST}
 masked_rc <- mask(ras_sst, GFST)
 
 # Visualize the SST in GFST Province and crop to the GFST extent
 plot(masked_rc, ext = GFST)
 ```
 
-::: {.callout-note title="Troubleshooting"}
-If you get the following error:
-
-> Warning: Opening a /vsi file with the netCDF driver requires Linux userfaultfd to be available. Or you may set the GDAL_SKIP=netCDF configuration option to force the use of the HDF5 driver. (GDAL error 1)Error: [rast] file does not exist: /vsicurl/https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20191231120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc
-
-[insert solve]
-:::
 
 ## Compute monthly average of SST
 
@@ -152,16 +151,21 @@ of data, will be used for this exercise.
 
 Select the SST results for end of Jan and beginning of Feb
 ```{r}
-ras_all <- terra::rast(results[c(20:40)], vsi = TRUE)
+ras_all <- terra::rast(results[c(25:35)], vsi = TRUE)
 ```
 
 Trim the SST data to the boundaries of GFST
 ```{r}
 rc_all <- terra::mask(ras_all, GFST)
 ```
-# SST data
-rc_sst <- rc_all["analysed_sst", ]
 
+SST data
+```{r}
+rc_sst <- rc_all["analysed_sst", ]
+```
+
+Calculate monthly means
+```{r get_means}
 # Function to convert times to year-month format
 year_month <- function(x) {
   format(as.Date(time(x), format="%Y-%m-%d"), "%Y-%m")
@@ -179,7 +183,7 @@ monthly_means <- global(monthly_mean_rast, fun = mean, na.rm=TRUE)
 
 ## Convert raster into data frame
 
-```{r}
+```{r ras_to_df}
 # Convert raster into data.frame
 monthly_means_df <- as.data.frame(monthly_means)
 
@@ -196,3 +200,13 @@ ggplot(data = monthly_means_df, aes(x = year_month, y = mean, group = 1)) +
   xlab("Year.Month") + 
   ylab("Mean SST (F)")
 ```
+
+## Troubleshooting
+
+::: {.callout-note title="Troubleshooting"}
+If you get the following error:
+
+> Warning: Opening a /vsi file with the netCDF driver requires Linux userfaultfd to be available. Or you may set the GDAL_SKIP=netCDF configuration option to force the use of the HDF5 driver. (GDAL error 1)Error: [rast] file does not exist: /vsicurl/https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20191231120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc
+
+[insert solve]
+:::

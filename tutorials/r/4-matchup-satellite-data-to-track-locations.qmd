@@ -1,13 +1,6 @@
 ---
 title: Matchup satellite data to track locations
 author: NOAA CoastWatch
-date: "`r paste0(Last run format(Sys.Date(), format='%B %d %Y')) `"
-output:
-  md_document:
-    variant: gfm
-editor_options: 
-  markdown: 
-    wrap: sentence
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}

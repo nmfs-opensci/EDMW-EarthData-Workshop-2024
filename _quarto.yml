@@ -5,7 +5,7 @@ project:
     - "*.*"
     - "!tutorials/python-notebooks/*.ipynb"
     - "!tutorials/r/gdalcubes.qmd"
-    - "!tutorials/r/05-r-geospatial.qmd"
+    - "!tutorials/r/5-r-geospatial.qmd"
 
 execute:
   freeze: auto
@@ -69,10 +69,10 @@ website:
                 href: tutorials/r/2-subset-and-plot.qmd
               - text: Mask and Aggregate
                 href: tutorials/r/3-extract-satellite-data-within-boundary.qmd
-              - text: Get Points
-                href: tutorials/r/4-matchup-satellite-data-to-track-locations.qmd
-              - text: "Bonus: Geospatial Data"
-                href: tutorials/r/5-r-geospatial.qmd
+#              - text: Get Points
+#                href: tutorials/r/4-matchup-satellite-data-to-track-locations.qmd
+#              - text: "Bonus: Geospatial Data"
+#                href: tutorials/r/5-r-geospatial.qmd
           - section: "Tutorials in Python"
             contents:
               - text: Search
@@ -81,8 +81,8 @@ website:
                 href: tutorials/python/2-subset-and-plot.ipynb
               - text: Mask and Aggregate
                 href: tutorials/python/3-extract-satellite-data-within-boundary.ipynb
-              - text: Get Points
-                href: tutorials/python/4-matchup-satellite-data-to-track-locations.ipynb
+#              - text: Get Points
+#                href: tutorials/python/4-matchup-satellite-data-to-track-locations.ipynb
       - text: <img width=100px>
       - text: <img src="/images/noaa_emblem_logo-2022.png" width=100px>
         href: https://fisheries.noaa.gov

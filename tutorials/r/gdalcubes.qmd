@@ -86,3 +86,50 @@ data_gd |>
     slice_time(it=1) |>
     plot(col = viridisLite::viridis(10))
 ```
+
+
+> https://www.r-bloggers.com/2022/09/reading-zarr-files-with-r-package-stars/
+
+> "`Zarr` is a data format; it does not come in a single file as NetCDF or HDF5 does but as a directory with chunks of data in compressed files and metadata in JSON files. Zarr was developed in the Python numpy and xarray communities, and was quickly taken up by the Pangeo community. A Python-independent specification of Zarr (in progress, V3) is found [here](https://zarr-specs.readthedocs.io/en/latest/).
+
+> "[GDAL](https://gdal.org/) has a [Zarr driver](https://gdal.org/drivers/raster/zarr.html), and can read single (spatial, raster) slices without time reference through its classic [raster API](https://gdal.org/api/index.html#raster-api), and full time-referenced arrays through its newer multidimensional array API. In this blog post we show how these can be used through R and package stars for raster and vector data cubes. We will start with an attempt to reproduce what Ryan Abernathey did with Python, xarray and geopandas..."
+
+```{r eval=FALSE}
+library(stars)
+## Loading required package: abind
+## Loading required package: sf
+## Linking to GEOS 3.10.2, GDAL 3.4.3, PROJ 8.2.0; sf_use_s2() is TRUE
+dsn = 'ZARR:"/vsicurl/https://ncsa.osn.xsede.org/Pangeo/pangeo-forge/gpcp-feedstock/gpcp.zarr"'
+bounds = c(longitude = "lon_bounds", latitude = "lat_bounds")
+r = stars::read_mdim(dsn, bounds = bounds)
+r
+```
+::: {.callout-note title="Troubleshooting 1"}
+If you get the following error:
+
+> `r = stars::read_mdim(dsn, bounds = bounds)`
+> Warning: GDAL Error 1: Decompressor blosc not handledWarning: GDAL Error 1: Decompressor blosc not handledWarning: GDAL Error 1: Decompressor blosc not handledWarning: GDAL Error 1: Decompressor blosc not handledWarning: GDAL Error 1: Decompressor blosc not handledWarning: GDAL Error 1: Decompressor blosc not handledWarning: GDAL Error 1: Decompressor blosc not handledError: no array names found
+
+Not sure...
+:::
+
+
+
+```{r eval=FALSE}
+library(gdalcubes)
+data_gd <- gdalcubes::stack_cube(vrt(0:2), datetime_values = as.Date(c("2022-01-01", "2022-01-02","2022-01-03")))
+#extent = list(left=-75.5, right=-73.5, bottom=33.5, top=35.5, t0="2022-01-01", t1="2022-01-02")
+extent = list(left=-75.5, right=-73.5, bottom=33.5, top=35.5)
+test <- data_gd |> 
+  gdalcubes::crop(extent) |> 
+  gdalcubes::aggregate_time(dt="P2D", method="mean") |> 
+  plot(col = viridisLite::viridis(10))
+```
+
+::: {.callout-note title="Troubleshooting"}
+If you get the following error:
+
+> Error in seq.default(zlim[1], zlim[2], length.out = nbreaks) : 'from' must be a finite number
+
+Not sure... this error happened in dhub!
+:::

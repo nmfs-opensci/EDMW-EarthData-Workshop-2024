@@ -158,7 +158,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Set-up</span></a>
+ <span class="menu-text">Set-up - To work on JupyterHub</span></a>
   </div>
 </li>
           <li class="sidebar-item sidebar-item-section">
@@ -184,8 +184,20 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/02-local-setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Local set-up</span></a>
+  <a href="./content/02-local-setup-r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Local set-up - R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./content/02-local-setup-python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Local set-up - Python</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./content/02-git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Git-Authentication</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -275,12 +287,6 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Mask and Aggregate</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./tutorials/r/4-matchup-satellite-data-to-track-locations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Get Points</span></a>
-  </div>
-</li>
       </ul>
   </li>
           <li class="sidebar-item sidebar-item-section">
@@ -308,12 +314,6 @@ ul.task-list li input[type="checkbox"] {
   <div class="sidebar-item-container"> 
   <a href="./tutorials/python/3-extract-satellite-data-within-boundary.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Mask and Aggregate</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./tutorials/python/4-matchup-satellite-data-to-track-locations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Get Points</span></a>
   </div>
 </li>
       </ul>
@@ -378,7 +378,7 @@ function googleTranslateElementInit() {
 
 
 <p><img src="images/cloud-overview.png" style="width:250px; float:right;"> Welcome to the NOAA Fisheries workshop focused on geospatial analysis using ocean ‘big data’. Today, we are focused on using data from NASA <a href="https://www.earthdata.nasa.gov/">EarthData</a> but the skills you will learn are transferable to other ways that you might get earth data, e.g.&nbsp;NESDIS, NCEI, ERDDAP servers, Copernicus, etc.</p>
-<p>This workshop is focused on those who are brand new to working with earth data in the cloud and with geospatial packages. R users will be introduced to the earthdatalogin, terra and sf packages, while Python users will be introduced to the earthaccess and xarray packages. This workshop will also introduce to working with JupyterHubs. We will use both Jupyter Lab (Python) and RStudio (R) within our JupyterHub.</p>
+<p>This workshop is focused on those who are brand new to working with earth data in the cloud and with geospatial packages. R users will be introduced to the earthdatalogin, terra and sf packages, while Python users will be introduced to the earthaccess and xarray packages. This workshop will also introduce working with JupyterHubs. We will use both Jupyter Lab (Python) and RStudio (R) within our JupyterHub.</p>
 <section id="topics-for-may-15-2024" class="level2">
 <h2 class="anchored" data-anchor-id="topics-for-may-15-2024">Topics for May 15, 2024</h2>
 <ul>
@@ -387,7 +387,6 @@ function googleTranslateElementInit() {
 <li>Tutorial 1: Searching for resources in NASA Earthdata</li>
 <li>Tutorial 2: Plotting and subsetting earth data</li>
 <li>Tutorial 3: Masking and aggregating your earth data within a region (shapefiles)</li>
-<li>Tutorial 4: Getting values at points (along a track or transect)</li>
 </ul>
 </section>
 <section id="resources" class="level2">
@@ -395,6 +394,7 @@ function googleTranslateElementInit() {
 <ul>
 <li><a href="https://github.com/coastwatch-training">CoastWatch GitHub organization</a> for many more training modules for working with satellite data in Python and R</li>
 <li><a href="https://nasa-openscapes.github.io/earthdata-cloud-cookbook/">NASA EarthData Cloudbook</a> for many tutorials on using satellite data in Python and R and NASA Earth Data</li>
+<li>[NMFS HackHour]</li>
 </ul>
 </section>
 <section id="thank-you-for-inspiration-and-content" class="level2">

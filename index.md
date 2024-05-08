@@ -15,12 +15,12 @@ This workshop is focused on those who are brand new to working with earth data i
 * Tutorial 1: Searching for resources in NASA Earthdata
 * Tutorial 2: Plotting and subsetting earth data
 * Tutorial 3: Masking and aggregating your earth data within a region (shapefiles)
-* Tutorial 4: Getting values at points (along a track or transect)
 
 ## Resources
 
 * [CoastWatch GitHub organization](https://github.com/coastwatch-training) for many more training modules for working with satellite data in Python and R
 * [NASA EarthData Cloudbook](https://nasa-openscapes.github.io/earthdata-cloud-cookbook/) for many tutorials on using satellite data in Python and R and NASA Earth Data
+* [NMFS HackHour]
 
 ## Thank you for inspiration and content!
 
