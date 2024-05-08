@@ -7,7 +7,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="NOAA CoastWatch">
-<meta name="dcterms.date" content="2024-03-01">
 
 <title>2024 EDMW Workshop 3B - Matchup satellite data to track locations</title>
 <style>
@@ -65,8 +64,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../tutorials/python/1-earthaccess.html" rel="next">
-<link href="../../tutorials/r/3-extract-satellite-data-within-boundary.html" rel="prev">
 <link href="../../images/favicon-16x16.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -160,7 +157,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Tutorials</li><li class="breadcrumb-item"><a href="../../tutorials/r/1-earthdatalogin.html">Tutorials in R</a></li><li class="breadcrumb-item"><a href="../../tutorials/r/4-matchup-satellite-data-to-track-locations.html">Get Points</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Matchup satellite data to track locations</li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -195,7 +192,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Set-up</span></a>
+ <span class="menu-text">Set-up - To work on JupyterHub</span></a>
   </div>
 </li>
           <li class="sidebar-item sidebar-item-section">
@@ -221,8 +218,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/02-local-setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Local set-up</span></a>
+  <a href="../../content/02-local-setup-r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Local set-up - R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/02-local-setup-python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Local set-up - Python</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/02-git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Git-Authentication</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -249,13 +258,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">
  <span class="menu-text">Tutorials</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false">
@@ -287,13 +296,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">
  <span class="menu-text">Tutorials in R</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 show">  
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../tutorials/r/1-earthdatalogin.html" class="sidebar-item-text sidebar-link">
@@ -310,12 +319,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="../../tutorials/r/3-extract-satellite-data-within-boundary.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Mask and Aggregate</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../tutorials/r/4-matchup-satellite-data-to-track-locations.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Get Points</span></a>
   </div>
 </li>
       </ul>
@@ -347,12 +350,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Mask and Aggregate</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../tutorials/python/4-matchup-satellite-data-to-track-locations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Get Points</span></a>
-  </div>
-</li>
       </ul>
   </li>
       </ul>
@@ -381,7 +378,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#objective" id="toc-objective" class="nav-link" data-scroll-target="#objective">Objective</a></li>
   <li><a href="#the-tutorial-demonstrates-the-following-techniques" id="toc-the-tutorial-demonstrates-the-following-techniques" class="nav-link" data-scroll-target="#the-tutorial-demonstrates-the-following-techniques">The tutorial demonstrates the following techniques</a></li>
   <li><a href="#datasets-used" id="toc-datasets-used" class="nav-link" data-scroll-target="#datasets-used">Datasets used</a></li>
-  <li><a href="#install-required-packages-and-load-libraries" id="toc-install-required-packages-and-load-libraries" class="nav-link" data-scroll-target="#install-required-packages-and-load-libraries">Install required packages and load libraries</a></li>
+  <li><a href="#install-and-load-packages" id="toc-install-and-load-packages" class="nav-link" data-scroll-target="#install-and-load-packages">Install and load packages</a></li>
   <li><a href="#import-the-track-data-into-a-data-frame" id="toc-import-the-track-data-into-a-data-frame" class="nav-link" data-scroll-target="#import-the-track-data-into-a-data-frame">Import the track data into a data frame</a></li>
   <li><a href="#plot-the-track-on-a-map" id="toc-plot-the-track-on-a-map" class="nav-link" data-scroll-target="#plot-the-track-on-a-map">Plot the track on a map</a></li>
   <li><a href="#examine-metadata" id="toc-examine-metadata" class="nav-link" data-scroll-target="#examine-metadata">Examine metadata</a></li>
@@ -391,7 +388,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#plotting-the-results-using-ggplot" id="toc-plotting-the-results-using-ggplot" class="nav-link" data-scroll-target="#plotting-the-results-using-ggplot">Plotting the results using ggplot</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><ul class="collapse"><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/edit/main/tutorials/r/4-matchup-satellite-data-to-track-locations.rmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/tutorials/r/4-matchup-satellite-data-to-track-locations.rmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
+<div class="toc-actions"><ul class="collapse"><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/edit/main/tutorials/r/4-matchup-satellite-data-to-track-locations.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/tutorials/r/4-matchup-satellite-data-to-track-locations.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -405,7 +402,7 @@ function googleTranslateElementInit() {
 
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Tutorials</li><li class="breadcrumb-item"><a href="../../tutorials/r/1-earthdatalogin.html">Tutorials in R</a></li><li class="breadcrumb-item"><a href="../../tutorials/r/4-matchup-satellite-data-to-track-locations.html">Get Points</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Matchup satellite data to track locations</h1>
 </div>
@@ -421,12 +418,6 @@ function googleTranslateElementInit() {
           </div>
   </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">March 1, 2024</p>
-    </div>
-  </div>
   
     
   </div>
@@ -438,7 +429,6 @@ function googleTranslateElementInit() {
 
 <section id="matchup-satellite-data-to-track-locations" class="level1">
 <h1>Matchup Satellite data to track locations</h1>
-<p>history | Modified March 2024</p>
 <section id="objective" class="level2">
 <h2 class="anchored" data-anchor-id="objective">Objective</h2>
 <p>This tutorial will demonstrate how to extract satellite data around a set of points defined by longitude, latitude, and time coordinates, like those produced by an animal telemetry tag, and ship track, or a glider track.</p>
@@ -448,7 +438,7 @@ function googleTranslateElementInit() {
 <ul>
 <li>Importing track data in csv file to data frame</li>
 <li>Plotting the latitude/longitude points onto a map</li>
-<li>Using rerddapXtraco function to extract satellite data from an ERDDAP data server along a track</li>
+<li>Using the <code>rerddapXtraco</code> function to extract satellite data from an ERDDAP data server along a track</li>
 <li>Plotting the satellite data onto a map</li>
 </ul>
 </section>
@@ -457,10 +447,10 @@ function googleTranslateElementInit() {
 <p><strong>Chlorophyll a concentration, the European Space Agency’s Ocean Colour Climate Change Initiative (OC-CCI) Monthly dataset v6.0</strong></p>
 <p>We’ll use the European Space Agency’s OC-CCI product (<a href="https://climate.esa.int/en/projects/ocean-colour/" class="uri">https://climate.esa.int/en/projects/ocean-colour/</a>) to obtain chlorophyll data. This is a merged product combining data from many ocean color sensors to create a long time series (1997-present).</p>
 <p><strong>Loggerhead turtle telemetry track data</strong></p>
-<p>The turtle was raised in captivity in Japan, then tagged and released on 05/04/2005 in the Central Pacific. Its tag transmitted for over 3 years and went all the way to the Southern tip of Baja California. This dataset has been subsampled to reduce the data requests needed for this tutorial from over 1200 to 25. The track data are stored in the data folder in this project folder.</p>
+<p>The turtle was raised in captivity in Japan, then tagged and released on 05/04/2005 in the Central Pacific. Its tag transmitted for over 3 years and went all the way to the Southern tip of Baja California. This data set has been subsampled to reduce the data requests needed for this tutorial from over 1200 to 25. The track data are stored in the data folder in this project folder.</p>
 </section>
-<section id="install-required-packages-and-load-libraries" class="level2">
-<h2 class="anchored" data-anchor-id="install-required-packages-and-load-libraries">Install required packages and load libraries</h2>
+<section id="install-and-load-packages" class="level2">
+<h2 class="anchored" data-anchor-id="install-and-load-packages">Install and load packages</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to check if pkgs are installed, and install any missing pkgs</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pkgTest <span class="ot">&lt;-</span> <span class="cf">function</span>(x)</span>
@@ -472,18 +462,17 @@ function googleTranslateElementInit() {
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Create list of required packages</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>list.of.packages <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"rerddap"</span>, <span class="st">"plotdap"</span>, <span class="st">"parsedate"</span>, <span class="st">"ggplot2"</span>, <span class="st">"rerddapXtracto"</span>,</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"date"</span>, <span class="st">"maps"</span>, <span class="st">"mapdata"</span>, <span class="st">"RColorBrewer"</span>,<span class="st">"viridis"</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Create list of installed packages</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>pkges <span class="ot">=</span> <span class="fu">installed.packages</span>()[,<span class="st">"Package"</span>]</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Install and load all required pkgs</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (pk <span class="cf">in</span> list.of.packages) {</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pkgTest</span>(pk)</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create list of required packages</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>list.of.packages <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"rerddap"</span>, <span class="st">"plotdap"</span>, <span class="st">"parsedate"</span>, <span class="st">"ggplot2"</span>, <span class="st">"rerddapXtracto"</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"date"</span>, <span class="st">"maps"</span>, <span class="st">"mapdata"</span>, <span class="st">"RColorBrewer"</span>,<span class="st">"viridis"</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Create list of installed packages</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>pkges <span class="ot">=</span> <span class="fu">installed.packages</span>()[,<span class="st">"Package"</span>]</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Install and load all required pkgs</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (pk <span class="cf">in</span> list.of.packages) {</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pkgTest</span>(pk)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="import-the-track-data-into-a-data-frame" class="level2">
@@ -527,17 +516,18 @@ function googleTranslateElementInit() {
 </div>
 <p>In this exercise, two different ways of extracting data from ERDDAP data server along a track of xyt points are demonstrated:</p>
 <ol type="1">
-<li>Using the <strong>rerddapXtracto</strong> package which was written specifically for this task</li>
+<li>Using the <code>rerddapXtracto</code> package which was written specifically for this task</li>
 <li>By manually constructing a URL with the data data request</li>
 </ol>
 <section id="extracting-xyt-data-using-the-rerddapxtracto-package" class="level3">
-<h3 class="anchored" data-anchor-id="extracting-xyt-data-using-the-rerddapxtracto-package">Extracting XYT data using the <strong>rerddapXtracto</strong> package</h3>
-<p>We will use the `<code>rxtracto</code> function of the <strong>rerddapXtracto</strong> package, which was written to simplify data extraction from ERDDAP servers.</p>
+<h3 class="anchored" data-anchor-id="extracting-xyt-data-using-the-rerddapxtracto-package">Extracting XYT data using the <code>rerddapXtracto</code> package</h3>
+<p>We will use the `<code>rxtracto</code> function of the <code>rerddapXtracto</code> package, which was written to simplify data extraction from ERDDAP servers.</p>
 <p><strong>Let’s use data from the monthly product of the OC-CCI datasets.</strong><br>
 The ERDDAP URL to the monthly product is below:<br>
 <a href="https://oceanwatch.pifsc.noaa.gov/erddap/griddap/esa-cci-chla-monthly-v6-0" class="uri">https://oceanwatch.pifsc.noaa.gov/erddap/griddap/esa-cci-chla-monthly-v6-0</a></p>
 <p><strong>A note on dataset selection</strong><br>
-We have preselected the dataset because we know it will work with this exercise. If you were selecting datasets on your own, you would want to check out the dataset to determine if its spatial and temporal coverages are suitable for your application. Following the link above you will find:</p>
+</p>
+<p>We have preselected the dataset because we know it will work with this exercise. If you were selecting datasets on your own, you would want to check out the dataset to determine if its spatial and temporal coveragea are suitable for your application. Following the link above you will find:</p>
 <p>The latitude range is -89.97916 to 89.97916 and the longitude range is 0.020833 to 359.97916, which covers the track latitude range of 23.72 to 41.77 and longitude range of 175.86 to 248.57.</p>
 <p>The time range is 1997-09-04 to 2023-12-01 (at the day of this writing), which covers the track time range of 2005-05-04 to 2008-08-16.</p>
 <p>You should also note the name of the variable you will be downloading. For this dataset it is “<strong>chlor_a</strong>”</p>
@@ -628,9 +618,9 @@ We have preselected the dataset because we know it will work with this exercise.
 <span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract satellite data using x, y, t coordinates from turtle track data</span></span>
 <span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>chl_track <span class="ot">&lt;-</span> <span class="fu">rxtracto</span>(dataInfo, </span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>                  <span class="at">parameter=</span>parameter, </span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>                  <span class="at">xcoord=</span>xcoords, <span class="at">ycoord=</span>ycoords, </span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>                  <span class="at">tcoord=</span>tcoords, <span class="at">xlen=</span>xlen, <span class="at">ylen=</span>ylen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>                      <span class="at">parameter=</span>parameter, </span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>                      <span class="at">xcoord=</span>xcoords, <span class="at">ycoord=</span>ycoords, </span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>                      <span class="at">tcoord=</span>tcoords, <span class="at">xlen=</span>xlen, <span class="at">ylen=</span>ylen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -754,13 +744,13 @@ attr(,"datasetid")
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Animate tracks</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>make180 <span class="ot">&lt;-</span> <span class="cf">function</span>(lon) {</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    ind <span class="ot">&lt;-</span> <span class="fu">which</span>(lon <span class="sc">&gt;</span> <span class="dv">180</span>)</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    lon[ind] <span class="ot">&lt;-</span> lon[ind] <span class="sc">-</span> <span class="dv">360</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>   <span class="fu">return</span>(lon)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  ind <span class="ot">&lt;-</span> <span class="fu">which</span>(lon <span class="sc">&gt;</span> <span class="dv">180</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  lon[ind] <span class="ot">&lt;-</span> lon[ind] <span class="sc">-</span> <span class="dv">360</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(lon)</span>
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plotTrack</span>(chl_track, <span class="fu">make180</span>(xcoords), ycoords, tcoords, <span class="at">plotColor =</span> <span class="st">'viridis'</span>,</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>                    <span class="at">animate =</span> <span class="cn">TRUE</span>, <span class="at">cumulative =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">animate =</span> <span class="cn">TRUE</span>, <span class="at">cumulative =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>NULL</code></pre>
 </div>
@@ -802,7 +792,7 @@ attr(,"datasetid")
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="images/ggplot_track-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="images/ggplot-track-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -830,15 +820,15 @@ attr(,"datasetid")
 <span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop through each turtle track data</span></span>
 <span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(turtle_df)[<span class="dv">1</span>]) {</span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>   <span class="co"># Create erddap URL by adding lat, lon, dates of each track point </span></span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>   url <span class="ot">&lt;-</span>  <span class="fu">paste</span>(erddap, <span class="st">"[("</span>, dates2[i], <span class="st">"):1:("</span>, dates2[i], <span class="st">")][("</span>, lat[i], <span class="st">"):1:("</span>, lat[i], <span class="st">")][("</span>, lon[i], <span class="st">"):1:("</span>, lon[i], <span class="st">")]"</span>, <span class="at">sep =</span> <span class="st">""</span>)  </span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>   </span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>   <span class="co"># Request and load satelite data from ERDDAP</span></span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>   new <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(url, <span class="at">skip=</span><span class="dv">2</span>, <span class="at">header =</span> <span class="cn">FALSE</span>) </span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>   </span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>   <span class="co"># Append the data</span></span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>   tot <span class="ot">&lt;-</span> <span class="fu">rbind</span>(tot, new)   </span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create erddap URL by adding lat, lon, dates of each track point </span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>  url <span class="ot">&lt;-</span>  <span class="fu">paste</span>(erddap, <span class="st">"[("</span>, dates2[i], <span class="st">"):1:("</span>, dates2[i], <span class="st">")][("</span>, lat[i], <span class="st">"):1:("</span>, lat[i], <span class="st">")][("</span>, lon[i], <span class="st">"):1:("</span>, lon[i], <span class="st">")]"</span>, <span class="at">sep =</span> <span class="st">""</span>)  </span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Request and load satelite data from ERDDAP</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>  new <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(url, <span class="at">skip=</span><span class="dv">2</span>, <span class="at">header =</span> <span class="cn">FALSE</span>) </span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Append the data</span></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>  tot <span class="ot">&lt;-</span> <span class="fu">rbind</span>(tot, new)   </span>
 <span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Delete the first row (default column names)</span></span>
@@ -868,7 +858,7 @@ attr(,"datasetid")
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="images/ggplot_track 2-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="images/ggplot-track-2-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -880,10 +870,10 @@ attr(,"datasetid")
 <p>First we will get a 3D block of chl data from the region and of the turtle track over the span of time the turtle was in that area. We will use the ‘xtracto_3d’ function of rerddapXtracto to get the data. This data call will take a few minutes.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>chl_grid <span class="ot">&lt;-</span> <span class="fu">rxtracto_3D</span>(dataInfo, </span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">parameter=</span>parameter, </span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">xcoord=</span><span class="fu">c</span>(<span class="fu">min</span>(xcoords),<span class="fu">max</span>(xcoords)), </span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">ycoord=</span><span class="fu">c</span>(<span class="fu">min</span>(ycoords),<span class="fu">max</span>(ycoords)), </span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">tcoord=</span><span class="fu">c</span>(<span class="fu">min</span>(tcoords),<span class="fu">max</span>(tcoords)))</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">parameter=</span>parameter, </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">xcoord=</span><span class="fu">c</span>(<span class="fu">min</span>(xcoords),<span class="fu">max</span>(xcoords)), </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">ycoord=</span><span class="fu">c</span>(<span class="fu">min</span>(ycoords),<span class="fu">max</span>(ycoords)), </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">tcoord=</span><span class="fu">c</span>(<span class="fu">min</span>(tcoords),<span class="fu">max</span>(tcoords)))</span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>chl_area <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(chl_grid<span class="sc">$</span>chlor_a) </span>
 <span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
@@ -897,17 +887,17 @@ attr(,"datasetid")
 <p>Now we we plot histograms of all the chlorphyll values in the area, and those of the turtle track. Since we subset the turtletrack, and only have 25 points for this subsampopled dataset the turtle histogram isn’t as useful as it would be with a larger dataset.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">as.data.frame</span>(chl_area)) <span class="sc">+</span> </span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x=</span>chl_area,<span class="at">y=</span><span class="fu">after_stat</span>(density),<span class="at">color =</span> <span class="st">"darkgray"</span>,<span class="at">fill=</span><span class="st">'Area'</span>),<span class="at">color=</span><span class="st">'black'</span>, <span class="at">bins=</span><span class="dv">50</span>) <span class="sc">+</span> </span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_histogram</span>(<span class="at">data=</span><span class="fu">as.data.frame</span>(chl_turtle), <span class="fu">aes</span>(<span class="at">x=</span>chl_turtle,<span class="at">y=</span><span class="fu">after_stat</span>(density),<span class="at">color=</span><span class="st">'green'</span>, <span class="at">fill=</span><span class="st">'Turtle'</span>),<span class="at">color=</span><span class="st">'black'</span>,<span class="at">bins=</span><span class="dv">50</span>, <span class="at">alpha=</span>.<span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">9</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span> </span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">15</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'Chlorophyll values'</span>,<span class="at">y=</span><span class="st">'Density'</span>) <span class="sc">+</span> </span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"darkgray"</span>,<span class="st">"green"</span>),<span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x=</span>chl_area,<span class="at">y=</span><span class="fu">after_stat</span>(density),<span class="at">color =</span> <span class="st">"darkgray"</span>,<span class="at">fill=</span><span class="st">'Area'</span>),<span class="at">color=</span><span class="st">'black'</span>, <span class="at">bins=</span><span class="dv">50</span>) <span class="sc">+</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">data=</span><span class="fu">as.data.frame</span>(chl_turtle), <span class="fu">aes</span>(<span class="at">x=</span>chl_turtle,<span class="at">y=</span><span class="fu">after_stat</span>(density),<span class="at">color=</span><span class="st">'green'</span>, <span class="at">fill=</span><span class="st">'Turtle'</span>),<span class="at">color=</span><span class="st">'black'</span>,<span class="at">bins=</span><span class="dv">50</span>, <span class="at">alpha=</span>.<span class="dv">4</span>) <span class="sc">+</span> </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">9</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span> </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">15</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'Chlorophyll values'</span>,<span class="at">y=</span><span class="st">'Density'</span>) <span class="sc">+</span> </span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"darkgray"</span>,<span class="st">"green"</span>),<span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="images/Plot histogram of chlorophyll-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="images/plot-histogram-of-chlorophyll-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1484,18 +1474,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
-      <a href="../../tutorials/r/3-extract-satellite-data-within-boundary.html" class="pagination-link" aria-label="Mask and Aggregate">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Mask and Aggregate</span>
-      </a>          
-  </div>
-  <div class="nav-page nav-page-next">
-      <a href="../../tutorials/python/1-earthaccess.html" class="pagination-link" aria-label="Search">
-        <span class="nav-page-text">Search</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
-  </div>
-</nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
@@ -1504,7 +1482,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>   
     <div class="nav-footer-center">
 <p><img src="https://github.com/nmfs-opensci/assets/blob/main/logo/nmfs-opensci-logo2.png?raw=true" alt="NMFS Open Science logo" style="width:150px"><br>NMFS Open Science (2023)</p>
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/edit/main/tutorials/r/4-matchup-satellite-data-to-track-locations.rmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/tutorials/r/4-matchup-satellite-data-to-track-locations.rmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/edit/main/tutorials/r/4-matchup-satellite-data-to-track-locations.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/tutorials/r/4-matchup-satellite-data-to-track-locations.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>

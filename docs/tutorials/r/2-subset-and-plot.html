@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Eli Holmes">
 
 <title>2024 EDMW Workshop 3B - Subset and Plot</title>
 <style>
@@ -193,7 +194,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Set-up</span></a>
+ <span class="menu-text">Set-up - To work on JupyterHub</span></a>
   </div>
 </li>
           <li class="sidebar-item sidebar-item-section">
@@ -219,8 +220,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/02-local-setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Local set-up</span></a>
+  <a href="../../content/02-local-setup-r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Local set-up - R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/02-local-setup-python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Local set-up - Python</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/02-git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Git-Authentication</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -310,12 +323,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Mask and Aggregate</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../tutorials/r/4-matchup-satellite-data-to-track-locations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Get Points</span></a>
-  </div>
-</li>
       </ul>
   </li>
           <li class="sidebar-item sidebar-item-section">
@@ -343,12 +350,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="../../tutorials/python/3-extract-satellite-data-within-boundary.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Mask and Aggregate</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../tutorials/python/4-matchup-satellite-data-to-track-locations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Get Points</span></a>
   </div>
 </li>
       </ul>
@@ -380,7 +381,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#crop-and-plot-multiple-netcdf-files" id="toc-crop-and-plot-multiple-netcdf-files" class="nav-link" data-scroll-target="#crop-and-plot-multiple-netcdf-files">Crop and plot multiple netCDF files</a></li>
   <li><a href="#reading-in-a-zarr-file" id="toc-reading-in-a-zarr-file" class="nav-link" data-scroll-target="#reading-in-a-zarr-file">Reading in a Zarr file</a></li>
   <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions">Conclusions</a></li>
-  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix">Appendix</a></li>
   </ul>
 <div class="toc-actions"><ul class="collapse"><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/edit/main/tutorials/r/2-subset-and-plot.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/tutorials/r/2-subset-and-plot.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
     </div>
@@ -405,6 +405,12 @@ function googleTranslateElementInit() {
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Eli Holmes </p>
+          </div>
+  </div>
     
   
     
@@ -427,7 +433,7 @@ Learning Objectives
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li>How to crop a single data file</li>
-<li>How to create a data cube with terra</li>
+<li>How to create a data cube with <code>terra</code></li>
 <li>How to crop a data cube to a box</li>
 </ol>
 </div>
@@ -446,25 +452,22 @@ Learning Objectives
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>earthdatalogin<span class="sc">::</span><span class="fu">edl_netrc</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Get the urls.</p>
+<p>Get the urls. The <code>results</code> object is a vector of urls pointing to our <code>netCDF</code> files in the cloud. Each <code>netCDF</code> file is circa 670Mb.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>short_name <span class="ot">&lt;-</span> <span class="st">'MUR-JPL-L4-GLOB-v4.1'</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>bbox <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">xmin=</span><span class="sc">-</span><span class="fl">73.5</span>, <span class="at">ymin=</span><span class="fl">33.5</span>, <span class="at">xmax=</span><span class="sc">-</span><span class="fl">43.5</span>, <span class="at">ymax=</span><span class="fl">43.5</span>) </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>bbox <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">xmin=</span><span class="sc">-</span><span class="fl">75.5</span>, <span class="at">ymin=</span><span class="fl">33.5</span>, <span class="at">xmax=</span><span class="sc">-</span><span class="fl">73.5</span>, <span class="at">ymax=</span><span class="fl">35.5</span>) </span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>tbox <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"2020-01-16"</span>, <span class="st">"2020-12-16"</span>)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">edl_search</span>(</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">short_name =</span> short_name,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">version =</span> <span class="st">"4.1"</span>,</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">temporal =</span> tbox,</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">bounding_box =</span> <span class="fu">paste</span>(bbox,<span class="at">collapse=</span><span class="st">","</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> earthdatalogin<span class="sc">::</span><span class="fu">edl_search</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">short_name =</span> short_name,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="st">"4.1"</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">temporal =</span> tbox, </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">bounding_box =</span> <span class="fu">paste</span>(bbox,<span class="at">collapse=</span><span class="st">","</span>)</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 336</code></pre>
 </div>
-</div>
-<p><code>results</code> is a vector of urls pointing to our netCDF files in the cloud. Each netCDF file is ca 670Mb.</p>
-<div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>results[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc"
@@ -475,15 +478,17 @@ Learning Objectives
 </section>
 <section id="crop-and-plot-one-netcdf-file" class="level2">
 <h2 class="anchored" data-anchor-id="crop-and-plot-one-netcdf-file">Crop and plot one netCDF file</h2>
-<p>Each MUR SST netCDF file is large so I do not want to download. Instead I will use <code>terra::rast()</code> to do subset the data on the server side. <code>vsi = TRUE</code> is letting it know that these are files in the cloud and to use GDAL functionality for that type of resource.</p>
+<p>Each MUR SST <code>netCDF</code> file is large so I do not want to download. Instead I will use <code>terra::rast()</code> to do subset the data on the server side. <code>vsi = TRUE</code> is letting function know that these are files in the cloud and to use GDAL functionality for that type of resource.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(results[<span class="dv">1</span>], <span class="at">vsi=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Crop to a small region.</p>
+<p><em>Getting errors? Scroll below to the troubleshooting section.</em></p>
+<p>Crop to a very small region.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">ext</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">75.5</span>, <span class="sc">-</span><span class="fl">73.5</span>,  <span class="fl">33.5</span>, <span class="fl">35.5</span> ))</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>rc <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(ras, e)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>rc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># note order of terms is different than in bbox!!</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">ext</span>(<span class="fu">c</span>(<span class="at">xmin=</span><span class="sc">-</span><span class="fl">75.5</span>, <span class="at">xmax=</span><span class="sc">-</span><span class="fl">73.5</span>,  <span class="at">ymin=</span><span class="fl">33.5</span>, <span class="at">ymax=</span><span class="fl">35.5</span> ))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>rc <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(ras, e)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>rc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>class       : SpatRaster 
 dimensions  : 200, 200, 6  (nrow, ncol, nlyr)
@@ -497,13 +502,13 @@ max values  :      298.954,        0.40,    2,        1.28,         128,       3
 time        : 2020-01-16 09:00:00 UTC </code></pre>
 </div>
 </div>
-<p>Plot.</p>
+<p>Plot:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rc[[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="2-subset-and-plot_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2-subset-and-plot_files/figure-html/plot_MUR-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -511,32 +516,64 @@ time        : 2020-01-16 09:00:00 UTC </code></pre>
 </section>
 <section id="crop-and-plot-multiple-netcdf-files" class="level2">
 <h2 class="anchored" data-anchor-id="crop-and-plot-multiple-netcdf-files">Crop and plot multiple netCDF files</h2>
-<p>We can send multiple urls to terra.</p>
+<p>We can send multiple urls to <code>terra</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ras_all <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(results[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)], <span class="at">vsi =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ras_all <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(results[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)], <span class="at">vsi =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>ras_all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+dimensions  : 17999, 36000, 24  (nrow, ncol, nlyr)
+resolution  : 0.01, 0.01  (x, y)
+extent      : -179.995, 180.005, -89.995, 89.995  (xmin, xmax, ymin, ymax)
+coord. ref. : lon/lat WGS 84 
+sources     : 20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc:analysed_sst  
+              20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc:analysis_error  
+              20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc:mask  
+              ... and 21 more source(s)
+varnames    : analysed_sst (analysed sea surface temperature) 
+              analysis_error (estimated error standard deviation of analysed_sst) 
+              mask (sea/land field composite mask) 
+              ...
+names       : analysed_sst, analy~error, mask, sea_i~ction, dt_1km_data, sst_anomaly, ... 
+unit        :       kelvin,      kelvin,     ,            ,       hours,      kelvin, ... 
+time        : 2020-01-16 09:00:00 to 2020-01-19 09:00:00 UTC </code></pre>
 </div>
-<p>Crop to a small extent. The numbers are lons and lats.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">ext</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">75.5</span>, <span class="sc">-</span><span class="fl">73.5</span>,  <span class="fl">33.5</span>, <span class="fl">35.5</span> ))</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>rc_all <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(ras_all, e)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>rc_sst <span class="ot">&lt;-</span> rc_all[<span class="st">"analysed_sst"</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Convert Kelvin to Celcius.</p>
+<p>Crop to a small extent. Note order of terms is different than in bbox! Since we will only plot sst for this example, it is faster to first select our variable of interest.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>rc_sst <span class="ot">&lt;-</span> rc_sst <span class="sc">-</span> <span class="fl">273.15</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">ext</span>(<span class="fu">c</span>(<span class="at">xmin=</span><span class="sc">-</span><span class="fl">75.5</span>, <span class="at">xmax=</span><span class="sc">-</span><span class="fl">73.5</span>,  <span class="at">ymin=</span><span class="fl">33.5</span>, <span class="at">ymax=</span><span class="fl">35.5</span> ))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>ras_sst <span class="ot">&lt;-</span> ras_all[<span class="st">"analysed_sst"</span>,]</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>rc_sst <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crop</span>(ras_sst, e)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>rc_sst</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+dimensions  : 200, 200, 4  (nrow, ncol, nlyr)
+resolution  : 0.01, 0.01  (x, y)
+extent      : -75.495, -73.495, 33.505, 35.505  (xmin, xmax, ymin, ymax)
+coord. ref. : lon/lat WGS 84 
+source(s)   : memory
+varname     : analysed_sst (analysed sea surface temperature) 
+names       : analysed_sst, analysed_sst, analysed_sst, analysed_sst 
+min values  :      290.656,      290.316,      289.456,      289.216 
+max values  :      298.954,      298.869,      298.662,      298.119 
+unit        :       kelvin,       kelvin,       kelvin,       kelvin 
+time        : 2020-01-16 09:00:00 to 2020-01-19 09:00:00 UTC </code></pre>
+</div>
+</div>
+<p>Convert Kelvin to Celsius.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>rc_sst <span class="ot">&lt;-</span> rc_sst <span class="sc">-</span> <span class="fl">273.15</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now plot. We will set the range so it is the same across plots and clean up the titles to be just day without time.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>titles <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">time</span>(rc_sst) <span class="sc">|&gt;</span> lubridate<span class="sc">::</span><span class="fu">date</span>() <span class="sc">|&gt;</span> <span class="fu">as.character</span>()</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  rc_sst, </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">range =</span> <span class="fu">c</span>(<span class="dv">16</span>, <span class="dv">26</span>),</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> titles</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>titles <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">time</span>(<span class="at">x =</span> rc_sst) <span class="sc">|&gt;</span> lubridate<span class="sc">::</span><span class="fu">date</span>() <span class="sc">|&gt;</span> <span class="fu">as.character</span>()</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rc_sst, </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">range =</span> <span class="fu">c</span>(<span class="dv">16</span>, <span class="dv">26</span>),</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> titles)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="2-subset-and-plot_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2-subset-and-plot_files/figure-html/plot_four_MUR-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -544,98 +581,52 @@ time        : 2020-01-16 09:00:00 UTC </code></pre>
 </section>
 <section id="reading-in-a-zarr-file" class="level2">
 <h2 class="anchored" data-anchor-id="reading-in-a-zarr-file">Reading in a Zarr file</h2>
-<p>https://www.r-bloggers.com/2022/09/reading-zarr-files-with-r-package-stars/</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stars)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Loading required package: abind</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Loading required package: sf</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Linking to GEOS 3.10.2, GDAL 3.4.3, PROJ 8.2.0; sf_use_s2() is TRUE</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>dsn <span class="ot">=</span> <span class="st">'ZARR:"/vsicurl/https://ncsa.osn.xsede.org/Pangeo/pangeo-forge/gpcp-feedstock/gpcp.zarr"'</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>bounds <span class="ot">=</span> <span class="fu">c</span>(<span class="at">longitude =</span> <span class="st">"lon_bounds"</span>, <span class="at">latitude =</span> <span class="st">"lat_bounds"</span>)</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> <span class="fu">read_mdim</span>(dsn, <span class="at">bounds =</span> bounds)</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<p>Reading in Zarr files is easy in Python with <code>xarray</code> but currently this is difficult in R. See the <code>gdalcubes.qmd</code> file in the <code>tutorials/r</code> directory. However we can open individual files from a Zarr file.</p>
 <p>Read one file.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://mur-sst.s3.us-west-2.amazonaws.com/zarr-v1"</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>prefixes <span class="ot">&lt;-</span> <span class="st">'ZARR:</span><span class="sc">\"</span><span class="st">/vsicurl/'</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>slice <span class="ot">&lt;-</span> <span class="st">'</span><span class="sc">\"</span><span class="st">:/analysed_sst:0"'</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>addr <span class="ot">&lt;-</span> <span class="fu">paste0</span>(prefixes, url, slice)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> terra<span class="sc">::</span><span class="fu">rast</span>(addr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://mur-sst.s3.us-west-2.amazonaws.com/zarr-v1"</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>prefixes <span class="ot">&lt;-</span> <span class="st">'ZARR:</span><span class="sc">\"</span><span class="st">/vsicurl/'</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>slice <span class="ot">&lt;-</span> <span class="st">'</span><span class="sc">\"</span><span class="st">:/analysed_sst:0"'</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>addr <span class="ot">&lt;-</span> <span class="fu">paste0</span>(prefixes, url, slice)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> terra<span class="sc">::</span><span class="fu">rast</span>(addr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Read multiple files.</p>
+<p>Plot</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>vrt <span class="ot">&lt;-</span> <span class="cf">function</span>(i) {</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  prefix <span class="ot">&lt;-</span>  <span class="st">'ZARR:</span><span class="sc">\"</span><span class="st">/vsicurl/'</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  url <span class="ot">&lt;-</span> <span class="st">"https://mur-sst.s3.us-west-2.amazonaws.com/zarr-v1"</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  slice <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">'</span><span class="sc">\"</span><span class="st">:/analysed_sst:'</span>,i,<span class="st">'"'</span>)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(prefix, url, slice)</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="fu">vrt</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">2</span>))</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>y <span class="sc">|&gt;</span> terra<span class="sc">::</span><span class="fu">crop</span>(e) <span class="sc">|&gt;</span> <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">ext</span>(<span class="fu">c</span>(<span class="at">xmin=</span><span class="sc">-</span><span class="fl">75.5</span>, <span class="at">xmax=</span><span class="sc">-</span><span class="fl">73.5</span>,  <span class="at">ymin=</span><span class="fl">33.5</span>, <span class="at">ymax=</span><span class="fl">35.5</span> ))</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>y <span class="sc">|&gt;</span> terra<span class="sc">::</span><span class="fu">crop</span>(e) <span class="sc">|&gt;</span> terra<span class="sc">::</span><span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="2-subset-and-plot_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2-subset-and-plot_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+<p>Read multiple files.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gdalcubes)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>data_gd <span class="ot">&lt;-</span> gdalcubes<span class="sc">::</span><span class="fu">stack_cube</span>(<span class="fu">vrt</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">2</span>), <span class="at">datetime_values =</span> <span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">"2022-01-01"</span>, <span class="st">"2022-01-02"</span>,<span class="st">"2022-01-03"</span>)))</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#extent = list(left=-75.5, right=-73.5, bottom=33.5, top=35.5, t0="2022-01-01", t1="2022-01-02")</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>extent <span class="ot">=</span> <span class="fu">list</span>(<span class="at">left=</span><span class="sc">-</span><span class="fl">75.5</span>, <span class="at">right=</span><span class="sc">-</span><span class="fl">73.5</span>, <span class="at">bottom=</span><span class="fl">33.5</span>, <span class="at">top=</span><span class="fl">35.5</span>)</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> data_gd <span class="sc">|&gt;</span> gdalcubes<span class="sc">::</span><span class="fu">crop</span>(extent) <span class="sc">|&gt;</span> </span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    gdalcubes<span class="sc">::</span><span class="fu">aggregate_time</span>(<span class="at">dt=</span><span class="st">"P2D"</span>, <span class="at">method=</span><span class="st">"mean"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(<span class="at">col =</span> viridisLite<span class="sc">::</span><span class="fu">viridis</span>(<span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>vrt <span class="ot">&lt;-</span> <span class="cf">function</span>(i) {</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  prefix <span class="ot">&lt;-</span>  <span class="st">'ZARR:</span><span class="sc">\"</span><span class="st">/vsicurl/'</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  url <span class="ot">&lt;-</span> <span class="st">"https://mur-sst.s3.us-west-2.amazonaws.com/zarr-v1"</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  slice <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">'</span><span class="sc">\"</span><span class="st">:/analysed_sst:'</span>,i,<span class="st">'"'</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(prefix, url, slice)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="fu">vrt</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">3</span>))</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">ext</span>(<span class="fu">c</span>(<span class="at">xmin=</span><span class="sc">-</span><span class="fl">75.5</span>, <span class="at">xmax=</span><span class="sc">-</span><span class="fl">73.5</span>,  <span class="at">ymin=</span><span class="fl">33.5</span>, <span class="at">ymax=</span><span class="fl">35.5</span> ))</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>y <span class="sc">|&gt;</span> terra<span class="sc">::</span><span class="fu">crop</span>(e) <span class="sc">|&gt;</span> terra<span class="sc">::</span><span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2-subset-and-plot_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
 </div>
 </section>
 <section id="conclusions" class="level2">
 <h2 class="anchored" data-anchor-id="conclusions">Conclusions</h2>
-<p>Some really cool things just happened here! You connected to multiple remote-sensing files (netCDF) in the cloud and worked with them without directly downloading them.</p>
-</section>
-<section id="appendix" class="level2">
-<h2 class="anchored" data-anchor-id="appendix">Appendix</h2>
-<p>Alternatively we might get our bounding box from a shape. Here I get a bounding box around Indonesia. I am going to use a smaller dataset, the OI SST dataset.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>oi <span class="ot">&lt;-</span> earthdatalogin<span class="sc">::</span><span class="fu">edl_search</span>(</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">short_name =</span> <span class="st">"AVHRR_OI-NCEI-L4-GLOB-v2.1"</span>,</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">version =</span> <span class="st">"2.1"</span>,</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">temporal =</span> <span class="fu">c</span>(<span class="st">"2020-01-16"</span>, <span class="st">"2020-01-17"</span>)</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>earthdatalogin<span class="sc">::</span><span class="fu">edl_netrc</span>()</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>io_ras <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="at">x =</span> oi[<span class="dv">1</span>], <span class="at">vsi=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Get the shape, then bounding box, then plot.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'tmap'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:datasets':
-
-    rivers</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(World)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>ind_shp <span class="ot">&lt;-</span> World<span class="sc">$</span>geometry[World<span class="sc">$</span>name <span class="sc">==</span> <span class="st">"Indonesia"</span>]</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span>sf<span class="sc">::</span><span class="fu">st_bbox</span>( ind_shp )</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>(io_ras[<span class="st">'analysed_sst'</span>] <span class="sc">-</span> <span class="fl">273.15</span>) <span class="sc">|&gt;</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">crop</span>(ind) <span class="sc">|&gt;</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="fu">polys</span>( ind_shp <span class="sc">|&gt;</span> <span class="fu">vect</span>(), <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="2-subset-and-plot_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
+<p>Some really cool things just happened here! You connected to multiple remote-sensing files (<code>netCDF</code>) in the cloud and worked with them without directly downloading them.</p>
 
 
 </section>

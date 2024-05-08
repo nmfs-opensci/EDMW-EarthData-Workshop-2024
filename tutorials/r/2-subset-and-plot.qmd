@@ -1,13 +1,6 @@
 ---
 title: Subset and Plot
-author: NOAA CoastWatch, NOAA Openscapes
-date: "`r paste0(Last run format(Sys.Date(), format='%B %d %Y')) `"
-output:
-  md_document:
-    variant: gfm
-editor_options: 
-  markdown: 
-    wrap: sentence
+author: Eli Holmes
 ---
 
 ::: {.callout-note title="Learning Objectives"}
@@ -23,8 +16,6 @@ editor_options:
 library(earthdatalogin)
 library(lubridate)
 library(terra)
-library(tmap)
-library(gdalcubes)
 ```
 
 ## Get a vector of urls to our nc files
@@ -37,12 +28,12 @@ earthdatalogin::edl_netrc()
 
 Get the urls. The `results` object is a vector of urls pointing to our `netCDF` files in the cloud. Each `netCDF` file is circa 670Mb.
 
-```{r}
+```{r results_MUR}
 short_name <- 'MUR-JPL-L4-GLOB-v4.1'
-bbox <- c(xmin=-73.5, ymin=33.5, xmax=-43.5, ymax=43.5) 
+bbox <- c(xmin=-75.5, ymin=33.5, xmax=-73.5, ymax=35.5) 
 tbox <- c("2020-01-16", "2020-12-16")
 
-results <- edl_search(
+results <- earthdatalogin::edl_search(
   short_name = short_name,
   version = "4.1",
   temporal = tbox, 
@@ -56,49 +47,23 @@ results[1:3]
 
 Each MUR SST `netCDF` file is large so I do not want to download. Instead I will use `terra::rast()` to do subset the data on the server side. `vsi = TRUE` is letting function know that these are files in the cloud and to use GDAL functionality for that type of resource.
 
-```{r}
+```{r get_one_MUR}
 ras <- terra::rast(results[1], vsi=TRUE)
 ```
 
-::: {.callout-note title="Troubleshooting 1"}
-If you get the following error:
+*Getting errors? Scroll below to the troubleshooting section.*
 
-> Warning: Opening a /vsi file with the netCDF driver requires Linux userfaultfd to be available. Or you may set the GDAL_SKIP=netCDF configuration option to force the use of the HDF5 driver. (GDAL error 1)
+Crop to a very small region.
 
-This is an issue with the [GDAL installation](https://developers.planet.com/docs/integrations/qgis/install-qgis-gdal/). 
-:::
-
-::: {.callout-note title="Troubleshooting 2"}
-If you get the following error:
-
-> Error: [rast] file does not exist: /vsicurl/https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20200116090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc
-
-It is likely because you do not have the End User Licence Agreement (EULA)/permissions to use that data set or are not properly logged in usig `earthdatalogin::edl_netrc()`.
-:::
-
-Crop to a small region.
-
-```{r, echo = FALSE}
-# chunk time check
-start.time <- Sys.time() 
-```
-
-```{r}
-e <- terra::ext(bbox) # c(-75.5, -73.5,  33.5, 35.5 ))
+```{r crop_MUR}
+# note order of terms is different than in bbox!!
+e <- terra::ext(c(xmin=-75.5, xmax=-73.5,  ymin=33.5, ymax=35.5 ))
 rc <- terra::crop(ras, e)
 rc
 ```
 
-```{r, echo = FALSE}
-# chunk time check
-end.time <- Sys.time()
-time.taken <- as.numeric(round(end.time - start.time,2))
-cat(paste0("> FYI: the above code chunk took ", time.taken, " minutes. "))
-```
-
 Plot:
-
-```{r}
+```{r plot_MUR}
 plot(rc[[c(1, 2)]])
 ```
 
@@ -107,18 +72,17 @@ plot(rc[[c(1, 2)]])
 
 We can send multiple urls to `terra`. 
 
-```{r}
+```{r get_four_MUR}
 ras_all <- terra::rast(results[c(1:4)], vsi = TRUE)
 ras_all
 ```
 
-Crop to a small extent. The `bbox` numbers are longitudes and latitudes.
+Crop to a small extent. Note order of terms is different than in bbox! Since we will only plot sst for this example, it is faster to first select our variable of interest.
 
-```{r}
-e <- terra::ext(bbox) # c(-75.5, -73.5,  33.5, 35.5 ))
-rc_all <- terra::crop(ras_all, e)
-rc_all
-rc_sst <- rc_all["analysed_sst",]
+```{r crop_four_MUR}
+e <- terra::ext(c(xmin=-75.5, xmax=-73.5,  ymin=33.5, ymax=35.5 ))
+ras_sst <- ras_all["analysed_sst",]
+rc_sst <- terra::crop(ras_sst, e)
 rc_sst
 ```
 
@@ -126,12 +90,11 @@ Convert Kelvin to Celsius.
 
 ```{r}
 rc_sst <- rc_sst - 273.15
-rc_sst
 ```
 
 Now plot. We will set the range so it is the same across plots and clean up the titles to be just day without time.
 
-```{r}
+```{r plot_four_MUR}
 titles <- terra::time(x = rc_sst) |> lubridate::date() |> as.character()
 plot(rc_sst, 
      range = c(16, 26),
@@ -140,39 +103,11 @@ plot(rc_sst,
 
 ## Reading in a Zarr file
 
-> https://www.r-bloggers.com/2022/09/reading-zarr-files-with-r-package-stars/
-
-> "`Zarr` is a data format; it does not come in a single file as NetCDF or HDF5 does but as a directory with chunks of data in compressed files and metadata in JSON files. Zarr was developed in the Python numpy and xarray communities, and was quickly taken up by the Pangeo community. A Python-independent specification of Zarr (in progress, V3) is found [here](https://zarr-specs.readthedocs.io/en/latest/).
-
-> "[GDAL](https://gdal.org/) has a [Zarr driver](https://gdal.org/drivers/raster/zarr.html), and can read single (spatial, raster) slices without time reference through its classic [raster API](https://gdal.org/api/index.html#raster-api), and full time-referenced arrays through its newer multidimensional array API. In this blog post we show how these can be used through R and package stars for raster and vector data cubes. We will start with an attempt to reproduce what Ryan Abernathey did with Python, xarray and geopandas..."
-
-```{r eval=FALSE}
-library(stars)
-## Loading required package: abind
-## Loading required package: sf
-## Linking to GEOS 3.10.2, GDAL 3.4.3, PROJ 8.2.0; sf_use_s2() is TRUE
-dsn = 'ZARR:"/vsicurl/https://ncsa.osn.xsede.org/Pangeo/pangeo-forge/gpcp-feedstock/gpcp.zarr"'
-bounds = c(longitude = "lon_bounds", latitude = "lat_bounds")
-r = stars::read_mdim(dsn, bounds = bounds)
-r
-```
-::: {.callout-note title="Troubleshooting 1"}
-If you get the following error:
-
-> `r = stars::read_mdim(dsn, bounds = bounds)`
-> Warning: GDAL Error 1: Decompressor blosc not handledWarning: GDAL Error 1: Decompressor blosc not handledWarning: GDAL Error 1: Decompressor blosc not handledWarning: GDAL Error 1: Decompressor blosc not handledWarning: GDAL Error 1: Decompressor blosc not handledWarning: GDAL Error 1: Decompressor blosc not handledWarning: GDAL Error 1: Decompressor blosc not handledError: no array names found
-
-Not sure...
-:::
+Reading in Zarr files is easy in Python with `xarray` but currently this is difficult in R. See the `gdalcubes.qmd` file in the `tutorials/r` directory. However we can open individual files from a Zarr file. 
 
 Read one file.
 
-```{r, echo = FALSE}
-# chunk time check
-start.time <- Sys.time() 
-```
-
-```{r}
+```{r read_one_Zarr}
 url <- "https://mur-sst.s3.us-west-2.amazonaws.com/zarr-v1"
 prefixes <- 'ZARR:\"/vsicurl/'
 slice <- '\":/analysed_sst:0"'
@@ -180,20 +115,11 @@ addr <- paste0(prefixes, url, slice)
 y = terra::rast(addr)
 ```
 
-```{r, echo = FALSE}
-# chunk time check
-end.time <- Sys.time()
-time.taken <- as.numeric(round(end.time - start.time,2))
-cat(paste0("> FYI: the above code chunk took ", time.taken, " minutes. "))
+Plot
+```{r}
+e <- terra::ext(c(xmin=-75.5, xmax=-73.5,  ymin=33.5, ymax=35.5 ))
+y |> terra::crop(e) |> terra::plot()
 ```
-
-::: {.callout-note title="Troubleshooting 2"}
-If you get the following error:
-
-> Error: [rast] file does not exist: ZARR:"/vsicurl/https://mur-sst.s3.us-west-2.amazonaws.com/zarr-v1":/analysed_sst:0"
-
-It is likely because you do not have the End User Licence Agreement (EULA)/permissions to use that data set or are not properly logged in using `earthdatalogin::edl_netrc()`. 
-:::
 
 Read multiple files.
 
@@ -206,79 +132,13 @@ vrt <- function(i) {
 }
 ```
 
-```{r, echo = FALSE}
-# chunk time check
-start.time <- Sys.time() 
-```
-
 ```{r}
-y <- terra::rast(vrt(0:2))
-y |> terra::crop(e) |> plot()
-y
+y <- terra::rast(vrt(0:3))
+e <- terra::ext(c(xmin=-75.5, xmax=-73.5,  ymin=33.5, ymax=35.5 ))
+y |> terra::crop(e) |> terra::plot()
 ```
-
-```{r, echo = FALSE}
-# chunk time check
-end.time <- Sys.time()
-time.taken <- as.numeric(round(end.time - start.time,2))
-cat(paste0("> FYI: the above code chunk took ", time.taken, " minutes. "))
-```
-
-```{r eval=FALSE}
-library(gdalcubes)
-data_gd <- gdalcubes::stack_cube(vrt(0:2), datetime_values = as.Date(c("2022-01-01", "2022-01-02","2022-01-03")))
-#extent = list(left=-75.5, right=-73.5, bottom=33.5, top=35.5, t0="2022-01-01", t1="2022-01-02")
-extent = list(left=-75.5, right=-73.5, bottom=33.5, top=35.5)
-test <- data_gd |> 
-  gdalcubes::crop(extent) |> 
-  gdalcubes::aggregate_time(dt="P2D", method="mean") |> 
-  plot(col = viridisLite::viridis(10))
-```
-
-::: {.callout-note title="Troubleshooting"}
-If you get the following error:
-
-> Error in seq.default(zlim[1], zlim[2], length.out = nbreaks) : 'from' must be a finite number
-
-Not sure... this error happened in dhub!
-:::
 
 ## Conclusions
 
 Some really cool things just happened here! You connected to multiple remote-sensing files (`netCDF`) in the cloud and worked with them without directly downloading them.
 
-## Appendix
-
-Alternatively we might get our bounding box from a shape. Here I get a bounding box around Indonesia. I am going to use a smaller dataset, the OI SST dataset.
-
-```{r}
-oi <- earthdatalogin::edl_search(
-  short_name = "AVHRR_OI-NCEI-L4-GLOB-v2.1",
-  version = "2.1",
-  temporal = c("2020-01-16", "2020-01-17")
-)
-earthdatalogin::edl_netrc()
-io_ras <- terra::rast(x = oi[1], vsi=TRUE)
-io_ras
-```
-
-Get the shape, then bounding box, then plot.
-
-```{r}
-library(tmap)
-data(World)
-ind_shp <- World$geometry[World$name == "Indonesia"]
-ind <- sf::st_bbox(ind_shp)
-(io_ras['analysed_sst'] - 273.15) |>
-  crop(ind) |>
-  plot()
-polys( ind_shp |> vect(), "blue")
-```
-
-::: {.callout-note title="Troubleshooting"}
-If you get the following error:
-
-> Error in (function (cond): error in evaluating the argument 'x' in selecting a method for function 'plot': is.cube(cube) is not TRUE
-
-Not sure... this error happened in dhub!
-:::
