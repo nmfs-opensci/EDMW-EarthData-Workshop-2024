@@ -5,6 +5,7 @@ project:
     - "*.*"
     - "!tutorials/python-notebooks/*.ipynb"
     - "!tutorials/r/gdalcubes.qmd"
+    - "!tutorials/r/05-r-geospatial.qmd"
 
 execute:
   freeze: auto
@@ -39,8 +40,12 @@ website:
               href: content/02-rstudio.qmd
             - text: Earthdata login
               href: content/02-earthdata.md
-            - text: Local set-up
-              href: content/02-local-setup.qmd
+            - text: Local set-up - R
+              href: content/02-local-setup-r.qmd
+            - text: Local set-up - Python
+              href: content/02-local-setup-python.qmd
+            - text: Git-Authentication
+              href: content/02-git.md
             - text: Git-JupyterLab
               href: content/02-git-jupyter.md
             - text: Git-RStudio
@@ -65,7 +70,9 @@ website:
               - text: Mask and Aggregate
                 href: tutorials/r/3-extract-satellite-data-within-boundary.qmd
               - text: Get Points
-                href: tutorials/r/4-matchup-satellite-data-to-track-locations.rmd
+                href: tutorials/r/4-matchup-satellite-data-to-track-locations.qmd
+              - text: "Bonus: Geospatial Data"
+                href: tutorials/r/5-r-geospatial.qmd
           - section: "Tutorials in Python"
             contents:
               - text: Search
