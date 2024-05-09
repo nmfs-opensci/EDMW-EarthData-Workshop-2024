@@ -375,11 +375,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#load-packages" id="toc-load-packages" class="nav-link active" data-scroll-target="#load-packages">Load packages</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#terminology" id="toc-terminology" class="nav-link" data-scroll-target="#terminology">Terminology</a></li>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
+  <li><a href="#load-required-packages" id="toc-load-required-packages" class="nav-link" data-scroll-target="#load-required-packages">Load Required Packages</a></li>
   <li><a href="#get-a-vector-of-urls-to-our-nc-files" id="toc-get-a-vector-of-urls-to-our-nc-files" class="nav-link" data-scroll-target="#get-a-vector-of-urls-to-our-nc-files">Get a vector of urls to our nc files</a></li>
   <li><a href="#crop-and-plot-one-netcdf-file" id="toc-crop-and-plot-one-netcdf-file" class="nav-link" data-scroll-target="#crop-and-plot-one-netcdf-file">Crop and plot one netCDF file</a></li>
   <li><a href="#crop-and-plot-multiple-netcdf-files" id="toc-crop-and-plot-multiple-netcdf-files" class="nav-link" data-scroll-target="#crop-and-plot-multiple-netcdf-files">Crop and plot multiple netCDF files</a></li>
-  <li><a href="#reading-in-a-zarr-file" id="toc-reading-in-a-zarr-file" class="nav-link" data-scroll-target="#reading-in-a-zarr-file">Reading in a Zarr file</a></li>
+  <li><a href="#reading-in-a-zarr-file" id="toc-reading-in-a-zarr-file" class="nav-link" data-scroll-target="#reading-in-a-zarr-file">Reading in a <code>Zarr</code> file</a></li>
   <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions">Conclusions</a></li>
   </ul>
 <div class="toc-actions"><ul class="collapse"><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/edit/main/tutorials/r/2-subset-and-plot.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/tutorials/r/2-subset-and-plot.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
@@ -438,8 +441,26 @@ Learning Objectives
 </ol>
 </div>
 </div>
-<section id="load-packages" class="level2">
-<h2 class="anchored" data-anchor-id="load-packages">Load packages</h2>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>In this example, we will utilize the <code>earthdatalogin</code> R package to retrieve, subset, and crop sea surface temperature data as a file and as a datacube from <a href="https://search.earthdata.nasa.gov/search">NASA Earthdata search</a>. The <code>earthdatalogin</code> R package simplifies the process of discovering and accessing NASA Earth science data.</p>
+<p>For more on <code>earthdatalogin</code> visit the <a href="https://github.com/boettiger-lab/earthdatalogin/"><code>earthdatalogin</code> GitHub</a> page and/or the <a href="https://boettiger-lab.github.io/earthdatalogin/"><code>earthdatalogin</code> documentation</a> site. Be aware that <code>earthdatalogin</code> is under active development and that we are using the development version on GitHub.</p>
+</section>
+<section id="terminology" class="level2">
+<h2 class="anchored" data-anchor-id="terminology">Terminology</h2>
+<ul>
+<li><strong><code>Zarr</code> files</strong>: is a community project to develop specifications and software for storage of large N-dimensional typed arrays, also commonly known as tensors. A particular focus of Zarr is to provide support for storage using distributed systems like cloud object stores, and to enable efficient I/O for parallel computing applications. Learn more <a href="https://zarr.dev/">here</a>.</li>
+<li><strong>Open Data Cube (ODC)</strong>: is an Open Source Geospatial Data Management and Analysis Software project that helps you harness the power of Satellite data. At its core, the ODC is a set of Python libraries and PostgreSQL database that helps you work with geospatial raster data. The ODC seeks to increase the value and impact of global Earth observation satellite data by providing an open and freely accessible exploitation architecture. Learn more <a href="https://www.opendatacube.org/">here</a>.</li>
+</ul>
+</section>
+<section id="prerequisites" class="level2">
+<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
+<p>The tutorials today can be run with the guest Earthdata Login that is in <code>earthdatalogin</code>. However, if you will be using the NASA Earthdata portal more regularly, please register for an Earthdata Login account. Please <a href="https://urs.earthdata.nasa.gov" class="uri">https://urs.earthdata.nasa.gov</a> to register and manage your Earthdata Login account. This account is free to create and only takes a moment to set up.</p>
+</section>
+<section id="load-required-packages" class="level2">
+<h2 class="anchored" data-anchor-id="load-required-packages">Load Required Packages</h2>
+<p>We are using the JupyterHub and all necessary packages are already installed for you.</p>
+<p><em>Note: See the set-up tab (in left nav bar) for instructions on getting set up on your own computer, but be aware that it is common to run into trouble getting GDAL set up properly to handle netCDF files. Using a Docker image (and Python) is often less aggravating.</em></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(earthdatalogin)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
@@ -580,8 +601,8 @@ time        : 2020-01-16 09:00:00 to 2020-01-19 09:00:00 UTC </code></pre>
 </div>
 </section>
 <section id="reading-in-a-zarr-file" class="level2">
-<h2 class="anchored" data-anchor-id="reading-in-a-zarr-file">Reading in a Zarr file</h2>
-<p>Reading in Zarr files is easy in Python with <code>xarray</code> but currently this is difficult in R. See the <code>gdalcubes.qmd</code> file in the <code>tutorials/r</code> directory. However we can open individual files from a Zarr file.</p>
+<h2 class="anchored" data-anchor-id="reading-in-a-zarr-file">Reading in a <code>Zarr</code> file</h2>
+<p>Reading in <code>Zarr</code> files is easy in Python with <a href="https://docs.xarray.dev/en/latest/index.html"><code>xarray</code></a> but currently this is difficult in R. See the <a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/tutorials/r/gdalcubes.qmd"><code>gdalcubes.qmd</code> file</a> in the <a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/tree/main/tutorials/r"><code>tutorials/r</code></a> directory of this GitHub repository. However we can open individual files from a <code>Zarr</code> file.</p>
 <p>Read one file.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://mur-sst.s3.us-west-2.amazonaws.com/zarr-v1"</span></span>
@@ -590,7 +611,7 @@ time        : 2020-01-16 09:00:00 to 2020-01-19 09:00:00 UTC </code></pre>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>addr <span class="ot">&lt;-</span> <span class="fu">paste0</span>(prefixes, url, slice)</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> terra<span class="sc">::</span><span class="fu">rast</span>(addr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Plot</p>
+<p>Plot.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">ext</span>(<span class="fu">c</span>(<span class="at">xmin=</span><span class="sc">-</span><span class="fl">75.5</span>, <span class="at">xmax=</span><span class="sc">-</span><span class="fl">73.5</span>,  <span class="at">ymin=</span><span class="fl">33.5</span>, <span class="at">ymax=</span><span class="fl">35.5</span> ))</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>y <span class="sc">|&gt;</span> terra<span class="sc">::</span><span class="fu">crop</span>(e) <span class="sc">|&gt;</span> terra<span class="sc">::</span><span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

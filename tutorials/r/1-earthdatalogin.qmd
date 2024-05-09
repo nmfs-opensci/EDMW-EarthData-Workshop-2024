@@ -27,22 +27,21 @@ For more on `earthdatalogin` visit the [`earthdatalogin` GitHub](https://github.
 
 An Earthdata Login account is required to access data from NASA Earthdata. Please visit <https://urs.earthdata.nasa.gov> to register as a new user and manage your Earthdata Login account. This account is free to create and only takes a moment to set up.  
 
-### Import Required Packages
+## Load Required Packages
+
+We are using the JupyterHub and all necessary packages are already installed for you.
 
 *Note: See the set-up tab (in left nav bar) for instructions on getting set up on your own computer, but
-be aware that getting it is common to run into trouble getting GDAL set up properly to handle
+be aware that it is common to run into trouble getting GDAL set up properly to handle
 netCDF files. Using a Docker image (and Python) is often less aggravating.*
 
-## Load packages
-
-*Note: See the [Earthdata login set-up tab](https://nmfs-opensci.github.io/EDMW-EarthData-Workshop-2024/content/02-earthdata.html) (in left nav bar) for instructions on getting set up on your own computer.*
 
 ```{r}
 library(earthdatalogin)
 library(terra)
 ```
 
-### Authentication for NASA Earthdata  
+## Authentication for NASA Earthdata  
 
 We will start by authenticating using our Earthdata Login credentials. Authentication is not necessarily needed to search for publicly available data collections in Earthdata, but is always needed to download or access data from the NASA Earthdata archives. We can use `edl_netrc()` from the `earthdatalogin` package to create a `.netrc` file that will store our credentials. 
 
@@ -71,7 +70,7 @@ earthdatalogin::edl_netrc()
 
 *For the purposes of this workshop, `edl_netrc()` will work by using a default public account login. Feel free to login with your own [NASA Earthdata account](https://urs.earthdata.nasa.gov/home.*
 
-### Search for data  
+## Search for data  
 
 There are multiple keywords we can use to discover data from collections. The table below contains the `short_name`, `concept_id`, and `doi` for some collections we are interested in for the tutorials today. Each of these can be used to search for data or information related to the collection we are interested in.  
 
@@ -91,7 +90,7 @@ If we hover over the top box, find and click on the more information button (an 
 
 On that page you will see the **"short name"** `MUR-JPL-L4-GLOB-v4.1`. Note the short name was also on the first search page (though it wasn't labeled as the short name, there).
 
-#### Search by short name
+### Search by short name
 
 ```{r}
 short_name <- 'MUR-JPL-L4-GLOB-v4.1'
@@ -139,11 +138,11 @@ length(results)
 results[1:3]
 ```
 
-### Working with `earthdatalogin` returns  
+## Working with `earthdatalogin` returns  
 
 Following the search for data, you'll likely take one of two pathways with those results. You may choose to **download** the assets that have been returned to you or you may choose to continue working with the search results within the R environment.  
 
-#### Download `earthdatalogin` results
+### Download `earthdatalogin` results
 
 In some cases you may want to download your assets. The `earthdatalogin::edl_download()` function makes downloading the data from the search results very easy. We won't download the MUR SST file for this tutorial because it is 673 Gb, but you could with the code below, if inclined.
 
@@ -154,7 +153,7 @@ earthdatalogin::edl_download(
 )
 ```
 
-#### Work in the cloud
+### Work in the cloud
 
 We do not have to download the data to work with it or at least not until we need to compute with it or plot it. Let's look at a smaller dataset.
 
