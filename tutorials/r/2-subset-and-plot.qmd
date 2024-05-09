@@ -28,13 +28,13 @@ However, if you will be using the NASA Earthdata portal more regularly, please r
 Earthdata Login account. Please <https://urs.earthdata.nasa.gov> to register and manage your 
 Earthdata Login account. This account is free to create and only takes a moment to set up.
 
-### Import Required Packages
+## Load Required Packages
+
+We are using the JupyterHub and all necessary packages are already installed for you.
 
 *Note: See the set-up tab (in left nav bar) for instructions on getting set up on your own computer, but
-be aware that getting it is common to run into trouble getting GDAL set up properly to handle
+be aware that it is common to run into trouble getting GDAL set up properly to handle
 netCDF files. Using a Docker image (and Python) is often less aggravating.*
-
-## Load packages
 
 ```{r message=FALSE}
 library(earthdatalogin)

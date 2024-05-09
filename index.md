@@ -3,6 +3,8 @@ title: "EDMW 2024 - Workshop 3B"
 subtitle: "Introduction to using earth data in the cloud for scientific workflows"
 ---
 
+Register (free and virtual) for the EDM Workshop: Go to [website](https://2024noaaedmw.sched.com/) with password EnterpriseData2024  Once registered you can navigate to [workshop 3B](https://2024noaaedmw.sched.com/event/58a6a2f2f583464e45f7db30afd26624) and add that to your schedule.
+
 <img src="images/cloud-overview.png" style="width:250px; float:right;">
 Welcome to the NOAA Fisheries workshop focused on geospatial analysis using ocean 'big data'. Today, we are focused on using data from NASA [EarthData](https://www.earthdata.nasa.gov/) but the skills you will learn are transferable to other ways that you might get earth data (e.g., NESDIS, NCEI, ERDDAP servers, Copernicus).
 
