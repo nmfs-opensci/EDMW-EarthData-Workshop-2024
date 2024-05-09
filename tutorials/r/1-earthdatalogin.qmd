@@ -16,9 +16,22 @@ In this example we will use the `earthdatalogin` R package to search for data co
 
 For more on `earthdatalogin` visit the [`earthdatalogin` GitHub](https://github.com/boettiger-lab/earthdatalogin/) page and/or the [`earthdatalogin` documentation](https://boettiger-lab.github.io/earthdatalogin/) site. Be aware that `earthdatalogin` is under active development. 
 
+## Terminology
+
+- **`NetCDF` files**: network Common Data Form; is a file format for storing multidimensional scientific data (variables) such as temperature, humidity, pressure, wind speed, and direction. Each of these variables can be displayed through a dimension (such as time) in ArcGIS by making a layer or table view from the netCDF file. Learn more [here](https://pro.arcgis.com/en/pro-app/latest/help/data/multidimensional/what-is-netcdf-data.htm). 
+- **`tif` or `tiff` or geo tiff file**: is used as an interchange format for georeferenced raster imagery. GeoTIFF is in wide use in NASA Earth science data systems. Learn more [here](https://www.earthdata.nasa.gov/esdis/esco/standards-and-practices/geotiff). 
+- **raster**: is a matrix of cells (or pixels) organized into rows and columns (or a grid) where each cell contains a value representing information, such as temperature. Rasters are digital aerial photographs, imagery from satellites, digital pictures, or even scanned maps.Learn more [here](https://desktop.arcgis.com/en/arcmap/latest/manage-data/raster-and-images/what-is-raster-data.htm). 
+- **GDAL**: is a translator library for raster and vector geospatial data formats. As a library, it presents a single raster abstract data model and single vector abstract data model to the calling application for all supported formats. It also comes with a variety of useful command line utilities for data translation and processing. Learn more [here](https://gdal.org/index.html). 
+
 ## Prerequisites
 
 An Earthdata Login account is required to access data from NASA Earthdata. Please visit <https://urs.earthdata.nasa.gov> to register as a new user and manage your Earthdata Login account. This account is free to create and only takes a moment to set up.  
+
+### Import Required Packages
+
+*Note: See the set-up tab (in left nav bar) for instructions on getting set up on your own computer, but
+be aware that getting it is common to run into trouble getting GDAL set up properly to handle
+netCDF files. Using a Docker image (and Python) is often less aggravating.*
 
 ## Load packages
 
@@ -48,11 +61,7 @@ This will put your login info in a `netrc` file located at:
 earthdatalogin:::edl_netrc_path()
 ```
 
-You can open a terminal and run this to see that it has your username and login.
-
-```{}
-cat /home/jovyan/.local/share/R/earthdatalogin/netrc
-```
+You can open a terminal and run `cat /home/jovyan/.local/share/R/earthdatalogin/netrc` to see that it has your username and login.
 
 Once your `netrc` file is saved, you can use `earthdatalogin::edl_netrc()` to authenticate.
 
@@ -78,7 +87,7 @@ How can we find the `shortname`, `concept_id`, and `doi` for collections not in 
 
 ![](images/SST_Blended_Earthdata_Search.png){width=50%}
 
-If we hover over the top box, find and click on the more information button (an i with a circle around it). On this page, you will see the `DOI`. Now click "View More Info" to get to https://cmr.earthdata.nasa.gov/search/concepts/C1996881146-POCLOUD.html. 
+If we hover over the top box, find and click on the more information button (an i with a circle around it). On this page, you will see the `DOI`. Now click "View More Info" to get to [https://cmr.earthdata.nasa.gov/search/concepts/C1996881146-POCLOUD.html](https://cmr.earthdata.nasa.gov/search/concepts/C1996881146-POCLOUD.html). 
 
 On that page you will see the **"short name"** `MUR-JPL-L4-GLOB-v4.1`. Note the short name was also on the first search page (though it wasn't labeled as the short name, there).
 
@@ -102,15 +111,15 @@ results <- earthdatalogin::edl_search(
     version = "4.1",
     temporal = tbox
 )
-length(results)
-results[1:3]
+length(results) # how many links were returned
+results[1:3] # let's see the first 3 of these links
 ```
 
 In this example we used the `short_name` parameter to search from our desired data set. However, there are multiple ways to specify the collection(s) we are interested in. Alternative parameters include:  
 
 - `doi`: request collection by digital object identifier (e.g., `doi = '10.5067/GHAAO-4BC21'`)  
 
-**NOTE:** Each Earthdata collect has a unique `concept_id` and `doi`. This is not the case with `short_name`. A **shortname** can be associated with multiple versions of a collection. If multiple versions of a collection are publicly available, using the `short_name` parameter with return all versions available. It is advised to use the `version` parameter in conjunction with the `short_name` parameter with searching.
+**NOTE:** Each Earthdata collect has a unique `concept_id` and `doi`. This is not the case with `short_name`, which can be associated with multiple versions of a collection. If multiple versions of a collection are publicly available, using the `short_name` parameter with return all versions available. It is advised to use the `version` parameter in conjunction with the `short_name` parameter with searching.
 
 We can refine our search by passing more parameters that describe the spatiotemporal domain of our use case. Here, we use the `temporal` parameter to request a date range and the `bounding_box` parameter to request granules that intersect with a bounding box.  
 
@@ -136,7 +145,7 @@ Following the search for data, you'll likely take one of two pathways with those
 
 #### Download `earthdatalogin` results
 
-In some cases you may want to download your assets. `earthdatalogin` makes downloading the data from the search results is very easy using the `earthdatalogin::edl_download()` function. The MUR SST files are 673 Gb file so I would prefer not to download. But you could.
+In some cases you may want to download your assets. The `earthdatalogin::edl_download()` function makes downloading the data from the search results very easy. We won't download the MUR SST file for this tutorial because it is 673 Gb, but you could with the code below, if inclined.
 
 ```{r eval=FALSE}
 earthdatalogin::edl_download(
@@ -158,7 +167,7 @@ oi <- earthdatalogin::edl_search(
 oi
 ```
 
-Let's try plotting this. I am going to authenticate again just to make sure my token did not expire. To search, we don't need to authenticate but to plot or download, we do.
+Let's try plotting this. I am going to authenticate again just to make sure my token did not expire. To search, we don't need to authenticate, but to plot or download, we do.
 
 ```{r}
 # Re-authenticate (just in case)
@@ -177,10 +186,10 @@ If you get the following error:
 > Error: [rast] file does not exist: /vsicurl/https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc
 
 It is likely because you do not have the End User Licence Agreement (EULA)/permissions to use that data set or are not properly logged in using `earthdatalogin::edl_netrc()`. Another reason may be that your
-GDAL installation is not properly handling netCDF files.
+GDAL installation is not properly handling `netCDF` files.
 :::
 
-Also try this example script from the `?earthdatalogin::edl_netrc` documentation that uses a tif file instead of netCDF. 
+Also try this example script from the `?earthdatalogin::edl_netrc` documentation that uses a `.tif` file instead of `.netCDF`. 
 
 ```{r}
 url <- earthdatalogin::lpdacc_example_url()

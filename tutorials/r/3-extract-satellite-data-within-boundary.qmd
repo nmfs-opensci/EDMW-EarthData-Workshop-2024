@@ -11,11 +11,15 @@ author: 'NOAA CoastWatch, NOAA Openscapes'
 
 ## Summary
 
-In this example, we will utilize the earthdatalogin R package to retrieve sea surface temperature data from [NASA Earthdata search](https://search.earthdata.nasa.gov/search). The `earthdatalogin` package simplifies the process of discovering and accessing NASA Earth science data.
+In this example, we will utilize the `earthdatalogin` R package to retrieve sea surface temperature data from [NASA Earthdata search](https://search.earthdata.nasa.gov/search). The `earthdatalogin` R package simplifies the process of discovering and accessing NASA Earth science data.
 
 This example is adapted from the NOAA CoastWatch Satellite Data Tutorials. To explore the full range of tutorials on accessing and utilizing oceanographic satellite data, visit the [NOAA CoastWatch Tutorial Github repository.](https://github.com/coastwatch-training/CoastWatch-Tutorials)
 
 For more on `earthdatalogin` visit the [`earthdatalogin` GitHub](https://github.com/boettiger-lab/earthdatalogin/) page and/or the [`earthdatalogin` documentation](https://boettiger-lab.github.io/earthdatalogin/) site. Be aware that `earthdatalogin` is under active development and that we are using the development version on GitHub.
+
+## Terminology
+
+- **`shapefiles`**: is a simple, nontopological format for storing the geometric location and attribute information of geographic features. Geographic features in a shapefile can be represented by points, lines, or polygons (areas). Learn more [here](https://desktop.arcgis.com/en/arcmap/latest/manage-data/shapefiles/what-is-a-shapefile.htm). 
 
 ## Prerequisites
 
@@ -38,7 +42,7 @@ This NOAA blended SST is a moderate resolution satellite-based gap-free sea surf
 **Longhurst Marine Provinces**\
 The dataset represents the division of the world oceans into provinces as defined by Longhurst (1995; 1998; 2006). This division has been based on the prevailing role of physical forcing as a regulator of phytoplankton distribution.
 
-The Longhurst Marine Provinces dataset is available online (https://www.marineregions.org/downloads.php) and within the shapes folder associated with this repository. For this exercise we will use the Gulf Stream province (ProvCode: GFST)
+The Longhurst Marine Provinces dataset is available online (https://www.marineregions.org/downloads.php) and within the shapes folder associated with this repository. For this exercise we will use the Gulf Stream province (`ProvCode: GFST`)
 
 ![](../images/longhurst.png)
 
@@ -55,7 +59,6 @@ library(ggplot2)
 
 The shapefile for the Longhurst marine provinces includes a list of regions.\
 For this exercise, we will only use the boundary of one province, the Gulf Stream region ("GFST").
-
 
 ```{r read province boundaries from shapefiles}
 # Set directory path for shapefile
@@ -124,17 +127,17 @@ shp <- vect(shapes)
 GFST <- shp[shp$ProvCode == "GFST",]
 ```
 
-Plot the SST data
+Plot the SST data.
 ```{r plot_SST}
 plot(ras_sst)
 ```
 
-Plot GFST boundaries from shapefile
+Plot GFST boundaries from shapefile.
 ```{r plot_GFST}
 plot(GFST,col='red')
 ```
 
-Mask SST with the GFST boundaries and plot
+Mask SST with the GFST boundaries and plot.
 ```{r mask_SST}
 masked_rc <- mask(ras_sst, GFST)
 
@@ -142,29 +145,28 @@ masked_rc <- mask(ras_sst, GFST)
 plot(masked_rc, ext = GFST)
 ```
 
-
 ## Compute monthly average of SST
 
 We will construct a data cube to compute monthly average for sea surface temperature data within the boundary.
 To minimize data loading times, the first 10 results, which correspond to approximately two months 
 of data, will be used for this exercise.
 
-Select the SST results for end of Jan and beginning of Feb
+Select the SST results for end of January and beginning of February. 
 ```{r}
 ras_all <- terra::rast(results[c(25:35)], vsi = TRUE)
 ```
 
-Trim the SST data to the boundaries of GFST
+Trim the SST data to the boundaries of GFST. 
 ```{r}
 rc_all <- terra::mask(ras_all, GFST)
 ```
 
-SST data
+Select SST data. 
 ```{r}
 rc_sst <- rc_all["analysed_sst", ]
 ```
 
-Calculate monthly means
+Calculate monthly SST means. 
 ```{r get_means}
 # Function to convert times to year-month format
 year_month <- function(x) {
