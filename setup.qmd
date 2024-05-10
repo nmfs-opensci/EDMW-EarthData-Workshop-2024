@@ -1,16 +1,28 @@
 ---
-title: Set-up - To work on JupyterHub
+title: Set-up
 ---
 
-If you want to follow along, you can also see [setup - R](content/02-local-setup-r.html) and [setup - Python](content/02-local-setup-python.html) to attempt local set up on your computer.
+We will be using a JupyterHub for the workshop.
 
-## GitHub username (required to get on JupyterHub)
+* <https://dhub.opensci.live/>
+* Click Start Server
+* Open terminal, type to get the tutorials
+```
+cd ~
+git clone https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024
+```
+
+You can also see [setup - R](content/02-local-setup-r.html) and [setup - Python](content/02-local-setup-python.html) to aset up on your computer but be aware that GDAL installation is problemmatic.
+
+## Access to the JupyterHub
+
+### GitHub username
 
 * Create a GitHub account (if you don’t already have one) at <https://github.com>. Advice for choosing a GitHub username: this is a professional username that you will use in work settings. GitHub accounts are not anonymous; this is for sharing work. Using your real name is common.
 * Write down your username and password; you will need to log in during the course!
 * Here is [a video](https://www.youtube.com/watch?v=nHXw4mGoqiE) showing the whole process
 
-## Get on the JupyterHub (if you want to follow along)
+### Get on JupyterHub
 
 Once you have submitted your GitHub username and have been accepted as a member of the DaskHub team on the nmfs-opensci organization, you can log-into the JupyterHub.
 

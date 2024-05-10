@@ -350,307 +350,239 @@
     "text": "Thank you for inspiration and content!\nThank you to the open science community that has created software, teaching resources, and workflows that we have been able to build off of and be inspired by. These include: NASA Openscapes • OceanHackWeek • SnowEx Hackweek • eScience Institute, University of Washington • ICESat-2 Hackweek • Project Jupyter • Pangeo Project • CryoCloud"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "EDMW 2024 - Workshop 3B",
+    "objectID": "schedule.html",
+    "href": "schedule.html",
+    "title": "Schedule",
     "section": "",
-    "text": "Register (free and virtual) for the EDM Workshop: Go to website with password EnterpriseData2024 Once registered you can navigate to workshop 3B and add that to your schedule.\nWelcome to the NOAA Fisheries workshop focused on geospatial analysis using ocean ‘big data’. Today, we are focused on using data from NASA EarthData but the skills you will learn are transferable to other ways that you might get earth data (e.g., NESDIS, NCEI, ERDDAP servers, Copernicus).\nThis workshop is focused on those who are brand new to working with earth data in the cloud and with geospatial packages. R users will be introduced to the earthdatalogin, terra and sf packages, while Python users will be introduced to the earthaccess and xarray packages. This workshop will also introduce working with JupyterHubs. We will use both Jupyter Lab (Python) and RStudio (R) within our JupyterHub.",
+    "text": "All times Eastern. May 15, 2024",
     "crumbs": [
       "JupyterHub",
+      "Welcome",
+      "Schedule"
+    ]
+  },
+  {
+    "objectID": "schedule.html#topics",
+    "href": "schedule.html#topics",
+    "title": "Schedule",
+    "section": "Topics",
+    "text": "Topics\n\nTutorial 1: Searching for resources in NASA Earthdata\nTutorial 2: Plotting and subsetting earth data\nTutorial 3: Masking and aggregating your earth data within a region (shapefiles)",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Schedule"
+    ]
+  },
+  {
+    "objectID": "content/index.html",
+    "href": "content/index.html",
+    "title": "Week 1 Tutorials",
+    "section": "",
+    "text": "During week 1, participants will gain experience with the platforms used in collaborative science: GitHub and RMarkdown."
+  },
+  {
+    "objectID": "content/index.html#prerequisites",
+    "href": "content/index.html#prerequisites",
+    "title": "Week 1 Tutorials",
+    "section": "Prerequisites",
+    "text": "Prerequisites\nPlease follow the set up prerequisites"
+  },
+  {
+    "objectID": "content/index.html#content",
+    "href": "content/index.html#content",
+    "title": "Week 1 Tutorials",
+    "section": "Content",
+    "text": "Content\n\nThe R language and RStudio\nIntro to RStudio\nIntroduction to Git and GitHub"
+  },
+  {
+    "objectID": "content/02-local-setup-r.html",
+    "href": "content/02-local-setup-r.html",
+    "title": "Setting up on your computer - R users",
+    "section": "",
+    "text": "Here are instructions for installing on your own computer.\nInstall the development version of earthdatalogin and update terra.\ndevtools::install_github(\"boettiger-lab/earthdatalogin\")\ninstall.packages(\"terra\")\ninstall.packages(\"rstac\")\ninstall.packages(\"gdalcubes\")\ninstall.packages(\"here\")\n\nlibrary(\"earthdatalogin\")\nlibrary(\"terra\")\nlibrary(\"rstac\")\nlibrary(\"gdalcubes\")\nlibrary(\"here\")\nYou will need GDAL installed. See these instructions if you do not have it installed: https://developers.planet.com/docs/integrations/qgis/install-qgis-gdal/\nYou may need to install terra and sf from source to get them to use the latest GDAL installation.\ninstall.packages(\"terra\", type = \"source\")\ninstall.packages(\"sf\", type = \"source\")\nsf::sf_extSoftVersion()\nThe environment we are using today is the py-rocket-geospatial image. This is part of work on a Data Science Docker Stack for NOAA Fisheries.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Local set-up - R"
+    ]
+  },
+  {
+    "objectID": "content/02-local-setup-r.html#load-packages",
+    "href": "content/02-local-setup-r.html#load-packages",
+    "title": "Setting up on your computer - R users",
+    "section": "Load packages",
+    "text": "Load packages\n\n# Function to check if pkgs are installed, and install any missing pkgs\npkgTest &lt;- function(x)\n{\n  if (!require(x,character.only = TRUE))\n  {\n    install.packages(x,dep=TRUE,repos='http://cran.us.r-project.org')\n    if(!require(x,character.only = TRUE)) stop(x, \" :Package not found\")\n  }\n}\n\n# Create list of required packages\nlist.of.packages &lt;- c(\n  \"earthdatalogin\", \"terra\", \"rstac\", \"gdalcubes\", \"here\", \"sf\", \"dplyr\", \"stars\", \"tmap\", \n  \"rerddap\", \"plotdap\", \"parsedate\", \"ggplot2\", \"rerddapXtracto\",\n  \"date\", \"maps\", \"mapdata\", \"RColorBrewer\",\"viridis\")\n\n# Create list of installed packages\npkges = installed.packages()[,\"Package\"]\n\n# Install and load all required pkgs\nfor (pk in list.of.packages) {\n  pkgTest(pk)\n}\n\nLoading required package: earthdatalogin\n\n\nLoading required package: terra\n\n\nterra 1.7.71\n\n\nLoading required package: rstac\n\n\nLoading required package: gdalcubes\n\n\n\nAttaching package: 'gdalcubes'\n\n\nThe following objects are masked from 'package:terra':\n\n    animate, crop, size\n\n\nLoading required package: here\n\n\nhere() starts at /home/jovyan/EDMW-EarthData-Workshop-2024\n\n\nLoading required package: sf\n\n\nLinking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE\n\n\nLoading required package: dplyr\n\n\n\nAttaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:terra':\n\n    intersect, union\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union\n\n\nLoading required package: stars\n\n\nLoading required package: abind\n\n\nLoading required package: tmap\n\n\n\nAttaching package: 'tmap'\n\n\nThe following object is masked from 'package:datasets':\n\n    rivers\n\n\nLoading required package: rerddap\n\n\nRegistered S3 method overwritten by 'hoardr':\n  method           from\n  print.cache_info httr\n\n\nLoading required package: plotdap\n\n\nLoading required package: parsedate\n\n\nLoading required package: ggplot2\n\n\nLoading required package: rerddapXtracto\n\n\nLoading required package: date\n\n\nLoading required package: maps\n\n\nLoading required package: mapdata\n\n\nLoading required package: RColorBrewer\n\n\nLoading required package: viridis\n\n\nLoading required package: viridisLite\n\n\n\nAttaching package: 'viridis'\n\n\nThe following object is masked from 'package:maps':\n\n    unemp\n\nsessionInfo()\n\nR version 4.4.0 (2024-04-24)\nPlatform: x86_64-pc-linux-gnu\nRunning under: Ubuntu 22.04.4 LTS\n\nMatrix products: default\nBLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 \nLAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0\n\nlocale:\n [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       \n [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   \n [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          \n[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   \n\ntime zone: Etc/UTC\ntzcode source: system (glibc)\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base     \n\nother attached packages:\n [1] viridis_0.6.5           viridisLite_0.4.2       RColorBrewer_1.1-3     \n [4] mapdata_2.3.1           maps_3.4.2              date_1.2-42            \n [7] rerddapXtracto_1.2.0    ggplot2_3.5.1           parsedate_1.3.1        \n[10] plotdap_1.0.3           rerddap_1.1.0           tmap_3.99.9001         \n[13] stars_0.6-5             abind_1.4-5             dplyr_1.1.4            \n[16] sf_1.0-16               here_1.0.1              gdalcubes_0.7.0        \n[19] rstac_1.0.0             terra_1.7-71            earthdatalogin_0.0.2.99\n\nloaded via a namespace (and not attached):\n [1] tidyselect_1.2.1        fastmap_1.1.1           lazyeval_0.2.2         \n [4] leaflegend_1.2.0        leaflet_2.2.2           XML_3.99-0.16.1        \n [7] digest_0.6.35           lifecycle_1.0.4         magrittr_2.0.3         \n[10] compiler_4.4.0          rlang_1.1.3             tools_4.4.0            \n[13] utf8_1.2.4              yaml_2.3.8              data.table_1.15.4      \n[16] knitr_1.46              htmlwidgets_1.6.4       sp_2.1-4               \n[19] classInt_0.4-10         curl_5.2.1              xml2_1.3.6             \n[22] KernSmooth_2.23-22      httpcode_0.3.0          withr_3.0.0            \n[25] purrr_1.0.2             leafsync_0.1.0          grid_4.4.0             \n[28] fansi_1.0.6             cols4all_0.7-1          e1071_1.7-14           \n[31] leafem_0.2.3            colorspace_2.1-0        spacesXYZ_1.3-0        \n[34] scales_1.3.0            dichromat_2.0-0.1       crul_1.4.2             \n[37] cli_3.6.2               rmarkdown_2.26          crayon_1.5.2           \n[40] generics_0.1.3          rstudioapi_0.16.0       httr_1.4.7             \n[43] tmaptools_3.1-1         ncdf4_1.22              DBI_1.2.2              \n[46] proxy_0.4-27            parallel_4.4.0          base64enc_0.1-3        \n[49] vctrs_0.6.5             jsonlite_1.8.8          jpeg_0.1-10            \n[52] crosstalk_1.2.1         tidyr_1.3.1             units_0.8-5            \n[55] glue_1.7.0              lwgeom_0.2-14           codetools_0.2-20       \n[58] leaflet.providers_2.0.0 gtable_0.3.5            raster_3.6-26          \n[61] munsell_0.5.1           tibble_3.2.1            pillar_1.9.0           \n[64] rappdirs_0.3.3          htmltools_0.5.8.1       R6_2.5.1               \n[67] hoardr_0.5.4            rprojroot_2.0.4         evaluate_0.23          \n[70] lattice_0.22-6          png_0.1-8               class_7.3-22           \n[73] Rcpp_1.0.12             gridExtra_2.3           widgetframe_0.3.1      \n[76] xfun_0.43               pkgconfig_2.0.3",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Local set-up - R"
+    ]
+  },
+  {
+    "objectID": "content/02-git.html#set-up-authentication-to-github",
+    "href": "content/02-git.html#set-up-authentication-to-github",
+    "title": "Git - Set-up for Pushing",
+    "section": "Set up authentication to GitHub",
+    "text": "Set up authentication to GitHub\nYou need to tell GitHub who you are so you can push your local changes up to GitHub. There are a few ways to do this. I am going to show you a way that works on any computer, including a virtual computer like the JupyterHub.\n\nStep 1: Generate a Personal Access Token\nWe are going to generate a classic token.\n\nGo to https://github.com/settings/tokens\nClick Generate new token &gt; Generate new token (classic)\nWhen the pop-up shows up, fill in a description, click the “repo” checkbox, and then scroll to bottom to click “Generate”.\nFor scope, select “repo”.\nSAVE the token. You need it for the next step.\n\n\n\nStep 2: Tell Git who your are\n\nOpen a terminal. In Jupyter Lab, you will see a box labelled “Terminal” on the Launcher window. In RStudio, you will see a tab (usually in lower left) with the label “Terminal”\nPaste these 3 lines of code into the terminal\n\ngit config --global user.email \"&lt;your email&gt;\"\ngit config --global user.name \"&lt;your name&gt;\"\ngit config --global pull.rebase false\ngit config --global credential.helper store\nReplace \"&lt;your email&gt;\" with something like jane.doe@noaa.gov. Replace \"&lt;your name&gt;\" with something like \"Jane Doe\". Notice the quotes.\n\n\nStep 3: Trigger git to ask for your password\nThere are a few ways to do this.\n\nClone a repo, make a change, and then commit and push the change\nClone a private repo\n\nOption b is easiest if you are new to Git and GitHub.\n\nOpen a terminal window\nMake sure you are in the home directory by typing cd ~\nClone a repo and create an RStudio project. File &gt; New Project &gt; Version Control &gt; Git. Paste in this URL https://github.com/nmfs-opensci/github_setup_check and make sure it is creating the repo at ~ (home directory).\nYou will be asked for your GitHub username and password. For the password, enter the PERSONAL ACCESS TOKEN from Step 1.\n\nWatch a video of these 4 steps\nFull instructions with other ways to do this from R",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-Authentication"
+    ]
+  },
+  {
+    "objectID": "content/02-git-jupyter.html#summary",
+    "href": "content/02-git-jupyter.html#summary",
+    "title": "Git - Jupyter Lab",
+    "section": "Summary",
+    "text": "Summary\nIn this tutorial, we will provide a brief introduction to:\n\nCommand line (terminal/shell)\nNavigating around folders in Jupyter Lab\nVersion Control (code management using git)\nSetting up Git in Jupyter Lab\nThe Git GUI in Jupyter Lab\nBasic Git commands",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-JupyterLab"
+    ]
+  },
+  {
+    "objectID": "content/02-git-jupyter.html#introduction-jupyter-lab",
+    "href": "content/02-git-jupyter.html#introduction-jupyter-lab",
+    "title": "Git - Jupyter Lab",
+    "section": "Introduction :: Jupyter Lab",
+    "text": "Introduction :: Jupyter Lab\nWhen you start the JupyterHub, you will be in Jupyter Lab. From there you can click on the RStudio box and open RStudio. However for this tutorial, we will stay in Juptyer Lab.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-JupyterLab"
+    ]
+  },
+  {
+    "objectID": "content/02-git-jupyter.html#introduction-terminalshell",
+    "href": "content/02-git-jupyter.html#introduction-terminalshell",
+    "title": "Git - Jupyter Lab",
+    "section": "Introduction :: Terminal/Shell",
+    "text": "Introduction :: Terminal/Shell\nLog into the JupyterHub. If you do not see this\n\nThen go to File &gt; New Launcher\nClick on the “Terminal” box to open a new terminal window.\n\nShell or Terminal Basics\n\nWhat is Terminal or Shell?\nNavigating Files and Directories\nWorking with Files and Directories\nOptional: Detailed self-paced lesson on running scripts from the shell: Shell Lesson from Software Carpentry\n\nYou will need only basic navigation skills for this course: cd, ls and cat\n\npwd where am I\ncd nameofdir move into a directory\ncd .. move up a directory\nls list the files in the current directory\nls -a list the files including hidden files\nls -l list the files with more info\ncat filename print out the contents of a file\n\n\n\nLet’s try\nls\nls -a\ncd shared\nls\ncd shell-tutorial\ncat lesson1.sh\ncd ..\ncd ..\n\n\nClose the terminal\nJust click on the X in the terminal tab",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-JupyterLab"
+    ]
+  },
+  {
+    "objectID": "content/02-git-jupyter.html#introduction-file-navigation",
+    "href": "content/02-git-jupyter.html#introduction-file-navigation",
+    "title": "Git - Jupyter Lab",
+    "section": "Introduction :: File Navigation",
+    "text": "Introduction :: File Navigation\nIn the far left, you will see a line of icons. The top one is a folder and allows us to move around our file system.\n\nClick on shared. Now you can see the files in the shared directory.\nClick on shell-tutorial. Then click on lesson1.sh. The file opens. You won’t be able to save changes here because you don’t have write permission on this drive.\nClick on the folder icon that looks like this. Click on the actual folder image. \nNow it should look like this folder /\nThis shows me doing this\n\nCreate a new folder.\n\nNext to the blue rectange with a +, is a grey folder with a +. Click that to create a new folder, called lesson-scripts.\nThen click on lesson-scripts to enter the folder\n\n\nCreate a new file\n\nCreate with File &gt; New &gt; Text file\nThe file will open and you can edit it.\nSave with File &gt; Save Text\nDelete the file by right-clicking on it and clicking “Delete”",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-JupyterLab"
+    ]
+  },
+  {
+    "objectID": "content/02-git-jupyter.html#introduction-version-control-git",
+    "href": "content/02-git-jupyter.html#introduction-version-control-git",
+    "title": "Git - Jupyter Lab",
+    "section": "Introduction :: Version Control (Git)",
+    "text": "Introduction :: Version Control (Git)\n\nWhat is version control, git, github, and how to set it up?\nVersion control is managing and tracking changes to your documents (program source code, images, websites, data files, etc.). git is a popular tool used for version control of software code. github.com is popular platform that provides remote server hosting for git repositories. A repository is a collection of various files that you are tracking for changes and versions. Currently GitHub is the most popular platform for file sharing code and code packages.\nThis section is a step-by-step guide to set up git on our JupyterHub. We will also configure git to use your github.com account for managing your repositories hosted on github.com. There are 5 main steps.\n\n\nStep 1: Create a GitHub account\nTo complete the setup, you will need an account on github.com. If you don’t have an account, please visit github.com, create an account (free) and come back to this guide for setting up git.\n\n\nStep 2: Clone a repository\nWe have created a demo repository for you to clone:\nhttps://github.com/nmfs-opensci/Git-Lesson\n\nStart your JupyterHub\nClick on the Git icon\n\n\n\nClick “Clone a Repository”\nWhere it says “Enter the URI of the remote Git repository”, paste in the URL https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024\nThe folder appears and you can enter the folder and edit and create files.\n\n\nYour task: Create a file with your name and save to the Git-Lesson folder",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-JupyterLab"
+    ]
+  },
+  {
+    "objectID": "content/02-git-jupyter.html#step-3",
+    "href": "content/02-git-jupyter.html#step-3",
+    "title": "Git - Jupyter Lab",
+    "section": "Step 3:",
+    "text": "Step 3:\nConfigure git with your name and email address.\n``` bash\ngit config --global user.name \"Makhan Virdi\"\ngit config --global user.email \"Makhan.Virdi@gmail.com\"\n```\n\n**Note:** This name and email could be different from your github.com credentials. Remember `git` is a program that keeps track of your changes locally (on the JupyterHub or your own computer) and github.com is a platform to host your repositories. However, since your changes are tracked by `git`, the email/name used in git configuration will show up next to your contributions on github.com when you `push` your repository to github.com (`git push` is discussed in a later step).\n\nConfigure git to store your github credentials to avoid having to enter your github username and token each time you push changes to your repository(in Step 5, we will describe how to use github token instead of a password)\ngit config --global credential.helper store\nCopy link for the demo repository from your github account. Click the green “Code” button and copy the link as shown.\n\nClone the repository using git clone command in the terminal\nTo clone a repository from github, copy the link for the repository (previous step) and use git clone:\ngit clone https://github.com/YOUR-GITHUB-USERNAME/check_github_setup\nNote: Replace YOUR-GITHUB-USERNAME here with your github.com username. For example, it is virdi for my github.com account as seen in this image.\n\nUse ls (list files) to verify the existence of the repository that you just cloned\n\nChange directory to the cloned repository using cd check_github_setup and check the current directory using pwd command (present working directory)\n\nCheck status of your git repository to confirm git set up using git status\n\nYou are all set with using git on your 2i2c JupyterHub! But the collaborative power of git through github needs some additional setup.\nIn the next step, we will create a new file in this repository, track changes to this file, and link it with your github.com account.\n\n\nStep 4. Creating new file and tracking changes\n\nIn the left panel on your 2i2c JupyterHub, click on the “directory” icon and then double click on “check_github_setup” directory.\n\n\nOnce you are in the check_github_setup directory, create a new file using the text editor in your 2i2c JupyterHub (File &gt;&gt; New &gt;&gt; Text File).\n\nName the file lastname.txt. For example, virdi.txt for me (use your last name). Add some content to this file (for example, I added this to my virdi.txt file: my last name is virdi).\n\nNow you should have a new file (lastname.txt) in the git repository directory check_github_setup\nCheck if git can see that you have added a new file using git status. Git reports that you have a new file that is not tracked by git yet, and suggests adding that file to the git tracking system.\n\nAs seen in this image, git suggests adding that file so it can be tracked for changes. You can add file to git for tracking changes using git add. Then, you can commit changes to this file’s content using git commit as shown in the image.\ngit add virdi.txt\ngit status\ngit commit -m \"adding a new file\"\ngit status\n\nAs seen in the image above, git is suggesting to push the change that you just committed to the remote server at github.com (so that your collaborators can also see what changes you made).\nNote: DO NOT execute push yet. Before we push to github.com, let’s configure git further and store our github.com credentials to avoid entering the credentials every time we invoke git push. For doing so, we need to create a token on github.com to be used in place of your github.com password.\n\n\n\nStep 5. Create access token on github.com\n\nGo to your github account and create a new “personal access token”: https://github.com/settings/tokens/new\n\n\n\nGenerate Personal Access Token on github.com\n\n\nEnter a description in “Note” field as seen above, select “repo” checkbox, and scroll to the bottom and click the green button “Generate Token”. Once generated, copy the token (or save it in a text file for reference).\nIMPORTANT: You will see this token only once, so be sure to copy this. If you do not copy your token at this stage, you will need to generate a new token.\n\nTo push (transfer) your changes to github, use git push in terminal. It requires you to enter your github credentials. You will be prompted to enter your github username and “password”. When prompted for your “password”, DO NOT use your github password, use the github token that was copied in the previous step.\ngit push\n\nNote: When you paste your token in the terminal window, windows users will press Ctrl+V and mac os users will press Cmd+V. If it does not work, try generating another token and use the copy icon next to the token to copy the token. Then, paste using your computer’s keyboard shortcut for paste.\nNow your password is stored in ~/.git-credentials and you will not be prompted again unless the Github token expires. You can check the presence of this git-credentials file using Terminal. Here the ~ character represents your home directory (/home/jovyan/).\nls -la ~\nThe output looks like this:\ndrwxr-xr-x 13 jovyan jovyan 6144 Oct 22 17:35 .\ndrwxr-xr-x  1 root   root   4096 Oct  4 16:21 ..\n-rw-------  1 jovyan jovyan 1754 Oct 29 18:30 .bash_history\ndrwxr-xr-x  4 jovyan jovyan 6144 Oct 29 16:38 .config\n-rw-------  1 jovyan jovyan   66 Oct 22 17:35 .git-credentials\n-rw-r--r--  1 jovyan jovyan   84 Oct 22 17:14 .gitconfig\ndrwxr-xr-x 10 jovyan jovyan 6144 Oct 21 16:19 2021-Cloud-Hackathon\nYou can also verify your git configuration\n(notebook) jovyan@jupyter-virdi:~$ git config -l\nThe output should have credential.helper = store:\nuser.email        = Makhan.Virdi@gmail.com\nuser.name         = Makhan Virdi\ncredential.helper = store\n\nNow we are all set to collaborate with github on the JupyterHub during the Cloud Hackathon!\n\n\nSummary: Git Commands\n\nCommonly used git commands (modified from source)\n\n\nGit Command\nDescription\n\n\n\n\ngit status\nShows the current state of the repository: the current working branch, files in the staging area, etc.\n\n\ngit add\nAdds a new, previously untracked file to version control and marks already tracked files to be committed with the next commit\n\n\ngit commit\nSaves the current state of the repository and creates an entry in the log\n\n\ngit log\nShows the history for the repository\n\n\ngit diff\nShows content differences between commits, branches, individual files and more\n\n\ngit clone\nCopies a repository to your local environment, including all the history\n\n\ngit pull\nGets the latest changes of a previously cloned repository\n\n\ngit push\nPushes your local changes to the remote repository, sharing them with others\n\n\n\n\n\nGit: More Details\nLesson: For a more detailed self-paced lesson on git, visit Git Lesson from Software Carpentry\nCheatsheet: Frequently used git commands\nDangit, Git!?!: If you are stuck after a git mishap, there are ready-made solutions to common problems at Dangit, Git!?!\n\n\nCloning our repository using the git Jupyter lab extension.\nIf we’re already familiar with git commands and feel more confortable using a GUI our Jupyterhub deployment comes with a git extension. This plugin allows us to operate with git using a simple user interface.\nFor example we can clone our repository using the extension.\n\n\n\ngit extension",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-JupyterLab"
+    ]
+  },
+  {
+    "objectID": "content/01-welcome.html",
+    "href": "content/01-welcome.html",
+    "title": "Welcome",
+    "section": "",
+    "text": "Introduction to working with earth data in the cloud and NASA Earth Data\nOrientation on our JupyterHub\nTutorial 1: Searching for resources in NASA Earth Data\nTutorial 2: Points and shapefiles\nTutorial 3: Subsetting your earth data with in a region (shapefile)\nTutorial 4: Getting values at points (along a track or transect)",
+    "crumbs": [
+      "JupyterHub",
+      "Tutorials",
+      "Welcome",
       "Welcome"
     ]
   },
   {
-    "objectID": "index.html#topics-for-may-15-2024",
-    "href": "index.html#topics-for-may-15-2024",
-    "title": "EDMW 2024 - Workshop 3B",
-    "section": "Topics for May 15, 2024",
-    "text": "Topics for May 15, 2024\n\nIntroduction to working with earth data in the cloud and NASA Earth Data\nOrientation on our JupyterHub\nTutorial 1: Searching for resources in NASA Earthdata\nTutorial 2: Plotting and subsetting earth data\nTutorial 3: Masking and aggregating your earth data within a region (shapefiles)",
+    "objectID": "content/01-intro-to-cloud.html",
+    "href": "content/01-intro-to-cloud.html",
+    "title": "Intro the Cloud",
+    "section": "",
+    "text": "Lecture on NASA earth data in the cloud by Michele Thornton (NASA Openscapes) Video",
     "crumbs": [
       "JupyterHub",
-      "Welcome"
+      "Tutorials",
+      "Welcome",
+      "Geoscience cloud tools"
     ]
   },
   {
-    "objectID": "index.html#resources",
-    "href": "index.html#resources",
-    "title": "EDMW 2024 - Workshop 3B",
-    "section": "Resources",
-    "text": "Resources\n\nCoastWatch GitHub organization for many more training modules for working with satellite data in Python and R\nNASA EarthData Cloudbook for many tutorials on using satellite data in Python and R and NASA Earth Data\nNMFS Friday HackHours",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome"
-    ]
-  },
-  {
-    "objectID": "index.html#thank-you-for-inspiration-and-content",
-    "href": "index.html#thank-you-for-inspiration-and-content",
-    "title": "EDMW 2024 - Workshop 3B",
-    "section": "Thank you for inspiration and content!",
-    "text": "Thank you for inspiration and content!\nThank you to the open science community that has created software, teaching resources, and workflows that we have been able to build off of and be inspired by. These include: NASA Openscapes • OceanHackWeek • SnowEx Hackweek • eScience Institute, University of Washington • ICESat-2 Hackweek • Project Jupyter • Pangeo Project • CryoCloud",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome"
-    ]
-  },
-  {
-    "objectID": "content/02-rstudio.html#open-rstudio-in-the-jupyterhub",
-    "href": "content/02-rstudio.html#open-rstudio-in-the-jupyterhub",
-    "title": "RStudio - R",
-    "section": "Open RStudio in the JupyterHub",
-    "text": "Open RStudio in the JupyterHub\n\nLogin the JupyterHub\nClick on the RStudio button when the Launcher appears \nLook for the browser tab with the RStudio icon",
+    "objectID": "coc.html",
+    "href": "coc.html",
+    "title": "Code of Conduct",
+    "section": "",
+    "text": "We are dedicated to providing a harassment-free learning experience for everyone regardless of gender, gender identity and expression, sexual orientation, disability, physical appearance, body size, race, age or religion. We do not tolerate harassment of participants in any form. Sexual language and imagery is not appropriate either in-person or virtual form, including the Discussion boards and Slack workspace. Participants (including event volunteers and organizers) violating these rules may be sanctioned or expelled from the event at the discretion of the organizers.",
     "crumbs": [
       "JupyterHub",
       "Welcome",
-      "Orientation",
-      "RStudio"
+      "Code of Conduct"
     ]
   },
   {
-    "objectID": "content/02-rstudio.html#basic-navigation",
-    "href": "content/02-rstudio.html#basic-navigation",
-    "title": "RStudio - R",
-    "section": "Basic Navigation",
-    "text": "Basic Navigation\n\n\n\nRStudio Panels",
+    "objectID": "coc.html#definition-of-harassment",
+    "href": "coc.html#definition-of-harassment",
+    "title": "Code of Conduct",
+    "section": "Definition of Harassment",
+    "text": "Definition of Harassment\nHarassment includes, but is not limited to:\n\nVerbal comments that reinforce social structures of domination related to gender, gender identity and expression, sexual orientation, disability, physical appearance, body size, race, age, religion.\nSexual images in public spaces\nDeliberate intimidation, stalking, or following\nHarassing photography or recording\nSustained disruption of talks or other events\nInappropriate physical contact\nUnwelcome sexual attention\nAdvocating for, or encouraging, any of the above behavior",
     "crumbs": [
       "JupyterHub",
       "Welcome",
-      "Orientation",
-      "RStudio"
+      "Code of Conduct"
     ]
   },
   {
-    "objectID": "content/02-rstudio.html#create-an-rstudio-project",
-    "href": "content/02-rstudio.html#create-an-rstudio-project",
-    "title": "RStudio - R",
-    "section": "Create an RStudio project",
-    "text": "Create an RStudio project\n\nOpen RStudio\nIn the file panel, click on the Home icon to make sure you are in your home directory\nFrom the file panel, click “New Project” to create a new project\nIn the pop up, select New Directory and then New Project\nName it sandbox\nClick on the dropdown in the upper right corner to select your sandbox project\nClick on Tools &gt; Project Options &gt; General and change the first 2 options about saving and restoring the workspace to “No”",
+    "objectID": "coc.html#expectations",
+    "href": "coc.html#expectations",
+    "title": "Code of Conduct",
+    "section": "Expectations",
+    "text": "Expectations\nParticipants asked to stop any harassing behavior are expected to comply immediately. If a participant engages in harassing behavior, the organizers retain the right to take any actions to keep the event a welcoming environment for all participants. This includes warning the offender or expulsion from the event.\nThe organizers may take action to redress anything designed to, or with the clear impact of, disrupting the event or making the environment hostile for any participants. We expect participants to follow these rules at all the event venues and event-related social activities.",
     "crumbs": [
       "JupyterHub",
       "Welcome",
-      "Orientation",
-      "RStudio"
+      "Code of Conduct"
     ]
   },
   {
-    "objectID": "content/02-rstudio.html#installing-packages",
-    "href": "content/02-rstudio.html#installing-packages",
-    "title": "RStudio - R",
-    "section": "Installing packages",
-    "text": "Installing packages\nIn the bottom right panel, select the Packages tab, click install and then start typing the name of the package. Then click Install.\nThe JupyterHub comes with many packages already installed so you shouldn’t have to install many packages.\nWhen you want to use a package, you first need to load it with\nlibrary(hello)\nYou will see this in the tutorials. You might also see something like\nhello::thefunction()\nThis is using thefunction() from the hello package.\n\n\n\n\n\n\nNote\n\n\n\nPython users. In R, you will always call a function like funtion(object) and never like object.function(). The exception is something called ‘piping’ in R, which I have never seen in Python. In this case you pass objects left to right. Like object %&gt;% function(). Piping is very common in modern R but you won’t see it much in R from 10 years ago.",
+    "objectID": "coc.html#reporting-a-violation",
+    "href": "coc.html#reporting-a-violation",
+    "title": "Code of Conduct",
+    "section": "Reporting a violation",
+    "text": "Reporting a violation\nHarassment and other code of conduct violations reduce the value of the event for everyone. If someone makes you or anyone else feel unsafe or unwelcome, please report it as soon as possible.\nIf you feel comfortable contacting someone associated with our event, you may speak with one of the event organizers in person or contact an organizer on a private Slack channel.",
     "crumbs": [
       "JupyterHub",
       "Welcome",
-      "Orientation",
-      "RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-rstudio.html#uploading-and-downloading-files",
-    "href": "content/02-rstudio.html#uploading-and-downloading-files",
-    "title": "RStudio - R",
-    "section": "Uploading and downloading files",
-    "text": "Uploading and downloading files\nNote, Upload and download is only for the JupyterHub not on RStudio on your computer.\n\nUploading is easy.\nLook for the Upload button in the Files tab of the bottom right panel.\n\n\nDownload is less intuitive.\n\nClick the checkbox next to the file you want to download. One only.\nClick the “cog” icon in the Files tab of the bottom right panel. Then click Export.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-rstudio.html#creating-files",
-    "href": "content/02-rstudio.html#creating-files",
-    "title": "RStudio - R",
-    "section": "Creating files",
-    "text": "Creating files\nWhen you start your server, you will have access to your own virtual drive space. No other users will be able to see or access your files. You can upload files to your virtual drive space and save files here. You can create folders to organize your files. You personal directory is home/rstudio. Everyone has the same home directory but your files are separate and cannot be seen by others.\nPython users: If you open a Python image instead of the R image, your home is home/jovyan.\nThere are a number of different ways to create new files. Let’s practice making new files in RStudio.\n\nR Script\n\nOpen RStudio\nIn the upper right, make sure you are in your sandbox project.\nFrom the file panel, click on “New Blank File” and create a new R script.\nPaste\n\nprint(\"Hello World\")\n1+1\nin the script. 7. Click the Source button (upper left of your new script file) to run this code. 8. Try putting your cursor on one line and running that line of code by clicking “Run” 9. Try selecting lines of code and running that by clicking “Run”\n\n\ncsv file\n\nFrom the file panel, click on “New Blank File” and create a Text File.\nThe file will open in the top left corner. Paste in the following:\n\nname, place, value\nA, 1, 2\nB, 10, 20\nC, 100, 200\n\nClick the save icon (above your new file) to save your csv file\n\n\n\nA Rmarkdown document\nNow let’s create some more complicated files using the RStudio template feature.\n\nFrom the upper left, click File -&gt; New File -&gt; RMarkdown\nClick “Ok” at the bottom.\nWhen the file opens, click Knit (icon at top of file).\nIt will ask for a name. Give it one and save.\nYou file will render into html.\n\nReference sheet for writing in RMarkdown or go to Help &gt; Markdown Quick Reference\n\n\nA Rmarkdown presentation\n\nFrom the upper left, click File -&gt; New File -&gt; RMarkdown\nClick “Presentation” on left of the popup and click “Ok” at the bottom.\nWhen the file opens, click Knit (icon at top of file).\nIt will ask for a name. Give it one and save.\nYou file will render into html.\n\n\n\n(advanced) An interactive application\n\nFrom the upper left, click File -&gt; New File -&gt; Shiny Web App\nIn the popup, give the app a name and make sure the app is saved to my-files\nWhen the file opens, Run App (icon at top of file).\n\n\n\nAnd many more\nPlay around with creating other types of documents using templates. Especially if you already use RStudio.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-rstudio.html#more-tips",
-    "href": "content/02-rstudio.html#more-tips",
-    "title": "RStudio - R",
-    "section": "More tips",
-    "text": "More tips\nLearn some tips and tricks from these\n\nhttps://colorado.posit.co/rsc/the-unknown/into-the-unknown.html\nhttps://www.dataquest.io/blog/rstudio-tips-tricks-shortcuts/",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-rstudio.html#plotting-a-netcdf-file",
-    "href": "content/02-rstudio.html#plotting-a-netcdf-file",
-    "title": "RStudio - R",
-    "section": "Plotting a netCDF file",
-    "text": "Plotting a netCDF file\n\nhttps://pjbartlein.github.io/REarthSysSci/netCDF.html\nhttps://r-spatial.github.io/sf/articles/sf1.html\n\nwebpage:\nhttps://coastwatch.pfeg.noaa.gov/erddap/griddap/ncdcOisst21Agg.graph?sst%5B(2023-08-27T12:00:00Z)%5D%5B(0.0)%5D%5B(-7.8):(44.8)%5D%5B(39.7):(92.3)%5D&.draw=surface&.vars=longitude%7Clatitude%7Csst&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff\nurl from the dropdown on that page\nurl &lt;- https://coastwatch.pfeg.noaa.gov/erddap/griddap/ncdcOisst21Agg.nc?sst%5B(2023-08-27T12:00:00Z)%5D%5B(0.0)%5D%5B(-7.875):(44.875)%5D%5B(39.625):(92.375)%5D&.draw=surface&.vars=longitude%7Clatitude%7Csst&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff\n\nOpen an R script\n\nAdd this code.\n\nlibrary(ggplot2) # package for plotting\nlibrary(sf)\nlibrary(stars)\nlibrary(dplyr)\n\nurl &lt;- \"https://coastwatch.pfeg.noaa.gov/erddap/griddap/ncdcOisst21Agg.nc?sst%5B(2023-08-27T12:00:00Z)%5D%5B(0.0)%5D%5B(-7.875):(44.875)%5D%5B(39.625):(92.375)%5D&.draw=surface&.vars=longitude%7Clatitude%7Csst&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff\"\n\nfil &lt;- \"sst.nc\"\nif(!exists(fil)){\n  download.file(url=url, destfile=fil)\n}\n\nstars_object &lt;- raster::raster(fil) %&gt;% st_as_stars()\nggplot() + geom_stars(data = stars_object)",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-git-rstudio.html#what-is-git-and-github",
-    "href": "content/02-git-rstudio.html#what-is-git-and-github",
-    "title": "Basic Git/GitHub Skills Using RStudio",
-    "section": "What is Git and GitHub?",
-    "text": "What is Git and GitHub?\nGit A program to track your file changes and create a history of those changes. Creates a ‘container’ for a set of files called a repository.\nGitHub A website to host these repositories and allow you to sync local copies (on your computer) to the website. Lots of functionality built on top of this.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-git-rstudio.html#some-basic-git-jargon",
-    "href": "content/02-git-rstudio.html#some-basic-git-jargon",
-    "title": "Basic Git/GitHub Skills Using RStudio",
-    "section": "Some basic Git jargon",
-    "text": "Some basic Git jargon\n\nRepo Repository. It is your code and the record of your changes. This record and also the status of your repo is a hidden folder called .git . You have a local repo and a remote repo. The remote repo is on GitHub (for in our case) is called origin. The local repo is on the JupyterHub.\nStage Tell Git which changes you want to commit (write to the repo history).\nCommit Write a note about what change the staged files and “commit” that note to the repository record. You are also tagging this state of the repo and you could go back to this state if you wanted.\nPush Push local changes (commits) up to the remote repository on GitHub (origin).\nPull Pull changes on GitHub into the local repository on the JupyterHub.\nGit GUIs A graphical interface for Git (which is command line). Today I will use jupyterlab-git which we have installed on JupyterHub.\nShell A terminal window where we can issue git commands.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-git-rstudio.html#overview",
-    "href": "content/02-git-rstudio.html#overview",
-    "title": "Basic Git/GitHub Skills Using RStudio",
-    "section": "Overview",
-    "text": "Overview\nToday I will cover the four basic Git/GitHub skills. The goal for today is to first get you comfortable with the basic skills and terminology. We will use what is called a “trunk-based workflow”.\n\nSimple Trunk-based Workflow:\n\nMake local (on your computer) changes to code.\nRecord what those changes were about and commit to the code change record (history).\nPush those changes to your remote repository (aka origin)\n\nWe’ll do this",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-git-rstudio.html#setting-up-git",
-    "href": "content/02-git-rstudio.html#setting-up-git",
-    "title": "Basic Git/GitHub Skills Using RStudio",
-    "section": "Setting up Git",
-    "text": "Setting up Git\nYou should have gotten this done on Tuesday but if not here are the instructions\nBefore we can work with Git in the JupyterHub, we need to do some set up.\n\nTell Git who you are and to store your credentials (GitHub login info)\n\nShow me\nPaste this into a terminal window:\ngit config --global user.email \"&lt;your email&gt;\"\ngit config --global user.name \"&lt;your name&gt;\"\ngit config --global pull.rebase false\ngit config --global credential.helper store\n\nGet a Personal Access Token from GitHub\n\nCopy the token! You will need it in the next step.\nShow me Note, one change to this video is that you need to specify that you want a classic token.\n\nTrigger Git to ask for your password (that personal access token)\n\nYou can do this by cloning a private repo. In the Terminal, issue this command\ngit clone https://github.com/nmfs-opensci/github_setup_check\nIt will ask for your GitHub username and password. At the password part, paste in the Personal Access Token.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-git-rstudio.html#git-tab",
-    "href": "content/02-git-rstudio.html#git-tab",
-    "title": "Basic Git/GitHub Skills Using RStudio",
-    "section": "Git tab",
-    "text": "Git tab\nWhen the instructions say to use or open or click the Git tab,",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-git-rstudio.html#the-key-skills",
-    "href": "content/02-git-rstudio.html#the-key-skills",
-    "title": "Basic Git/GitHub Skills Using RStudio",
-    "section": "The Key Skills",
-    "text": "The Key Skills\n\nSkill 1: Create a blank repo on GitHub\nSkill 2: Clone your GitHub repo to RStudio\nSkill 3: Make some changes and commit those local changes\nSkill 4: Push the changes to GitHub\nSkill 1b: Copy someone else’s GitHub repository",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-git-rstudio.html#lets-see-it-done",
-    "href": "content/02-git-rstudio.html#lets-see-it-done",
-    "title": "Basic Git/GitHub Skills Using RStudio",
-    "section": "Let’s see it done!",
-    "text": "Let’s see it done!\n\nSkill 1: Create a blank repo on GitHub\n\nClick the + in the upper left from YOUR GitHub page.\nGive your repo the name Test and make sure it is public.\nClick new and check checkbox to add the Readme file and .gitignore\nCopy the URL of your new repo. It’s in the browser where you normally see a URL.\n\nShow me\n\n\nSkill 2: Clone your repo to the RStudio\nIn RStudio we do this by making a new project.\n\nCopy the URL of your repo. https://www.github.com/yourname/Test\nFile &gt; New Project &gt; Version Control &gt; Git\nPast in the URL of your repo from Step 1\nCheck that it is being created in your Home directory which will be denoted ~ in the JupyterHub.\nClick Create.\n\nShow me\n\n\nSkill 3: Make some changes and commit your changes\nThis writes a note about what changes you have made. It also marks a ‘point’ in time that you can go back to if you need to.\n\nMake some changes to the README.md file in the Test repo.\nClick the Git tab, and stage the change(s) by checking the checkboxes next to the files listed.\nClick the Commit button.\nAdd a commit comment, click commit.\n\nShow me\n\n\nSkill 4: Push changes to GitHub / Pull changes from GitHub\nTo push changes you committed in Skill #3\n\nFrom Git tab, click on the Green up arrow that says Push.\nTo pull changes on GitHub that are not on your local computer:\nMake some changes directly on GitHub (not in RStudio)\nFrom Git tab, click on the down arrow that says Pull.\n\nShow me\n\n\nPair-activity 1\nIn RStudio,\n\nMake a copy of README.md\nRename it to .md\nAdd some text.\nStage and commit the added file.\nPush to GitHub.\n\nTry before watching.\nShow me in RStudio – Show me in the shell – Show me in jupyter-git\n\n\nPair-activity 2\nAll of this activity is in RStudio.\n\nClone this repo https://github.com/nmfs-opensci/git-basics to RStudio and create a new project\nNavigate to the files in your new project, create a filed called to &lt;yourname&gt;.md. Use your actual name so the filename is different from everyone elses.\nStage and then commit that new file.\nPush to GitHub.\nMake some more changes and push to GitHub.\nPull in your partner’s (and everyone elses) changes\n\nShow me in RStudio – Show me in JupyterLab\n\n\nPair-activity 3\nYou can copy your own or other people’s repos1.\n\nIn a browser, go to the GitHub repository https://github.com/RWorkflow-Workshops/Week5\nCopy its URL.\nNavigate to your GitHub page: click your icon in the upper right and then ‘your repositories’\nClick the + in top right and click import repository. Paste in the URL and give your repo a name.\nUse Skill #1 to clone your new repo to RStudio and create a new project",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-git-rstudio.html#footnotes",
-    "href": "content/02-git-rstudio.html#footnotes",
-    "title": "Basic Git/GitHub Skills Using RStudio",
-    "section": "Footnotes",
-    "text": "Footnotes\n\n\nThis is different from forking. There is no connection to the original repository.↩︎",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-RStudio"
-    ]
-  },
-  {
-    "objectID": "content/02-earthdata.html#overview",
-    "href": "content/02-earthdata.html#overview",
-    "title": "Earthdata Login",
-    "section": "Overview",
-    "text": "Overview",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Earthdata login"
-    ]
-  },
-  {
-    "objectID": "content/02-earthdata.html#why-do-i-need-an-earthdata-login",
-    "href": "content/02-earthdata.html#why-do-i-need-an-earthdata-login",
-    "title": "Earthdata Login",
-    "section": "Why do I need an Earthdata login?",
-    "text": "Why do I need an Earthdata login?\nWe will be teaching you ways to programmatically access NASA remote-sensing data from within your scripts. You will need to enter your Earthdata username and password in order for this to work.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Earthdata login"
-    ]
-  },
-  {
-    "objectID": "content/02-earthdata.html#getting-an-earthdata-login",
-    "href": "content/02-earthdata.html#getting-an-earthdata-login",
-    "title": "Earthdata Login",
-    "section": "Getting an Earthdata login",
-    "text": "Getting an Earthdata login\nIf you do not already have an Earthdata login, then navigate to the Earthdata Login page, a username and password, and then record this somewhere for use during the tutorials:",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Earthdata login"
-    ]
-  },
-  {
-    "objectID": "content/02-earthdata.html#configure-programmatic-access-to-nasa-servers",
-    "href": "content/02-earthdata.html#configure-programmatic-access-to-nasa-servers",
-    "title": "Earthdata Login",
-    "section": "Configure programmatic access to NASA servers",
-    "text": "Configure programmatic access to NASA servers\nIf you use web interfaces to retrieve nasa data such as Earthdata Search you are prompted to login. We will be using software to retrieve data from NASA Servers during the hackweek, so you must store your credentials on the JupyterHub. Run the following commands on the JupyterHub in a terminal replacing your Earthdata login username and password:\necho \"machine urs.earthdata.nasa.gov login EARTHDATA_LOGIN password EARTHDATA_PASSWORD\" &gt; ~/.netrc\nchmod 0600 .netrc",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Earthdata login"
+      "Code of Conduct"
     ]
   },
   {
@@ -758,263 +690,332 @@
     ]
   },
   {
-    "objectID": "coc.html",
-    "href": "coc.html",
-    "title": "Code of Conduct",
+    "objectID": "content/02-earthdata.html#overview",
+    "href": "content/02-earthdata.html#overview",
+    "title": "Earthdata Login",
+    "section": "Overview",
+    "text": "Overview",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Earthdata login"
+    ]
+  },
+  {
+    "objectID": "content/02-earthdata.html#why-do-i-need-an-earthdata-login",
+    "href": "content/02-earthdata.html#why-do-i-need-an-earthdata-login",
+    "title": "Earthdata Login",
+    "section": "Why do I need an Earthdata login?",
+    "text": "Why do I need an Earthdata login?\nWe will be teaching you ways to programmatically access NASA remote-sensing data from within your scripts. You will need to enter your Earthdata username and password in order for this to work.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Earthdata login"
+    ]
+  },
+  {
+    "objectID": "content/02-earthdata.html#getting-an-earthdata-login",
+    "href": "content/02-earthdata.html#getting-an-earthdata-login",
+    "title": "Earthdata Login",
+    "section": "Getting an Earthdata login",
+    "text": "Getting an Earthdata login\nIf you do not already have an Earthdata login, then navigate to the Earthdata Login page, a username and password, and then record this somewhere for use during the tutorials:",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Earthdata login"
+    ]
+  },
+  {
+    "objectID": "content/02-earthdata.html#configure-programmatic-access-to-nasa-servers",
+    "href": "content/02-earthdata.html#configure-programmatic-access-to-nasa-servers",
+    "title": "Earthdata Login",
+    "section": "Configure programmatic access to NASA servers",
+    "text": "Configure programmatic access to NASA servers\nIf you use web interfaces to retrieve nasa data such as Earthdata Search you are prompted to login. We will be using software to retrieve data from NASA Servers during the hackweek, so you must store your credentials on the JupyterHub. Run the following commands on the JupyterHub in a terminal replacing your Earthdata login username and password:\necho \"machine urs.earthdata.nasa.gov login EARTHDATA_LOGIN password EARTHDATA_PASSWORD\" &gt; ~/.netrc\nchmod 0600 .netrc",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Earthdata login"
+    ]
+  },
+  {
+    "objectID": "content/02-git-rstudio.html#what-is-git-and-github",
+    "href": "content/02-git-rstudio.html#what-is-git-and-github",
+    "title": "Basic Git/GitHub Skills Using RStudio",
+    "section": "What is Git and GitHub?",
+    "text": "What is Git and GitHub?\nGit A program to track your file changes and create a history of those changes. Creates a ‘container’ for a set of files called a repository.\nGitHub A website to host these repositories and allow you to sync local copies (on your computer) to the website. Lots of functionality built on top of this.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-git-rstudio.html#some-basic-git-jargon",
+    "href": "content/02-git-rstudio.html#some-basic-git-jargon",
+    "title": "Basic Git/GitHub Skills Using RStudio",
+    "section": "Some basic Git jargon",
+    "text": "Some basic Git jargon\n\nRepo Repository. It is your code and the record of your changes. This record and also the status of your repo is a hidden folder called .git . You have a local repo and a remote repo. The remote repo is on GitHub (for in our case) is called origin. The local repo is on the JupyterHub.\nStage Tell Git which changes you want to commit (write to the repo history).\nCommit Write a note about what change the staged files and “commit” that note to the repository record. You are also tagging this state of the repo and you could go back to this state if you wanted.\nPush Push local changes (commits) up to the remote repository on GitHub (origin).\nPull Pull changes on GitHub into the local repository on the JupyterHub.\nGit GUIs A graphical interface for Git (which is command line). Today I will use jupyterlab-git which we have installed on JupyterHub.\nShell A terminal window where we can issue git commands.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-git-rstudio.html#overview",
+    "href": "content/02-git-rstudio.html#overview",
+    "title": "Basic Git/GitHub Skills Using RStudio",
+    "section": "Overview",
+    "text": "Overview\nToday I will cover the four basic Git/GitHub skills. The goal for today is to first get you comfortable with the basic skills and terminology. We will use what is called a “trunk-based workflow”.\n\nSimple Trunk-based Workflow:\n\nMake local (on your computer) changes to code.\nRecord what those changes were about and commit to the code change record (history).\nPush those changes to your remote repository (aka origin)\n\nWe’ll do this",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-git-rstudio.html#setting-up-git",
+    "href": "content/02-git-rstudio.html#setting-up-git",
+    "title": "Basic Git/GitHub Skills Using RStudio",
+    "section": "Setting up Git",
+    "text": "Setting up Git\nYou should have gotten this done on Tuesday but if not here are the instructions\nBefore we can work with Git in the JupyterHub, we need to do some set up.\n\nTell Git who you are and to store your credentials (GitHub login info)\n\nShow me\nPaste this into a terminal window:\ngit config --global user.email \"&lt;your email&gt;\"\ngit config --global user.name \"&lt;your name&gt;\"\ngit config --global pull.rebase false\ngit config --global credential.helper store\n\nGet a Personal Access Token from GitHub\n\nCopy the token! You will need it in the next step.\nShow me Note, one change to this video is that you need to specify that you want a classic token.\n\nTrigger Git to ask for your password (that personal access token)\n\nYou can do this by cloning a private repo. In the Terminal, issue this command\ngit clone https://github.com/nmfs-opensci/github_setup_check\nIt will ask for your GitHub username and password. At the password part, paste in the Personal Access Token.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-git-rstudio.html#git-tab",
+    "href": "content/02-git-rstudio.html#git-tab",
+    "title": "Basic Git/GitHub Skills Using RStudio",
+    "section": "Git tab",
+    "text": "Git tab\nWhen the instructions say to use or open or click the Git tab,",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-git-rstudio.html#the-key-skills",
+    "href": "content/02-git-rstudio.html#the-key-skills",
+    "title": "Basic Git/GitHub Skills Using RStudio",
+    "section": "The Key Skills",
+    "text": "The Key Skills\n\nSkill 1: Create a blank repo on GitHub\nSkill 2: Clone your GitHub repo to RStudio\nSkill 3: Make some changes and commit those local changes\nSkill 4: Push the changes to GitHub\nSkill 1b: Copy someone else’s GitHub repository",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-git-rstudio.html#lets-see-it-done",
+    "href": "content/02-git-rstudio.html#lets-see-it-done",
+    "title": "Basic Git/GitHub Skills Using RStudio",
+    "section": "Let’s see it done!",
+    "text": "Let’s see it done!\n\nSkill 1: Create a blank repo on GitHub\n\nClick the + in the upper left from YOUR GitHub page.\nGive your repo the name Test and make sure it is public.\nClick new and check checkbox to add the Readme file and .gitignore\nCopy the URL of your new repo. It’s in the browser where you normally see a URL.\n\nShow me\n\n\nSkill 2: Clone your repo to the RStudio\nIn RStudio we do this by making a new project.\n\nCopy the URL of your repo. https://www.github.com/yourname/Test\nFile &gt; New Project &gt; Version Control &gt; Git\nPast in the URL of your repo from Step 1\nCheck that it is being created in your Home directory which will be denoted ~ in the JupyterHub.\nClick Create.\n\nShow me\n\n\nSkill 3: Make some changes and commit your changes\nThis writes a note about what changes you have made. It also marks a ‘point’ in time that you can go back to if you need to.\n\nMake some changes to the README.md file in the Test repo.\nClick the Git tab, and stage the change(s) by checking the checkboxes next to the files listed.\nClick the Commit button.\nAdd a commit comment, click commit.\n\nShow me\n\n\nSkill 4: Push changes to GitHub / Pull changes from GitHub\nTo push changes you committed in Skill #3\n\nFrom Git tab, click on the Green up arrow that says Push.\nTo pull changes on GitHub that are not on your local computer:\nMake some changes directly on GitHub (not in RStudio)\nFrom Git tab, click on the down arrow that says Pull.\n\nShow me\n\n\nPair-activity 1\nIn RStudio,\n\nMake a copy of README.md\nRename it to .md\nAdd some text.\nStage and commit the added file.\nPush to GitHub.\n\nTry before watching.\nShow me in RStudio – Show me in the shell – Show me in jupyter-git\n\n\nPair-activity 2\nAll of this activity is in RStudio.\n\nClone this repo https://github.com/nmfs-opensci/git-basics to RStudio and create a new project\nNavigate to the files in your new project, create a filed called to &lt;yourname&gt;.md. Use your actual name so the filename is different from everyone elses.\nStage and then commit that new file.\nPush to GitHub.\nMake some more changes and push to GitHub.\nPull in your partner’s (and everyone elses) changes\n\nShow me in RStudio – Show me in JupyterLab\n\n\nPair-activity 3\nYou can copy your own or other people’s repos1.\n\nIn a browser, go to the GitHub repository https://github.com/RWorkflow-Workshops/Week5\nCopy its URL.\nNavigate to your GitHub page: click your icon in the upper right and then ‘your repositories’\nClick the + in top right and click import repository. Paste in the URL and give your repo a name.\nUse Skill #1 to clone your new repo to RStudio and create a new project",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-git-rstudio.html#footnotes",
+    "href": "content/02-git-rstudio.html#footnotes",
+    "title": "Basic Git/GitHub Skills Using RStudio",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nThis is different from forking. There is no connection to the original repository.↩︎",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Git-RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-rstudio.html#open-rstudio-in-the-jupyterhub",
+    "href": "content/02-rstudio.html#open-rstudio-in-the-jupyterhub",
+    "title": "RStudio - R",
+    "section": "Open RStudio in the JupyterHub",
+    "text": "Open RStudio in the JupyterHub\n\nLogin the JupyterHub\nClick on the RStudio button when the Launcher appears \nLook for the browser tab with the RStudio icon",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-rstudio.html#basic-navigation",
+    "href": "content/02-rstudio.html#basic-navigation",
+    "title": "RStudio - R",
+    "section": "Basic Navigation",
+    "text": "Basic Navigation\n\n\n\nRStudio Panels",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-rstudio.html#create-an-rstudio-project",
+    "href": "content/02-rstudio.html#create-an-rstudio-project",
+    "title": "RStudio - R",
+    "section": "Create an RStudio project",
+    "text": "Create an RStudio project\n\nOpen RStudio\nIn the file panel, click on the Home icon to make sure you are in your home directory\nFrom the file panel, click “New Project” to create a new project\nIn the pop up, select New Directory and then New Project\nName it sandbox\nClick on the dropdown in the upper right corner to select your sandbox project\nClick on Tools &gt; Project Options &gt; General and change the first 2 options about saving and restoring the workspace to “No”",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-rstudio.html#installing-packages",
+    "href": "content/02-rstudio.html#installing-packages",
+    "title": "RStudio - R",
+    "section": "Installing packages",
+    "text": "Installing packages\nIn the bottom right panel, select the Packages tab, click install and then start typing the name of the package. Then click Install.\nThe JupyterHub comes with many packages already installed so you shouldn’t have to install many packages.\nWhen you want to use a package, you first need to load it with\nlibrary(hello)\nYou will see this in the tutorials. You might also see something like\nhello::thefunction()\nThis is using thefunction() from the hello package.\n\n\n\n\n\n\nNote\n\n\n\nPython users. In R, you will always call a function like funtion(object) and never like object.function(). The exception is something called ‘piping’ in R, which I have never seen in Python. In this case you pass objects left to right. Like object %&gt;% function(). Piping is very common in modern R but you won’t see it much in R from 10 years ago.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-rstudio.html#uploading-and-downloading-files",
+    "href": "content/02-rstudio.html#uploading-and-downloading-files",
+    "title": "RStudio - R",
+    "section": "Uploading and downloading files",
+    "text": "Uploading and downloading files\nNote, Upload and download is only for the JupyterHub not on RStudio on your computer.\n\nUploading is easy.\nLook for the Upload button in the Files tab of the bottom right panel.\n\n\nDownload is less intuitive.\n\nClick the checkbox next to the file you want to download. One only.\nClick the “cog” icon in the Files tab of the bottom right panel. Then click Export.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-rstudio.html#creating-files",
+    "href": "content/02-rstudio.html#creating-files",
+    "title": "RStudio - R",
+    "section": "Creating files",
+    "text": "Creating files\nWhen you start your server, you will have access to your own virtual drive space. No other users will be able to see or access your files. You can upload files to your virtual drive space and save files here. You can create folders to organize your files. You personal directory is home/rstudio. Everyone has the same home directory but your files are separate and cannot be seen by others.\nPython users: If you open a Python image instead of the R image, your home is home/jovyan.\nThere are a number of different ways to create new files. Let’s practice making new files in RStudio.\n\nR Script\n\nOpen RStudio\nIn the upper right, make sure you are in your sandbox project.\nFrom the file panel, click on “New Blank File” and create a new R script.\nPaste\n\nprint(\"Hello World\")\n1+1\nin the script. 7. Click the Source button (upper left of your new script file) to run this code. 8. Try putting your cursor on one line and running that line of code by clicking “Run” 9. Try selecting lines of code and running that by clicking “Run”\n\n\ncsv file\n\nFrom the file panel, click on “New Blank File” and create a Text File.\nThe file will open in the top left corner. Paste in the following:\n\nname, place, value\nA, 1, 2\nB, 10, 20\nC, 100, 200\n\nClick the save icon (above your new file) to save your csv file\n\n\n\nA Rmarkdown document\nNow let’s create some more complicated files using the RStudio template feature.\n\nFrom the upper left, click File -&gt; New File -&gt; RMarkdown\nClick “Ok” at the bottom.\nWhen the file opens, click Knit (icon at top of file).\nIt will ask for a name. Give it one and save.\nYou file will render into html.\n\nReference sheet for writing in RMarkdown or go to Help &gt; Markdown Quick Reference\n\n\nA Rmarkdown presentation\n\nFrom the upper left, click File -&gt; New File -&gt; RMarkdown\nClick “Presentation” on left of the popup and click “Ok” at the bottom.\nWhen the file opens, click Knit (icon at top of file).\nIt will ask for a name. Give it one and save.\nYou file will render into html.\n\n\n\n(advanced) An interactive application\n\nFrom the upper left, click File -&gt; New File -&gt; Shiny Web App\nIn the popup, give the app a name and make sure the app is saved to my-files\nWhen the file opens, Run App (icon at top of file).\n\n\n\nAnd many more\nPlay around with creating other types of documents using templates. Especially if you already use RStudio.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-rstudio.html#more-tips",
+    "href": "content/02-rstudio.html#more-tips",
+    "title": "RStudio - R",
+    "section": "More tips",
+    "text": "More tips\nLearn some tips and tricks from these\n\nhttps://colorado.posit.co/rsc/the-unknown/into-the-unknown.html\nhttps://www.dataquest.io/blog/rstudio-tips-tricks-shortcuts/",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "RStudio"
+    ]
+  },
+  {
+    "objectID": "content/02-rstudio.html#plotting-a-netcdf-file",
+    "href": "content/02-rstudio.html#plotting-a-netcdf-file",
+    "title": "RStudio - R",
+    "section": "Plotting a netCDF file",
+    "text": "Plotting a netCDF file\n\nhttps://pjbartlein.github.io/REarthSysSci/netCDF.html\nhttps://r-spatial.github.io/sf/articles/sf1.html\n\nwebpage:\nhttps://coastwatch.pfeg.noaa.gov/erddap/griddap/ncdcOisst21Agg.graph?sst%5B(2023-08-27T12:00:00Z)%5D%5B(0.0)%5D%5B(-7.8):(44.8)%5D%5B(39.7):(92.3)%5D&.draw=surface&.vars=longitude%7Clatitude%7Csst&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff\nurl from the dropdown on that page\nurl &lt;- https://coastwatch.pfeg.noaa.gov/erddap/griddap/ncdcOisst21Agg.nc?sst%5B(2023-08-27T12:00:00Z)%5D%5B(0.0)%5D%5B(-7.875):(44.875)%5D%5B(39.625):(92.375)%5D&.draw=surface&.vars=longitude%7Clatitude%7Csst&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff\n\nOpen an R script\n\nAdd this code.\n\nlibrary(ggplot2) # package for plotting\nlibrary(sf)\nlibrary(stars)\nlibrary(dplyr)\n\nurl &lt;- \"https://coastwatch.pfeg.noaa.gov/erddap/griddap/ncdcOisst21Agg.nc?sst%5B(2023-08-27T12:00:00Z)%5D%5B(0.0)%5D%5B(-7.875):(44.875)%5D%5B(39.625):(92.375)%5D&.draw=surface&.vars=longitude%7Clatitude%7Csst&.colorBar=%7C%7C%7C%7C%7C&.bgColor=0xffccccff\"\n\nfil &lt;- \"sst.nc\"\nif(!exists(fil)){\n  download.file(url=url, destfile=fil)\n}\n\nstars_object &lt;- raster::raster(fil) %&gt;% st_as_stars()\nggplot() + geom_stars(data = stars_object)",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "RStudio"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "EDMW 2024 - Workshop 3B",
     "section": "",
-    "text": "We are dedicated to providing a harassment-free learning experience for everyone regardless of gender, gender identity and expression, sexual orientation, disability, physical appearance, body size, race, age or religion. We do not tolerate harassment of participants in any form. Sexual language and imagery is not appropriate either in-person or virtual form, including the Discussion boards and Slack workspace. Participants (including event volunteers and organizers) violating these rules may be sanctioned or expelled from the event at the discretion of the organizers.",
+    "text": "Register for the EDM Workshop: Go to website with password EnterpriseData2024 Once registered you can navigate to Workshop 3B Part I and Part II and add them to your schedule.\nWelcome to the NOAA Fisheries workshop focused on geospatial analysis using ocean ‘big data’. Today, we are focused on using data from NASA EarthData but the skills you will learn are transferable to other ways that you might get earth data (e.g., NESDIS, NCEI, ERDDAP servers, Copernicus).\nThis workshop is focused on those who are brand new to working with earth data in the cloud and with geospatial packages. You will be introduced to cloud access to earth data via Python (first hour) and R (second hour). This workshop will also introduce working with JupyterHubs. We will Jupyter Lab (Python) and RStudio (R) within our JupyterHub.\nSCHEDULE (see nav bar to left)",
     "crumbs": [
       "JupyterHub",
-      "Welcome",
-      "Code of Conduct"
-    ]
-  },
-  {
-    "objectID": "coc.html#definition-of-harassment",
-    "href": "coc.html#definition-of-harassment",
-    "title": "Code of Conduct",
-    "section": "Definition of Harassment",
-    "text": "Definition of Harassment\nHarassment includes, but is not limited to:\n\nVerbal comments that reinforce social structures of domination related to gender, gender identity and expression, sexual orientation, disability, physical appearance, body size, race, age, religion.\nSexual images in public spaces\nDeliberate intimidation, stalking, or following\nHarassing photography or recording\nSustained disruption of talks or other events\nInappropriate physical contact\nUnwelcome sexual attention\nAdvocating for, or encouraging, any of the above behavior",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Code of Conduct"
-    ]
-  },
-  {
-    "objectID": "coc.html#expectations",
-    "href": "coc.html#expectations",
-    "title": "Code of Conduct",
-    "section": "Expectations",
-    "text": "Expectations\nParticipants asked to stop any harassing behavior are expected to comply immediately. If a participant engages in harassing behavior, the organizers retain the right to take any actions to keep the event a welcoming environment for all participants. This includes warning the offender or expulsion from the event.\nThe organizers may take action to redress anything designed to, or with the clear impact of, disrupting the event or making the environment hostile for any participants. We expect participants to follow these rules at all the event venues and event-related social activities.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Code of Conduct"
-    ]
-  },
-  {
-    "objectID": "coc.html#reporting-a-violation",
-    "href": "coc.html#reporting-a-violation",
-    "title": "Code of Conduct",
-    "section": "Reporting a violation",
-    "text": "Reporting a violation\nHarassment and other code of conduct violations reduce the value of the event for everyone. If someone makes you or anyone else feel unsafe or unwelcome, please report it as soon as possible.\nIf you feel comfortable contacting someone associated with our event, you may speak with one of the event organizers in person or contact an organizer on a private Slack channel.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Code of Conduct"
-    ]
-  },
-  {
-    "objectID": "content/01-intro-to-cloud.html",
-    "href": "content/01-intro-to-cloud.html",
-    "title": "Intro the Cloud",
-    "section": "",
-    "text": "Lecture on NASA earth data in the cloud by Michele Thornton (NASA Openscapes) Video",
-    "crumbs": [
-      "JupyterHub",
-      "Tutorials",
-      "Welcome",
-      "Geoscience cloud tools"
-    ]
-  },
-  {
-    "objectID": "content/01-welcome.html",
-    "href": "content/01-welcome.html",
-    "title": "Welcome",
-    "section": "",
-    "text": "Introduction to working with earth data in the cloud and NASA Earth Data\nOrientation on our JupyterHub\nTutorial 1: Searching for resources in NASA Earth Data\nTutorial 2: Points and shapefiles\nTutorial 3: Subsetting your earth data with in a region (shapefile)\nTutorial 4: Getting values at points (along a track or transect)",
-    "crumbs": [
-      "JupyterHub",
-      "Tutorials",
-      "Welcome",
       "Welcome"
     ]
   },
   {
-    "objectID": "content/02-git-jupyter.html#summary",
-    "href": "content/02-git-jupyter.html#summary",
-    "title": "Git - Jupyter Lab",
-    "section": "Summary",
-    "text": "Summary\nIn this tutorial, we will provide a brief introduction to:\n\nCommand line (terminal/shell)\nNavigating around folders in Jupyter Lab\nVersion Control (code management using git)\nSetting up Git in Jupyter Lab\nThe Git GUI in Jupyter Lab\nBasic Git commands",
+    "objectID": "index.html#resources",
+    "href": "index.html#resources",
+    "title": "EDMW 2024 - Workshop 3B",
+    "section": "Resources",
+    "text": "Resources\n\nCoastWatch GitHub organization for many more training modules for working with satellite data in Python and R\nNASA EarthData Cloudbook for many tutorials on using satellite data in Python and R and NASA Earth Data\nNMFS Friday HackHours",
     "crumbs": [
       "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-JupyterLab"
+      "Welcome"
     ]
   },
   {
-    "objectID": "content/02-git-jupyter.html#introduction-jupyter-lab",
-    "href": "content/02-git-jupyter.html#introduction-jupyter-lab",
-    "title": "Git - Jupyter Lab",
-    "section": "Introduction :: Jupyter Lab",
-    "text": "Introduction :: Jupyter Lab\nWhen you start the JupyterHub, you will be in Jupyter Lab. From there you can click on the RStudio box and open RStudio. However for this tutorial, we will stay in Juptyer Lab.",
+    "objectID": "index.html#thank-you-for-inspiration-and-content",
+    "href": "index.html#thank-you-for-inspiration-and-content",
+    "title": "EDMW 2024 - Workshop 3B",
+    "section": "Thank you for inspiration and content!",
+    "text": "Thank you for inspiration and content!\nThank you to the open science community that has created software, teaching resources, and workflows that we have been able to build off of and be inspired by. These include: NASA Openscapes • OceanHackWeek • SnowEx Hackweek • eScience Institute, University of Washington • ICESat-2 Hackweek • Project Jupyter • Pangeo Project • CryoCloud",
     "crumbs": [
       "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-JupyterLab"
+      "Welcome"
     ]
-  },
-  {
-    "objectID": "content/02-git-jupyter.html#introduction-terminalshell",
-    "href": "content/02-git-jupyter.html#introduction-terminalshell",
-    "title": "Git - Jupyter Lab",
-    "section": "Introduction :: Terminal/Shell",
-    "text": "Introduction :: Terminal/Shell\nLog into the JupyterHub. If you do not see this\n\nThen go to File &gt; New Launcher\nClick on the “Terminal” box to open a new terminal window.\n\nShell or Terminal Basics\n\nWhat is Terminal or Shell?\nNavigating Files and Directories\nWorking with Files and Directories\nOptional: Detailed self-paced lesson on running scripts from the shell: Shell Lesson from Software Carpentry\n\nYou will need only basic navigation skills for this course: cd, ls and cat\n\npwd where am I\ncd nameofdir move into a directory\ncd .. move up a directory\nls list the files in the current directory\nls -a list the files including hidden files\nls -l list the files with more info\ncat filename print out the contents of a file\n\n\n\nLet’s try\nls\nls -a\ncd shared\nls\ncd shell-tutorial\ncat lesson1.sh\ncd ..\ncd ..\n\n\nClose the terminal\nJust click on the X in the terminal tab",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-JupyterLab"
-    ]
-  },
-  {
-    "objectID": "content/02-git-jupyter.html#introduction-file-navigation",
-    "href": "content/02-git-jupyter.html#introduction-file-navigation",
-    "title": "Git - Jupyter Lab",
-    "section": "Introduction :: File Navigation",
-    "text": "Introduction :: File Navigation\nIn the far left, you will see a line of icons. The top one is a folder and allows us to move around our file system.\n\nClick on shared. Now you can see the files in the shared directory.\nClick on shell-tutorial. Then click on lesson1.sh. The file opens. You won’t be able to save changes here because you don’t have write permission on this drive.\nClick on the folder icon that looks like this. Click on the actual folder image. \nNow it should look like this folder /\nThis shows me doing this\n\nCreate a new folder.\n\nNext to the blue rectange with a +, is a grey folder with a +. Click that to create a new folder, called lesson-scripts.\nThen click on lesson-scripts to enter the folder\n\n\nCreate a new file\n\nCreate with File &gt; New &gt; Text file\nThe file will open and you can edit it.\nSave with File &gt; Save Text\nDelete the file by right-clicking on it and clicking “Delete”",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-JupyterLab"
-    ]
-  },
-  {
-    "objectID": "content/02-git-jupyter.html#introduction-version-control-git",
-    "href": "content/02-git-jupyter.html#introduction-version-control-git",
-    "title": "Git - Jupyter Lab",
-    "section": "Introduction :: Version Control (Git)",
-    "text": "Introduction :: Version Control (Git)\n\nWhat is version control, git, github, and how to set it up?\nVersion control is managing and tracking changes to your documents (program source code, images, websites, data files, etc.). git is a popular tool used for version control of software code. github.com is popular platform that provides remote server hosting for git repositories. A repository is a collection of various files that you are tracking for changes and versions. Currently GitHub is the most popular platform for file sharing code and code packages.\nThis section is a step-by-step guide to set up git on our JupyterHub. We will also configure git to use your github.com account for managing your repositories hosted on github.com. There are 5 main steps.\n\n\nStep 1: Create a GitHub account\nTo complete the setup, you will need an account on github.com. If you don’t have an account, please visit github.com, create an account (free) and come back to this guide for setting up git.\n\n\nStep 2: Clone a repository\nWe have created a demo repository for you to clone:\nhttps://github.com/nmfs-opensci/Git-Lesson\n\nStart your JupyterHub\nClick on the Git icon\n\n\n\nClick “Clone a Repository”\nWhere it says “Enter the URI of the remote Git repository”, paste in the URL https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024\nThe folder appears and you can enter the folder and edit and create files.\n\n\nYour task: Create a file with your name and save to the Git-Lesson folder",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-JupyterLab"
-    ]
-  },
-  {
-    "objectID": "content/02-git-jupyter.html#step-3",
-    "href": "content/02-git-jupyter.html#step-3",
-    "title": "Git - Jupyter Lab",
-    "section": "Step 3:",
-    "text": "Step 3:\nConfigure git with your name and email address.\n``` bash\ngit config --global user.name \"Makhan Virdi\"\ngit config --global user.email \"Makhan.Virdi@gmail.com\"\n```\n\n**Note:** This name and email could be different from your github.com credentials. Remember `git` is a program that keeps track of your changes locally (on the JupyterHub or your own computer) and github.com is a platform to host your repositories. However, since your changes are tracked by `git`, the email/name used in git configuration will show up next to your contributions on github.com when you `push` your repository to github.com (`git push` is discussed in a later step).\n\nConfigure git to store your github credentials to avoid having to enter your github username and token each time you push changes to your repository(in Step 5, we will describe how to use github token instead of a password)\ngit config --global credential.helper store\nCopy link for the demo repository from your github account. Click the green “Code” button and copy the link as shown.\n\nClone the repository using git clone command in the terminal\nTo clone a repository from github, copy the link for the repository (previous step) and use git clone:\ngit clone https://github.com/YOUR-GITHUB-USERNAME/check_github_setup\nNote: Replace YOUR-GITHUB-USERNAME here with your github.com username. For example, it is virdi for my github.com account as seen in this image.\n\nUse ls (list files) to verify the existence of the repository that you just cloned\n\nChange directory to the cloned repository using cd check_github_setup and check the current directory using pwd command (present working directory)\n\nCheck status of your git repository to confirm git set up using git status\n\nYou are all set with using git on your 2i2c JupyterHub! But the collaborative power of git through github needs some additional setup.\nIn the next step, we will create a new file in this repository, track changes to this file, and link it with your github.com account.\n\n\nStep 4. Creating new file and tracking changes\n\nIn the left panel on your 2i2c JupyterHub, click on the “directory” icon and then double click on “check_github_setup” directory.\n\n\nOnce you are in the check_github_setup directory, create a new file using the text editor in your 2i2c JupyterHub (File &gt;&gt; New &gt;&gt; Text File).\n\nName the file lastname.txt. For example, virdi.txt for me (use your last name). Add some content to this file (for example, I added this to my virdi.txt file: my last name is virdi).\n\nNow you should have a new file (lastname.txt) in the git repository directory check_github_setup\nCheck if git can see that you have added a new file using git status. Git reports that you have a new file that is not tracked by git yet, and suggests adding that file to the git tracking system.\n\nAs seen in this image, git suggests adding that file so it can be tracked for changes. You can add file to git for tracking changes using git add. Then, you can commit changes to this file’s content using git commit as shown in the image.\ngit add virdi.txt\ngit status\ngit commit -m \"adding a new file\"\ngit status\n\nAs seen in the image above, git is suggesting to push the change that you just committed to the remote server at github.com (so that your collaborators can also see what changes you made).\nNote: DO NOT execute push yet. Before we push to github.com, let’s configure git further and store our github.com credentials to avoid entering the credentials every time we invoke git push. For doing so, we need to create a token on github.com to be used in place of your github.com password.\n\n\n\nStep 5. Create access token on github.com\n\nGo to your github account and create a new “personal access token”: https://github.com/settings/tokens/new\n\n\n\nGenerate Personal Access Token on github.com\n\n\nEnter a description in “Note” field as seen above, select “repo” checkbox, and scroll to the bottom and click the green button “Generate Token”. Once generated, copy the token (or save it in a text file for reference).\nIMPORTANT: You will see this token only once, so be sure to copy this. If you do not copy your token at this stage, you will need to generate a new token.\n\nTo push (transfer) your changes to github, use git push in terminal. It requires you to enter your github credentials. You will be prompted to enter your github username and “password”. When prompted for your “password”, DO NOT use your github password, use the github token that was copied in the previous step.\ngit push\n\nNote: When you paste your token in the terminal window, windows users will press Ctrl+V and mac os users will press Cmd+V. If it does not work, try generating another token and use the copy icon next to the token to copy the token. Then, paste using your computer’s keyboard shortcut for paste.\nNow your password is stored in ~/.git-credentials and you will not be prompted again unless the Github token expires. You can check the presence of this git-credentials file using Terminal. Here the ~ character represents your home directory (/home/jovyan/).\nls -la ~\nThe output looks like this:\ndrwxr-xr-x 13 jovyan jovyan 6144 Oct 22 17:35 .\ndrwxr-xr-x  1 root   root   4096 Oct  4 16:21 ..\n-rw-------  1 jovyan jovyan 1754 Oct 29 18:30 .bash_history\ndrwxr-xr-x  4 jovyan jovyan 6144 Oct 29 16:38 .config\n-rw-------  1 jovyan jovyan   66 Oct 22 17:35 .git-credentials\n-rw-r--r--  1 jovyan jovyan   84 Oct 22 17:14 .gitconfig\ndrwxr-xr-x 10 jovyan jovyan 6144 Oct 21 16:19 2021-Cloud-Hackathon\nYou can also verify your git configuration\n(notebook) jovyan@jupyter-virdi:~$ git config -l\nThe output should have credential.helper = store:\nuser.email        = Makhan.Virdi@gmail.com\nuser.name         = Makhan Virdi\ncredential.helper = store\n\nNow we are all set to collaborate with github on the JupyterHub during the Cloud Hackathon!\n\n\nSummary: Git Commands\n\nCommonly used git commands (modified from source)\n\n\nGit Command\nDescription\n\n\n\n\ngit status\nShows the current state of the repository: the current working branch, files in the staging area, etc.\n\n\ngit add\nAdds a new, previously untracked file to version control and marks already tracked files to be committed with the next commit\n\n\ngit commit\nSaves the current state of the repository and creates an entry in the log\n\n\ngit log\nShows the history for the repository\n\n\ngit diff\nShows content differences between commits, branches, individual files and more\n\n\ngit clone\nCopies a repository to your local environment, including all the history\n\n\ngit pull\nGets the latest changes of a previously cloned repository\n\n\ngit push\nPushes your local changes to the remote repository, sharing them with others\n\n\n\n\n\nGit: More Details\nLesson: For a more detailed self-paced lesson on git, visit Git Lesson from Software Carpentry\nCheatsheet: Frequently used git commands\nDangit, Git!?!: If you are stuck after a git mishap, there are ready-made solutions to common problems at Dangit, Git!?!\n\n\nCloning our repository using the git Jupyter lab extension.\nIf we’re already familiar with git commands and feel more confortable using a GUI our Jupyterhub deployment comes with a git extension. This plugin allows us to operate with git using a simple user interface.\nFor example we can clone our repository using the extension.\n\n\n\ngit extension",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-JupyterLab"
-    ]
-  },
-  {
-    "objectID": "content/02-git.html#set-up-authentication-to-github",
-    "href": "content/02-git.html#set-up-authentication-to-github",
-    "title": "Git - Set-up for Pushing",
-    "section": "Set up authentication to GitHub",
-    "text": "Set up authentication to GitHub\nYou need to tell GitHub who you are so you can push your local changes up to GitHub. There are a few ways to do this. I am going to show you a way that works on any computer, including a virtual computer like the JupyterHub.\n\nStep 1: Generate a Personal Access Token\nWe are going to generate a classic token.\n\nGo to https://github.com/settings/tokens\nClick Generate new token &gt; Generate new token (classic)\nWhen the pop-up shows up, fill in a description, click the “repo” checkbox, and then scroll to bottom to click “Generate”.\nFor scope, select “repo”.\nSAVE the token. You need it for the next step.\n\n\n\nStep 2: Tell Git who your are\n\nOpen a terminal. In Jupyter Lab, you will see a box labelled “Terminal” on the Launcher window. In RStudio, you will see a tab (usually in lower left) with the label “Terminal”\nPaste these 3 lines of code into the terminal\n\ngit config --global user.email \"&lt;your email&gt;\"\ngit config --global user.name \"&lt;your name&gt;\"\ngit config --global pull.rebase false\ngit config --global credential.helper store\nReplace \"&lt;your email&gt;\" with something like jane.doe@noaa.gov. Replace \"&lt;your name&gt;\" with something like \"Jane Doe\". Notice the quotes.\n\n\nStep 3: Trigger git to ask for your password\nThere are a few ways to do this.\n\nClone a repo, make a change, and then commit and push the change\nClone a private repo\n\nOption b is easiest if you are new to Git and GitHub.\n\nOpen a terminal window\nMake sure you are in the home directory by typing cd ~\nClone a repo and create an RStudio project. File &gt; New Project &gt; Version Control &gt; Git. Paste in this URL https://github.com/nmfs-opensci/github_setup_check and make sure it is creating the repo at ~ (home directory).\nYou will be asked for your GitHub username and password. For the password, enter the PERSONAL ACCESS TOKEN from Step 1.\n\nWatch a video of these 4 steps\nFull instructions with other ways to do this from R",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Git-Authentication"
-    ]
-  },
-  {
-    "objectID": "content/02-local-setup-r.html",
-    "href": "content/02-local-setup-r.html",
-    "title": "Setting up on your computer - R users",
-    "section": "",
-    "text": "Here are instructions for installing on your own computer.\nInstall the development version of earthdatalogin and update terra.\ndevtools::install_github(\"boettiger-lab/earthdatalogin\")\ninstall.packages(\"terra\")\ninstall.packages(\"rstac\")\ninstall.packages(\"gdalcubes\")\ninstall.packages(\"here\")\n\nlibrary(\"earthdatalogin\")\nlibrary(\"terra\")\nlibrary(\"rstac\")\nlibrary(\"gdalcubes\")\nlibrary(\"here\")\nYou will need GDAL installed. See these instructions if you do not have it installed: https://developers.planet.com/docs/integrations/qgis/install-qgis-gdal/\nYou may need to install terra and sf from source to get them to use the latest GDAL installation.\ninstall.packages(\"terra\", type = \"source\")\ninstall.packages(\"sf\", type = \"source\")\nsf::sf_extSoftVersion()\nThe environment we are using today is the py-rocket-geospatial image. This is part of work on a Data Science Docker Stack for NOAA Fisheries.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Local set-up - R"
-    ]
-  },
-  {
-    "objectID": "content/02-local-setup-r.html#load-packages",
-    "href": "content/02-local-setup-r.html#load-packages",
-    "title": "Setting up on your computer - R users",
-    "section": "Load packages",
-    "text": "Load packages\n\n# Function to check if pkgs are installed, and install any missing pkgs\npkgTest &lt;- function(x)\n{\n  if (!require(x,character.only = TRUE))\n  {\n    install.packages(x,dep=TRUE,repos='http://cran.us.r-project.org')\n    if(!require(x,character.only = TRUE)) stop(x, \" :Package not found\")\n  }\n}\n\n# Create list of required packages\nlist.of.packages &lt;- c(\n  \"earthdatalogin\", \"terra\", \"rstac\", \"gdalcubes\", \"here\", \"sf\", \"dplyr\", \"stars\", \"tmap\", \n  \"rerddap\", \"plotdap\", \"parsedate\", \"ggplot2\", \"rerddapXtracto\",\n  \"date\", \"maps\", \"mapdata\", \"RColorBrewer\",\"viridis\")\n\n# Create list of installed packages\npkges = installed.packages()[,\"Package\"]\n\n# Install and load all required pkgs\nfor (pk in list.of.packages) {\n  pkgTest(pk)\n}\n\nLoading required package: earthdatalogin\n\n\nLoading required package: terra\n\n\nterra 1.7.71\n\n\nLoading required package: rstac\n\n\nLoading required package: gdalcubes\n\n\n\nAttaching package: 'gdalcubes'\n\n\nThe following objects are masked from 'package:terra':\n\n    animate, crop, size\n\n\nLoading required package: here\n\n\nhere() starts at /home/jovyan/EDMW-EarthData-Workshop-2024\n\n\nLoading required package: sf\n\n\nLinking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE\n\n\nLoading required package: dplyr\n\n\n\nAttaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:terra':\n\n    intersect, union\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union\n\n\nLoading required package: stars\n\n\nLoading required package: abind\n\n\nLoading required package: tmap\n\n\n\nAttaching package: 'tmap'\n\n\nThe following object is masked from 'package:datasets':\n\n    rivers\n\n\nLoading required package: rerddap\n\n\nRegistered S3 method overwritten by 'hoardr':\n  method           from\n  print.cache_info httr\n\n\nLoading required package: plotdap\n\n\nLoading required package: parsedate\n\n\nLoading required package: ggplot2\n\n\nLoading required package: rerddapXtracto\n\n\nLoading required package: date\n\n\nLoading required package: maps\n\n\nLoading required package: mapdata\n\n\nLoading required package: RColorBrewer\n\n\nLoading required package: viridis\n\n\nLoading required package: viridisLite\n\n\n\nAttaching package: 'viridis'\n\n\nThe following object is masked from 'package:maps':\n\n    unemp\n\nsessionInfo()\n\nR version 4.4.0 (2024-04-24)\nPlatform: x86_64-pc-linux-gnu\nRunning under: Ubuntu 22.04.4 LTS\n\nMatrix products: default\nBLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 \nLAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0\n\nlocale:\n [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       \n [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   \n [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          \n[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   \n\ntime zone: Etc/UTC\ntzcode source: system (glibc)\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base     \n\nother attached packages:\n [1] viridis_0.6.5           viridisLite_0.4.2       RColorBrewer_1.1-3     \n [4] mapdata_2.3.1           maps_3.4.2              date_1.2-42            \n [7] rerddapXtracto_1.2.0    ggplot2_3.5.1           parsedate_1.3.1        \n[10] plotdap_1.0.3           rerddap_1.1.0           tmap_3.99.9001         \n[13] stars_0.6-5             abind_1.4-5             dplyr_1.1.4            \n[16] sf_1.0-16               here_1.0.1              gdalcubes_0.7.0        \n[19] rstac_1.0.0             terra_1.7-71            earthdatalogin_0.0.2.99\n\nloaded via a namespace (and not attached):\n [1] tidyselect_1.2.1        fastmap_1.1.1           lazyeval_0.2.2         \n [4] leaflegend_1.2.0        leaflet_2.2.2           XML_3.99-0.16.1        \n [7] digest_0.6.35           lifecycle_1.0.4         magrittr_2.0.3         \n[10] compiler_4.4.0          rlang_1.1.3             tools_4.4.0            \n[13] utf8_1.2.4              yaml_2.3.8              data.table_1.15.4      \n[16] knitr_1.46              htmlwidgets_1.6.4       sp_2.1-4               \n[19] classInt_0.4-10         curl_5.2.1              xml2_1.3.6             \n[22] KernSmooth_2.23-22      httpcode_0.3.0          withr_3.0.0            \n[25] purrr_1.0.2             leafsync_0.1.0          grid_4.4.0             \n[28] fansi_1.0.6             cols4all_0.7-1          e1071_1.7-14           \n[31] leafem_0.2.3            colorspace_2.1-0        spacesXYZ_1.3-0        \n[34] scales_1.3.0            dichromat_2.0-0.1       crul_1.4.2             \n[37] cli_3.6.2               rmarkdown_2.26          crayon_1.5.2           \n[40] generics_0.1.3          rstudioapi_0.16.0       httr_1.4.7             \n[43] tmaptools_3.1-1         ncdf4_1.22              DBI_1.2.2              \n[46] proxy_0.4-27            parallel_4.4.0          base64enc_0.1-3        \n[49] vctrs_0.6.5             jsonlite_1.8.8          jpeg_0.1-10            \n[52] crosstalk_1.2.1         tidyr_1.3.1             units_0.8-5            \n[55] glue_1.7.0              lwgeom_0.2-14           codetools_0.2-20       \n[58] leaflet.providers_2.0.0 gtable_0.3.5            raster_3.6-26          \n[61] munsell_0.5.1           tibble_3.2.1            pillar_1.9.0           \n[64] rappdirs_0.3.3          htmltools_0.5.8.1       R6_2.5.1               \n[67] hoardr_0.5.4            rprojroot_2.0.4         evaluate_0.23          \n[70] lattice_0.22-6          png_0.1-8               class_7.3-22           \n[73] Rcpp_1.0.12             gridExtra_2.3           widgetframe_0.3.1      \n[76] xfun_0.43               pkgconfig_2.0.3",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Orientation",
-      "Local set-up - R"
-    ]
-  },
-  {
-    "objectID": "content/index.html",
-    "href": "content/index.html",
-    "title": "Week 1 Tutorials",
-    "section": "",
-    "text": "During week 1, participants will gain experience with the platforms used in collaborative science: GitHub and RMarkdown."
-  },
-  {
-    "objectID": "content/index.html#prerequisites",
-    "href": "content/index.html#prerequisites",
-    "title": "Week 1 Tutorials",
-    "section": "Prerequisites",
-    "text": "Prerequisites\nPlease follow the set up prerequisites"
-  },
-  {
-    "objectID": "content/index.html#content",
-    "href": "content/index.html#content",
-    "title": "Week 1 Tutorials",
-    "section": "Content",
-    "text": "Content\n\nThe R language and RStudio\nIntro to RStudio\nIntroduction to Git and GitHub"
   },
   {
     "objectID": "setup.html",
     "href": "setup.html",
-    "title": "Set-up - To work on JupyterHub",
+    "title": "Set-up",
     "section": "",
-    "text": "If you want to follow along, you can also see setup - R and setup - Python to attempt local set up on your computer.",
+    "text": "We will be using a JupyterHub for the workshop.\nYou can also see setup - R and setup - Python to aset up on your computer but be aware that GDAL installation is problemmatic.",
     "crumbs": [
       "JupyterHub",
       "Welcome",
-      "Set-up - To work on JupyterHub"
+      "Set-up"
     ]
   },
   {
-    "objectID": "setup.html#github-username-required-to-get-on-jupyterhub",
-    "href": "setup.html#github-username-required-to-get-on-jupyterhub",
-    "title": "Set-up - To work on JupyterHub",
-    "section": "GitHub username (required to get on JupyterHub)",
-    "text": "GitHub username (required to get on JupyterHub)\n\nCreate a GitHub account (if you don’t already have one) at https://github.com. Advice for choosing a GitHub username: this is a professional username that you will use in work settings. GitHub accounts are not anonymous; this is for sharing work. Using your real name is common.\nWrite down your username and password; you will need to log in during the course!\nHere is a video showing the whole process",
+    "objectID": "setup.html#access-to-the-jupyterhub",
+    "href": "setup.html#access-to-the-jupyterhub",
+    "title": "Set-up",
+    "section": "Access to the JupyterHub",
+    "text": "Access to the JupyterHub\n\nGitHub username\n\nCreate a GitHub account (if you don’t already have one) at https://github.com. Advice for choosing a GitHub username: this is a professional username that you will use in work settings. GitHub accounts are not anonymous; this is for sharing work. Using your real name is common.\nWrite down your username and password; you will need to log in during the course!\nHere is a video showing the whole process\n\n\n\nGet on JupyterHub\nOnce you have submitted your GitHub username and have been accepted as a member of the DaskHub team on the nmfs-opensci organization, you can log-into the JupyterHub.\nhttps://dhub.opensci.live/\n\nChoose the default Py-R base geospatial image. Watch a video of the login process and basic JupyterHub orientation.\nhome directory is yours and no one else can see it. To share files, you can connect to a GitHub repository or use the shared directory. Everyone can read and write to this directory. Please don’t delete content that is not your own.",
     "crumbs": [
       "JupyterHub",
       "Welcome",
-      "Set-up - To work on JupyterHub"
-    ]
-  },
-  {
-    "objectID": "setup.html#get-on-the-jupyterhub-if-you-want-to-follow-along",
-    "href": "setup.html#get-on-the-jupyterhub-if-you-want-to-follow-along",
-    "title": "Set-up - To work on JupyterHub",
-    "section": "Get on the JupyterHub (if you want to follow along)",
-    "text": "Get on the JupyterHub (if you want to follow along)\nOnce you have submitted your GitHub username and have been accepted as a member of the DaskHub team on the nmfs-opensci organization, you can log-into the JupyterHub.\nhttps://dhub.opensci.live/\n\nChoose the default Py-R base geospatial image. Watch a video of the login process and basic JupyterHub orientation.\nhome directory is yours and no one else can see it. To share files, you can connect to a GitHub repository or use the shared directory. Everyone can read and write to this directory. Please don’t delete content that is not your own.",
-    "crumbs": [
-      "JupyterHub",
-      "Welcome",
-      "Set-up - To work on JupyterHub"
+      "Set-up"
     ]
   },
   {
     "objectID": "setup.html#earthdata-login-account-optional",
     "href": "setup.html#earthdata-login-account-optional",
-    "title": "Set-up - To work on JupyterHub",
+    "title": "Set-up",
     "section": "Earthdata Login account (optional)",
     "text": "Earthdata Login account (optional)\nWe will be using a public user account, but if you do a lot of work with NASA Earthdata, you should get a login account.\n\nCreate an Earthdata Login account (if you don’t already have one) at https://urs.earthdata.nasa.gov\nWrite down your username and password; you will need it.",
     "crumbs": [
       "JupyterHub",
       "Welcome",
-      "Set-up - To work on JupyterHub"
+      "Set-up"
     ]
   },
   {

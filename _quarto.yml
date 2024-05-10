@@ -33,6 +33,7 @@ website:
         href: index.md
         contents:
           - team.md
+          - schedule.md
           - setup.qmd
           - section: Orientation
             contents:
