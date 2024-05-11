@@ -450,6 +450,10 @@ function googleTranslateElementInit() {
 <h2 class="anchored" data-anchor-id="summary">Summary</h2>
 <p>Once we have an <code>xarray</code> DataArray, there are many things we can do with it like aggregation, sampling, means and interpolation. See <a href="https://earth-env-data-science.github.io/lectures/xarray/xarray-part2.html">this tutorial</a> for examples. See the <code>xarray</code> <a href="https://docs.xarray.dev/en/latest/gallery.html">gallery</a> in the documentation.</p>
 <p>We will use the <a href="https://cmr.earthdata.nasa.gov/search/concepts/C2036881712-POCLOUD.html">GHRSST Level 4 AVHRR_OI Global Blended Sea Surface Temperature Analysis</a> data from NCEI. It is lower resolution than the MUR data and will load faster. Also keep in mind that we are on a JupyterHub on Azure while the NASA data is on AWS us-west-2. This means we have to do data access via <code>https</code> and not direct access via <code>S3</code> and our data access is much slower.</p>
+<section id="for-those-not-working-in-the-jupyterhub" class="level4">
+<h4 class="anchored" data-anchor-id="for-those-not-working-in-the-jupyterhub">For those not working in the JupyterHub</h4>
+<p><a href="https://colab.research.google.com/github/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/tutorials/python/4-data-cubes.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid" alt="image"></a> and then create a code cell and run <code>pip install earthaccess</code>.</p>
+</section>
 <section id="import-required-packages" class="level3">
 <h3 class="anchored" data-anchor-id="import-required-packages">Import Required Packages</h3>
 <div id="f04a653d-b9e5-4cfe-a198-b5b612389742" class="cell" data-tags="[]" data-execution_count="62">
