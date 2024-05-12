@@ -61,7 +61,7 @@ library(ggplot2)
 The shapefile for the Longhurst marine provinces includes a list of regions.\
 For this exercise, we will only use the boundary of one province, the Gulf Stream region ("GFST").
 
-```{r read province boundaries from shapefiles}
+```{r read_province_boundaries}
 # Set directory path for shapefile
 dir_path <- '../resources/longhurst_v4_2010/'
 
@@ -88,7 +88,7 @@ earthdatalogin::edl_netrc()
 
 Then, define your search and cropping criteria
 
-```{r}
+```{r get_results}
 # Dataset unique name
 short_name <- 'AVHRR_OI-NCEI-L4-GLOB-v2.1'
 
@@ -114,7 +114,7 @@ There are `r length(results)` files.
 
 ## Apply shapefiles as mask to satellite data
 
-```{r}
+```{r get_first_result}
 # Select the first result
 ras <- terra::rast(results[1], vsi = TRUE)
 
@@ -153,17 +153,17 @@ To minimize data loading times, the first 10 results, which correspond to approx
 of data, will be used for this exercise.
 
 Select the first 10 SST results (end of January and beginning of February). 
-```{r}
+```{r get_first_ten}
 ras_all <- terra::rast(results[c(25:35)], vsi = TRUE)
 ```
 
 Trim the SST data to the boundaries of GFST. 
-```{r}
+```{r trim_to_boundary}
 rc_all <- terra::mask(ras_all, GFST)
 ```
 
 Select SST data. 
-```{r}
+```{r select_sst}
 rc_sst <- rc_all["analysed_sst", ]
 ```
 
@@ -184,7 +184,7 @@ plot(terra::crop(raster_mean, GFST))
 
 
 Calculate monthly mean SST means across raster (lat, lon). 
-```{r get_means}
+```{r get_monthly_means}
 
 # Function to convert times to year-month format
 year_month <- function(x) {
@@ -198,7 +198,7 @@ ym <- year_month(rc_sst)
 monthly_mean_rast <- terra::tapp(rc_sst, ym, fun = mean)
 
 # Compute mean across raster grouped by Year-month
-monthly_mean <- global(monthly_mean_rast, fun = mean, na.rm=TRUE)
+monthly_means <- terra::global(monthly_mean_rast, fun = mean, na.rm=TRUE)
 
 ```
 
@@ -215,7 +215,7 @@ monthly_means_df$year_month <- sub("X", "", rownames(monthly_means_df))
 
 ## Plot monthly mean of sea surface temperature within GFST province
 
-```{r}
+```{r plot_monthly_mean}
 ggplot(data = monthly_means_df, aes(x = year_month, y = mean, group = 1)) +
   geom_line() +
   geom_point() +
