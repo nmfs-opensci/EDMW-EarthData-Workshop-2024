@@ -120,9 +120,12 @@ ras <- terra::rast(results[1], vsi = TRUE)
 
 # Extract SST from the multi-layer raster data
 ras_sst <- ras[["analysed_sst"]]
+```
 
+Convert shape to SpatVector.
+```{r get_shapes}
 # Vectorize shapes
-shp <- vect(shapes)
+shp <- terra::vect(shapes)
 
 # Get boundaries for GFST
 GFST <- shp[shp$ProvCode == "GFST",]
@@ -157,15 +160,21 @@ Select the first 10 SST results (end of January and beginning of February).
 ras_all <- terra::rast(results[c(25:35)], vsi = TRUE)
 ```
 
-Trim the SST data to the boundaries of GFST. 
-```{r trim_to_boundary}
-rc_all <- terra::mask(ras_all, GFST)
+Select SST data. The trim and mask operations are memory intensive and we want to select only the layer we will be working with.
+```{r select_sst}
+rc_sst <- ras_all["analysed_sst",]
 ```
 
-Select SST data. 
-```{r select_sst}
-rc_sst <- rc_all["analysed_sst", ]
+Crop to the GFST boundaries.
+```{r crop_to_boundary}
+rc_sst <- terra::crop(rc_sst, GFST)
 ```
+
+Trim the SST data to the boundaries of GFST. 
+```{r mask_boundary}
+rc_sst <- terra::mask(rc_sst, GFST)
+```
+
 
 Calculate mean SST over the entire time series and map it
 ```{r get_means}
@@ -230,5 +239,5 @@ If you get the following error:
 
 > Warning: Opening a /vsi file with the netCDF driver requires Linux userfaultfd to be available. Or you may set the GDAL_SKIP=netCDF configuration option to force the use of the HDF5 driver. (GDAL error 1)Error: [rast] file does not exist: /vsicurl/https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20191231120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc
 
-[insert solve]
+Then go back and run the authentication code at the top.
 :::
