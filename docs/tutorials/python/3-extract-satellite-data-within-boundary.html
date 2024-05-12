@@ -6,7 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="NOAA CoastWatch">
 
 <title>2024 EDMW Workshop 3B - Extract data within a boundary</title>
 <style>
@@ -403,7 +402,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#create-the-region-from-the-shape-file" id="toc-create-the-region-from-the-shape-file" class="nav-link" data-scroll-target="#create-the-region-from-the-shape-file">Create the region from the shape file</a></li>
   <li><a href="#mask-the-satellite-data" id="toc-mask-the-satellite-data" class="nav-link" data-scroll-target="#mask-the-satellite-data">Mask the satellite data</a></li>
   <li><a href="#visualize-the-masked-data-on-a-map" id="toc-visualize-the-masked-data-on-a-map" class="nav-link" data-scroll-target="#visualize-the-masked-data-on-a-map">Visualize the masked data on a map</a></li>
-  <li><a href="#plot-the-mean-daily-temperature-for-the-province" id="toc-plot-the-mean-daily-temperature-for-the-province" class="nav-link" data-scroll-target="#plot-the-mean-daily-temperature-for-the-province">Plot the mean daily temperature for the province</a></li>
+  <li><a href="#calculate-the-mean-temperature-over-all-timesteps" id="toc-calculate-the-mean-temperature-over-all-timesteps" class="nav-link" data-scroll-target="#calculate-the-mean-temperature-over-all-timesteps">Calculate the mean temperature over all timesteps</a></li>
+  <li><a href="#calculate-the-mean-temperature-over-all-grids-lat-lon" id="toc-calculate-the-mean-temperature-over-all-grids-lat-lon" class="nav-link" data-scroll-target="#calculate-the-mean-temperature-over-all-grids-lat-lon">Calculate the mean temperature over all grids (lat, lon)</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 <div class="toc-actions"><ul class="collapse"><li><a href="https://github.dev/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/tutorials/python/3-extract-satellite-data-within-boundary.ipynb" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/tutorials/python/3-extract-satellite-data-within-boundary.ipynb" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
@@ -429,12 +429,6 @@ function googleTranslateElementInit() {
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>NOAA CoastWatch </p>
-          </div>
-  </div>
     
   
     
@@ -477,7 +471,7 @@ The dataset represents the division of the world oceans into provinces as define
 </section>
 <section id="import-packages-and-authenticate" class="level2">
 <h2 class="anchored" data-anchor-id="import-packages-and-authenticate">Import packages and authenticate</h2>
-<div id="45ac5d46" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-03-15T05:05:41.334822Z&quot;,&quot;start_time&quot;:&quot;2024-03-15T05:05:39.765760Z&quot;}" data-execution_count="1">
+<div id="45ac5d46" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-03-15T05:05:41.334822Z&quot;,&quot;start_time&quot;:&quot;2024-03-15T05:05:39.765760Z&quot;}" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> earthaccess </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pprint <span class="im">import</span> pprint</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
@@ -492,11 +486,11 @@ The dataset represents the division of the world oceans into provinces as define
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>ERROR 1: PROJ: proj_create_from_database: Open of /srv/conda/envs/notebook/share/proj failed</code></pre>
 </div>
+<div id="10df5bae-c8bf-4595-9070-de07fe5fbecb" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"HOME"</span>] <span class="op">=</span> <span class="st">"/home/jovyan"</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="915537db-2314-45ae-ac43-ccaacf30115d" class="cell" data-execution_count="2">
+<div id="915537db-2314-45ae-ac43-ccaacf30115d" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>auth <span class="op">=</span> earthaccess.login()</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># are we authenticated?</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> auth.authenticated:</span>
@@ -506,7 +500,7 @@ The dataset represents the division of the world oceans into provinces as define
 </section>
 <section id="load-the-longhurst-provinces-shape-files-into-a-geopandas-dataframe" class="level2">
 <h2 class="anchored" data-anchor-id="load-the-longhurst-provinces-shape-files-into-a-geopandas-dataframe">Load the Longhurst Provinces shape files into a geopandas dataframe</h2>
-<div id="b8f4f525" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-03-15T05:06:24.591369Z&quot;,&quot;start_time&quot;:&quot;2024-03-15T05:06:24.359466Z&quot;}" data-execution_count="3">
+<div id="b8f4f525" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-03-15T05:06:24.591369Z&quot;,&quot;start_time&quot;:&quot;2024-03-15T05:06:24.359466Z&quot;}" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#shape_path = '../resources/longhurst_v4_2010/Longhurst_world_v4_2010.shp'</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>shape_path <span class="op">=</span> os.path.join(<span class="st">'..'</span>,</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                          <span class="st">'resources'</span>,</span>
@@ -515,7 +509,7 @@ The dataset represents the division of the world oceans into provinces as define
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                          )</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>shapefiles <span class="op">=</span> gpd.read_file(shape_path)</span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>shapefiles.head(<span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="33">
 <div>
 <div>
 
@@ -589,13 +583,13 @@ The dataset represents the division of the world oceans into provinces as define
 <section id="isolate-the-gulf-stream-province" class="level2">
 <h2 class="anchored" data-anchor-id="isolate-the-gulf-stream-province">Isolate the Gulf Stream Province</h2>
 <p>The Gulf Stream Province can be isolated using its ProvCode (GFST)</p>
-<div id="508e8688" class="cell" data-execution_count="4">
+<div id="508e8688" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ProvCode <span class="op">=</span> <span class="st">"GFST"</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Locate the row with the ProvCode code</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>gulf_stream <span class="op">=</span> shapefiles.loc[shapefiles[<span class="st">"ProvCode"</span>] <span class="op">==</span> ProvCode]</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>gulf_stream</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div class="cell-output cell-output-display" data-execution_count="34">
 <div>
 <div>
 
@@ -630,10 +624,10 @@ The dataset represents the division of the world oceans into provinces as define
 <li>The bounding box is the smallest rectangle that will completely enclose the province.</li>
 <li>We will use the bounding box coordinates to subset the satellite data</li>
 </ul>
-<div id="07ca5fe4" class="cell" data-execution_count="5">
+<div id="07ca5fe4" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>gs_bnds <span class="op">=</span> gulf_stream.bounds</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>gs_bnds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div class="cell-output cell-output-display" data-execution_count="36">
 <div>
 <div>
 
@@ -687,7 +681,7 @@ The dataset represents the division of the world oceans into provinces as define
 </tr>
 </tbody>
 </table>
-<div id="bda466ff-8eec-43f6-8f30-ecfcac92e969" class="cell" data-execution_count="6">
+<div id="bda466ff-8eec-43f6-8f30-ecfcac92e969" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Search Dataset Unique ID</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>collection_id <span class="op">=</span> <span class="st">'C2036881712-POCLOUD'</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> earthaccess.search_data(</span>
@@ -697,13 +691,13 @@ The dataset represents the division of the world oceans into provinces as define
 <pre><code>Granules found: 3053</code></pre>
 </div>
 </div>
-<div id="5750beef-a053-4e4e-99fe-e4faf56c9078" class="cell" data-execution_count="8">
+<div id="5750beef-a053-4e4e-99fe-e4faf56c9078" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define date range and bounding box and search</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>date_range <span class="op">=</span> (<span class="st">"2020-01-16"</span>, <span class="st">"2020-3-16"</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># (xmin=-73.5, ymin=33.5, xmax=-43.5, ymax=43.5)</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>bbox <span class="op">=</span> (gs_bnds.minx, gs_bnds.miny, gs_bnds.maxx, gs_bnds.maxy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="29cb81c1-a4b2-49c8-9866-649ff0362a77" class="cell" data-execution_count="9">
+<div id="29cb81c1-a4b2-49c8-9866-649ff0362a77" class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get results based on date range and bbox</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> earthaccess.search_data(</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    concept_id <span class="op">=</span> collection_id,</span>
@@ -715,73 +709,129 @@ The dataset represents the division of the world oceans into provinces as define
 <pre><code>Granules found: 62</code></pre>
 </div>
 </div>
-<div id="00409d44-28d5-41ad-9e14-8283710c7ca1" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the first 30 files</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>fileset <span class="op">=</span> earthaccess.<span class="bu">open</span>(results[<span class="dv">1</span>:<span class="dv">30</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="a597e895-8e58-47e5-9e23-c3d8d66da15a" class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Examine results</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>item <span class="op">=</span> results[<span class="dv">0</span>]</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#type(item)</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#item.keys()</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>item[<span class="st">'umm'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="40">
+<pre><code>{'TemporalExtent': {'RangeDateTime': {'EndingDateTime': '2020-01-16T00:00:00.000Z',
+   'BeginningDateTime': '2020-01-15T00:00:00.000Z'}},
+ 'MetadataSpecification': {'URL': 'https://cdn.earthdata.nasa.gov/umm/granule/v1.6.5',
+  'Name': 'UMM-G',
+  'Version': '1.6.5'},
+ 'GranuleUR': '20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1',
+ 'ProviderDates': [{'Type': 'Insert', 'Date': '2021-05-11T17:17:16.602Z'},
+  {'Type': 'Update', 'Date': '2021-05-11T17:17:16.603Z'}],
+ 'SpatialExtent': {'HorizontalSpatialDomain': {'Geometry': {'BoundingRectangles': [{'WestBoundingCoordinate': -179.875,
+      'SouthBoundingCoordinate': -89.875,
+      'EastBoundingCoordinate': 179.875,
+      'NorthBoundingCoordinate': 89.875}]}}},
+ 'DataGranule': {'ArchiveAndDistributionInformation': [{'SizeUnit': 'MB',
+    'Size': 9.72747802734375e-05,
+    'Checksum': {'Value': 'f7f272ac28fd5563da4a03bc9c74a9c2',
+     'Algorithm': 'MD5'},
+    'SizeInBytes': 102,
+    'Name': '20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc.md5'},
+   {'SizeUnit': 'MB',
+    'Size': 0.9890298843383789,
+    'Checksum': {'Value': '779e063e913ff1df721b252bbc4eb3b9',
+     'Algorithm': 'MD5'},
+    'SizeInBytes': 1037073,
+    'Name': '20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc'}],
+  'DayNightFlag': 'Unspecified',
+  'ProductionDateTime': '2020-02-11T00:00:00.000Z'},
+ 'CollectionReference': {'Version': '2.1',
+  'ShortName': 'AVHRR_OI-NCEI-L4-GLOB-v2.1'},
+ 'RelatedUrls': [{'URL': 's3://podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc',
+   'Type': 'GET DATA VIA DIRECT ACCESS',
+   'Description': 'This link provides direct download access via S3 to the granule.'},
+  {'URL': 'https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-public/AVHRR_OI-NCEI-L4-GLOB-v2.1/20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc.md5',
+   'Description': 'Download 20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc.md5',
+   'Type': 'EXTENDED METADATA'},
+  {'URL': 'https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc',
+   'Description': 'Download 20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc',
+   'Type': 'GET DATA'},
+  {'URL': 'https://archive.podaac.earthdata.nasa.gov/s3credentials',
+   'Description': 'api endpoint to retrieve temporary credentials valid for same-region direct s3 access',
+   'Type': 'VIEW RELATED INFORMATION'},
+  {'URL': 'https://opendap.earthdata.nasa.gov/providers/POCLOUD/collections/GHRSST%20Level%204%20AVHRR_OI%20Global%20Blended%20Sea%20Surface%20Temperature%20Analysis%20(GDS2)%20from%20NCEI/granules/20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1',
+   'Type': 'USE SERVICE API',
+   'Subtype': 'OPENDAP DATA',
+   'Description': 'OPeNDAP request URL'}]}</code></pre>
+</div>
+</div>
+<div id="00409d44-28d5-41ad-9e14-8283710c7ca1" class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the first 30 files</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>fileset <span class="op">=</span> earthaccess.<span class="bu">open</span>(results[<span class="dv">1</span>:<span class="dv">30</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Opening 29 granules, approx size: 0.03 GB</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"61d54eb1f32f4119a6d85fed829de40c","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"0dc2daf6b3444aeabdb20dbb0f61671c","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"1d5c8f43050a437e9a30ba1a4b658f7f","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"4b85dd5e24f74e8097dd21a506069da8","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"9654cc79f3e24ca6a1c22a0837cf46c0","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"5fdc35bec55c4afa95b487a6ea426b3b","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 </div>
 </section>
 <section id="load-the-satellite-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-the-satellite-data">Load the satellite data</h2>
-<div id="58008da4-b1c3-4e63-8072-65bc1ca5520a" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data; takes awhile</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>ds <span class="op">=</span> xr.open_mfdataset(fileset, chunks <span class="op">=</span> {})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="58008da4-b1c3-4e63-8072-65bc1ca5520a" class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data; takes awhile</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>ds <span class="op">=</span> xr.open_mfdataset(fileset, chunks <span class="op">=</span> {})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="34d2c0a1-845e-48ab-9ee7-282e287b36c6" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get SST data </span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>ds_subset <span class="op">=</span> ds[<span class="st">'analysed_sst'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="34d2c0a1-845e-48ab-9ee7-282e287b36c6" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get SST data </span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>ds_subset <span class="op">=</span> ds[<span class="st">'analysed_sst'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="visualize-the-unmasked-data-on-a-map" class="level2">
 <h2 class="anchored" data-anchor-id="visualize-the-unmasked-data-on-a-map">Visualize the unmasked data on a map</h2>
 <p>The map shows the full extent of the bounding box</p>
-<div id="05d31d6d" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">10</span>))</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Label axes of a Plate Carree projection with a central longitude of 180:</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>ax1 <span class="op">=</span> plt.subplot(<span class="dv">211</span>, projection<span class="op">=</span>ccrs.PlateCarree(central_longitude<span class="op">=</span><span class="dv">180</span>))</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the lon and lat ranges to set the extent of the map</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># the 120, 260 lon range will show the whole Pacific</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># the 15, 55 lat range with capture the range of the data</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>ax1.set_extent([<span class="dv">260</span>, <span class="dv">350</span>, <span class="dv">15</span>, <span class="dv">55</span>], ccrs.PlateCarree())</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co"># set the tick marks to be slightly inside the map extents</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co"># add feature to the map</span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>ax1.add_feature(cfeature.LAND, facecolor<span class="op">=</span><span class="st">'0.6'</span>)</span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>ax1.coastlines()</span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co"># format the lat and lon axis labels</span></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>lon_formatter <span class="op">=</span> LongitudeFormatter(zero_direction_label<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>lat_formatter <span class="op">=</span> LatitudeFormatter()</span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>ax1.xaxis.set_major_formatter(lon_formatter)</span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>ax1.yaxis.set_major_formatter(lat_formatter)</span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>ds_subset[<span class="dv">0</span>].plot.pcolormesh(ax<span class="op">=</span>ax1, transform<span class="op">=</span>ccrs.PlateCarree(), cmap<span class="op">=</span><span class="st">'jet'</span>)</span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Satellite Data Before Masking'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="05d31d6d" class="cell" data-execution_count="55">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">10</span>))</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Label axes of a Plate Carree projection with a central longitude of 180:</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>ax1 <span class="op">=</span> plt.subplot(<span class="dv">211</span>, projection<span class="op">=</span>ccrs.PlateCarree(central_longitude<span class="op">=</span><span class="dv">180</span>))</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the lon and lat ranges to set the extent of the map</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># the 120, 260 lon range will show the whole Pacific</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co"># the 15, 55 lat range with capture the range of the data</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>ax1.set_extent([<span class="dv">260</span>, <span class="dv">350</span>, <span class="dv">15</span>, <span class="dv">55</span>], ccrs.PlateCarree())</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co"># set the tick marks to be slightly inside the map extents</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co"># add feature to the map</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>ax1.add_feature(cfeature.LAND, facecolor<span class="op">=</span><span class="st">'0.6'</span>)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>ax1.coastlines()</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="co"># format the lat and lon axis labels</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>lon_formatter <span class="op">=</span> LongitudeFormatter(zero_direction_label<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>lat_formatter <span class="op">=</span> LatitudeFormatter()</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>ax1.xaxis.set_major_formatter(lon_formatter)</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>ax1.yaxis.set_major_formatter(lat_formatter)</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>sst_cm <span class="op">=</span> ds_subset[<span class="dv">0</span>].plot.pcolormesh(ax<span class="op">=</span>ax1, transform<span class="op">=</span>ccrs.PlateCarree(), cmap<span class="op">=</span><span class="st">'jet'</span>)</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Satellite Data Before Masking'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="55">
+<pre><code>Text(0.5, 1.0, 'Satellite Data Before Masking')</code></pre>
+</div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="3-extract-satellite-data-within-boundary_files/figure-html/cell-13-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="3-extract-satellite-data-within-boundary_files/figure-html/cell-15-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -790,51 +840,9 @@ The dataset represents the division of the world oceans into provinces as define
 <section id="create-the-region-from-the-shape-file" class="level2">
 <h2 class="anchored" data-anchor-id="create-the-region-from-the-shape-file">Create the region from the shape file</h2>
 <p>The plot shows the shape of the region and its placement along the US East Coast.</p>
-<div id="9de68aa0" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>region <span class="op">=</span> regionmask.from_geopandas(gulf_stream)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>region.plot()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="3-extract-satellite-data-within-boundary_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="mask-the-satellite-data" class="level2">
-<h2 class="anchored" data-anchor-id="mask-the-satellite-data">Mask the satellite data</h2>
-<div id="bb874fdd" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the mask</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> region.mask(ds_subset.lon, ds_subset.lat)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply mask the the satellite data</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>masked_ds <span class="op">=</span> ds_subset.where(mask <span class="op">==</span> region.numbers[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="visualize-the-masked-data-on-a-map" class="level2">
-<h2 class="anchored" data-anchor-id="visualize-the-masked-data-on-a-map">Visualize the masked data on a map</h2>
-<p>These data have been trimmed to contain only values within the Gulf Stream Province</p>
-<div id="593c40e4" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">10</span>))</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Label axes of a Plate Carree projection with a central longitude of 180:</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>ax1 <span class="op">=</span> plt.subplot(<span class="dv">211</span>, projection<span class="op">=</span>ccrs.PlateCarree(central_longitude<span class="op">=</span><span class="dv">180</span>))</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the lon and lat ranges to set the extent of the map</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># the 120, 260 lon range will show the whole Pacific</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co"># the 15, 55 lat range with capture the range of the data</span></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>ax1.set_extent([<span class="dv">260</span>, <span class="dv">350</span>, <span class="dv">15</span>, <span class="dv">55</span>], ccrs.PlateCarree())</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co"># add feature to the map</span></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>ax1.add_feature(cfeature.LAND, facecolor<span class="op">=</span><span class="st">'0.6'</span>)</span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>ax1.coastlines()</span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>masked_ds[<span class="dv">0</span>].plot.pcolormesh(ax<span class="op">=</span>ax1,</span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>                             transform<span class="op">=</span>ccrs.PlateCarree(),</span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>                             cmap<span class="op">=</span><span class="st">'jet'</span>)</span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Satellite Data After Masking for Longhurst GFST'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="9de68aa0" class="cell" data-execution_count="56">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>region <span class="op">=</span> regionmask.from_geopandas(gulf_stream)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>region.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -844,34 +852,87 @@ The dataset represents the division of the world oceans into provinces as define
 </div>
 </div>
 </section>
-<section id="plot-the-mean-daily-temperature-for-the-province" class="level2">
-<h2 class="anchored" data-anchor-id="plot-the-mean-daily-temperature-for-the-province">Plot the mean daily temperature for the province</h2>
-<div id="67241f4b" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>gulf_stream_mean <span class="op">=</span> masked_ds.mean(dim<span class="op">=</span>[<span class="st">'lat'</span>, <span class="st">'lon'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="mask-the-satellite-data" class="level2">
+<h2 class="anchored" data-anchor-id="mask-the-satellite-data">Mask the satellite data</h2>
+<div id="bb874fdd" class="cell" data-execution_count="57">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the mask</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> region.mask(ds_subset.lon, ds_subset.lat)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply mask the the satellite data</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>masked_ds <span class="op">=</span> ds_subset.where(mask <span class="op">==</span> region.numbers[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="0391d99e" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>gulf_stream_mean</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>)) </span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the SeaWiFS data</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>plt.plot_date(gulf_stream_mean.time,</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>              gulf_stream_mean, </span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>              <span class="st">'o'</span>, markersize<span class="op">=</span><span class="dv">8</span>, </span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>              label<span class="op">=</span><span class="st">'gulf stream'</span>, c<span class="op">=</span><span class="st">'black'</span>, </span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>              linestyle<span class="op">=</span><span class="st">'-'</span>, linewidth<span class="op">=</span><span class="dv">2</span>) </span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Gulf Stream Province Daily Mean Temperature in 2020'</span>)</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'SST(degrees K)'</span>) </span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>plt.legend()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="visualize-the-masked-data-on-a-map" class="level2">
+<h2 class="anchored" data-anchor-id="visualize-the-masked-data-on-a-map">Visualize the masked data on a map</h2>
+<p>These data have been trimmed to contain only values within the Gulf Stream Province</p>
+<div id="593c40e4" class="cell" data-execution_count="58">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">10</span>))</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Label axes of a Plate Carree projection with a central longitude of 180:</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>ax1 <span class="op">=</span> plt.subplot(<span class="dv">211</span>, projection<span class="op">=</span>ccrs.PlateCarree(central_longitude<span class="op">=</span><span class="dv">180</span>))</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the lon and lat ranges to set the extent of the map</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># the 120, 260 lon range will show the whole Pacific</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co"># the 15, 55 lat range with capture the range of the data</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>ax1.set_extent([<span class="dv">260</span>, <span class="dv">350</span>, <span class="dv">15</span>, <span class="dv">55</span>], ccrs.PlateCarree())</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co"># add feature to the map</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>ax1.add_feature(cfeature.LAND, facecolor<span class="op">=</span><span class="st">'0.6'</span>)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>ax1.coastlines()</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>masked_ds[<span class="dv">0</span>].plot.pcolormesh(ax<span class="op">=</span>ax1,</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>                             transform<span class="op">=</span>ccrs.PlateCarree(),</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>                             cmap<span class="op">=</span><span class="st">'jet'</span>)</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Satellite Data After Masking for Longhurst GFST'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="58">
+<pre><code>Text(0.5, 1.0, 'Satellite Data After Masking for Longhurst GFST')</code></pre>
+</div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="3-extract-satellite-data-within-boundary_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="3-extract-satellite-data-within-boundary_files/figure-html/cell-18-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<hr>
+</section>
+<section id="calculate-the-mean-temperature-over-all-timesteps" class="level2">
+<h2 class="anchored" data-anchor-id="calculate-the-mean-temperature-over-all-timesteps">Calculate the mean temperature over all timesteps</h2>
+<div id="df2b1539-68b9-4eca-adb5-59c396658df3" class="cell" data-execution_count="68">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate mean over all time steps</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>sst_mean_grid <span class="op">=</span> masked_ds.mean(dim<span class="op">=</span><span class="st">'time'</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Map the SST mean</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>sst_mean_grid.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="3-extract-satellite-data-within-boundary_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="calculate-the-mean-temperature-over-all-grids-lat-lon" class="level2">
+<h2 class="anchored" data-anchor-id="calculate-the-mean-temperature-over-all-grids-lat-lon">Calculate the mean temperature over all grids (lat, lon)</h2>
+<div id="ff326c58-3794-45fa-819c-bf6f62143819" class="cell" data-execution_count="71">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate mean over all grids</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>sst_mean_time <span class="op">=</span> masked_ds.mean(dim<span class="op">=</span>[<span class="st">'lat'</span>, <span class="st">'lon'</span>])</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the SST mean</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>)) </span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>plt.plot_date(sst_mean_time.time,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>              sst_mean_time, </span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>              <span class="st">'o'</span>, markersize<span class="op">=</span><span class="dv">8</span>, </span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>              label<span class="op">=</span><span class="st">'gulf stream'</span>, c<span class="op">=</span><span class="st">'black'</span>, </span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>              linestyle<span class="op">=</span><span class="st">'-'</span>, linewidth<span class="op">=</span><span class="dv">2</span>) </span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Gulf Stream Province Daily Mean Temperature 2020'</span>)</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'SST (degrees C)'</span>) </span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Dates'</span>)</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
