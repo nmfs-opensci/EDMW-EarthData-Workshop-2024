@@ -3,7 +3,15 @@ title: "EDMW 2024 - Workshop 3B"
 subtitle: "Introduction to using earth data in the cloud for scientific workflows"
 ---
 
-Register for the EDM Workshop: Go to [website](https://2024noaaedmw.sched.com/) with password EnterpriseData2024  Once registered you can navigate to Workshop 3B [Part I](https://2024noaaedmw.sched.com/event/1auQ5/3b-introduction-to-using-earth-data-in-the-cloud-for-scientific-workflows-180min-part-i) and [Part II](https://2024noaaedmw.sched.com/event/1auQi/3b-introduction-to-using-earth-data-in-the-cloud-for-scientific-workflows-180min-part-ii) and add them to your schedule.
+Register for the EDM Workshop: Go to [website](https://2024noaaedmw.sched.com/) with password EnterpriseData2024  Once registered you can navigate to Workshop 3B [Part I](https://2024noaaedmw.sched.com/event/1auQ5/3b-introduction-to-using-earth-data-in-the-cloud-for-scientific-workflows-180min-part-i) and [Part II](https://2024noaaedmw.sched.com/event/1auQi/3b-introduction-to-using-earth-data-in-the-cloud-for-scientific-workflows-180min-part-ii) and add them to your schedule. A couple prerequisites if you want to follow along with our tutorials during the workshop on our JupyterHub:
+
+* Provide us your GitHub user name:  <https://forms.gle/9R1oavEw3mxWFmaF7>
+* Questions? Submit questions here and we will get back to you: <https://forms.gle/LeWQVUHhhJ5sz1CJ7>
+
+Note, access to our JupyterHub is restricted to those with a NOAA email. *What if I am non-NOAA?* You can watch or follow along on Google Colab. *What if I don’t have a GitHub user name?* You can sign up for a user name at www.github.com, just watch, or follow along on 
+Google Colab. 
+
+
 
 <img src="images/cloud-overview.png" style="width:250px; float:right;">
 Welcome to the NOAA Fisheries workshop focused on geospatial analysis using ocean 'big data'. Today, we are focused on using data from NASA [EarthData](https://www.earthdata.nasa.gov/) but the skills you will learn are transferable to other ways that you might get earth data (e.g., NESDIS, NCEI, ERDDAP servers, Copernicus).
