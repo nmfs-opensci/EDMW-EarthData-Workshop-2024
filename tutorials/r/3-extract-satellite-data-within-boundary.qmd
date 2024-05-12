@@ -1,6 +1,7 @@
 ---
 title: Extract data within a boundary
-author: 'NOAA CoastWatch, NOAA Openscapes'
+original author: NOAA CoastWatch
+modifications by: NMFS Openscapes
 ---
 
 ::: {.callout-note title="Learning Objectives"}
