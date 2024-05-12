@@ -151,7 +151,7 @@ We will construct a data cube to compute monthly average for sea surface tempera
 To minimize data loading times, the first 10 results, which correspond to approximately two months 
 of data, will be used for this exercise.
 
-Select the SST results for end of January and beginning of February. 
+Select the first 10 SST results (end of January and beginning of February). 
 ```{r}
 ras_all <- terra::rast(results[c(25:35)], vsi = TRUE)
 ```
@@ -166,22 +166,41 @@ Select SST data.
 rc_sst <- rc_all["analysed_sst", ]
 ```
 
-Calculate monthly SST means. 
+Calculate mean SST over the entire time series and map it
 ```{r get_means}
+
+# Compute mean over 12 time layers
+raster_mean <- terra::mean(rc_sst, na.rm=TRUE)
+
+# Map mean SST 
+plot(raster_mean)
+
+# Map only the GFST area
+plot(terra::crop(raster_mean, GFST))
+
+
+```
+
+
+Calculate monthly mean SST means across raster (lat, lon). 
+```{r get_means}
+
 # Function to convert times to year-month format
 year_month <- function(x) {
   format(as.Date(time(x), format="%Y-%m-%d"), "%Y-%m")
 }
 
-# Convert time to Year-month format for aggregation
+# Format time to Year-month for monthly aggregation 
 ym <- year_month(rc_sst)
 
 # Compute raster mean grouped by Year-month
 monthly_mean_rast <- terra::tapp(rc_sst, ym, fun = mean)
 
 # Compute mean across raster grouped by Year-month
-monthly_means <- global(monthly_mean_rast, fun = mean, na.rm=TRUE)
+monthly_mean <- global(monthly_mean_rast, fun = mean, na.rm=TRUE)
+
 ```
+
 
 ## Convert raster into data frame
 
