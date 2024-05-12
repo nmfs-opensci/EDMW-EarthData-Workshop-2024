@@ -7,9 +7,10 @@ We will be using a JupyterHub for the workshop.
 * <https://dhub.opensci.live/>
 * Click Start Server
 * Open terminal, type to get the tutorials
+
 ```
 cd ~
-git clone https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024
+git clone https://github.com/nmfs-opensci/EDMW-3B-tutorials
 ```
 
 You can also see [setup - R](content/02-local-setup-r.html) and [setup - Python](content/02-local-setup-python.html) to aset up on your computer but be aware that GDAL installation is problemmatic.
