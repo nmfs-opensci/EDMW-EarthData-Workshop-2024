@@ -1,9 +1,0 @@
----
-title: Intro the Cloud
----
-
-![](../images/cloud-overview.png)
-
-Lecture on NASA earth data in the cloud by Michele Thornton (NASA Openscapes) [Video](https://www.youtube.com/watch?v=E5Dpeap16hU)
-
-{{< video https://www.youtube.com/watch?v=E5Dpeap16hU width="250" >}}
