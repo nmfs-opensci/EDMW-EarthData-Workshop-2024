@@ -33,6 +33,7 @@ website:
         href: index.md
         contents:
           - team.md
+          - schedule.md
           - setup.qmd
           - section: Orientation
             contents:
@@ -67,22 +68,18 @@ website:
                 href: tutorials/r/1-earthdatalogin.qmd
               - text: Subset and Crop
                 href: tutorials/r/2-subset-and-plot.qmd
-              - text: Mask and Aggregate
+              - text: Mask to a shapefile
                 href: tutorials/r/3-extract-satellite-data-within-boundary.qmd
-#              - text: Get Points
-#                href: tutorials/r/4-matchup-satellite-data-to-track-locations.qmd
-#              - text: "Bonus: Geospatial Data"
-#                href: tutorials/r/5-r-geospatial.qmd
           - section: "Tutorials in Python"
             contents:
               - text: Search
                 href: tutorials/python/1-earthaccess.ipynb
               - text: Subset and Crop
                 href: tutorials/python/2-subset-and-plot.ipynb
-              - text: Mask and Aggregate
+              - text: Mask to a shapefile
                 href: tutorials/python/3-extract-satellite-data-within-boundary.ipynb
-#              - text: Get Points
-#                href: tutorials/python/4-matchup-satellite-data-to-track-locations.ipynb
+              - text: Monthly and seasonal means
+                href: tutorials/python/4-data-cubes.ipynb
       - text: <img width=100px>
       - text: <img src="/images/noaa_emblem_logo-2022.png" width=100px>
         href: https://fisheries.noaa.gov

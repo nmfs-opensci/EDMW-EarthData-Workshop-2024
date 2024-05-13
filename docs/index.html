@@ -157,8 +157,14 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./schedule.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Schedule</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Set-up - To work on JupyterHub</span></a>
+ <span class="menu-text">Set-up</span></a>
   </div>
 </li>
           <li class="sidebar-item sidebar-item-section">
@@ -284,7 +290,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tutorials/r/3-extract-satellite-data-within-boundary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Mask and Aggregate</span></a>
+ <span class="menu-text">Mask to a shapefile</span></a>
   </div>
 </li>
       </ul>
@@ -313,7 +319,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tutorials/python/3-extract-satellite-data-within-boundary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Mask and Aggregate</span></a>
+ <span class="menu-text">Mask to a shapefile</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorials/python/4-data-cubes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Monthly and seasonal means</span></a>
   </div>
 </li>
       </ul>
@@ -339,8 +351,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#topics-for-may-15-2024" id="toc-topics-for-may-15-2024" class="nav-link active" data-scroll-target="#topics-for-may-15-2024">Topics for May 15, 2024</a></li>
-  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources">Resources</a></li>
+  <li><a href="#resources" id="toc-resources" class="nav-link active" data-scroll-target="#resources">Resources</a></li>
   <li><a href="#thank-you-for-inspiration-and-content" id="toc-thank-you-for-inspiration-and-content" class="nav-link" data-scroll-target="#thank-you-for-inspiration-and-content">Thank you for inspiration and content!</a></li>
   </ul>
 <div class="toc-actions"><ul class="collapse"><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/edit/main/index.md" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/index.md" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
@@ -377,19 +388,15 @@ function googleTranslateElementInit() {
 </header>
 
 
-<p>Register (free and virtual) for the EDM Workshop: Go to <a href="https://2024noaaedmw.sched.com/">website</a> with password EnterpriseData2024 Once registered you can navigate to <a href="https://2024noaaedmw.sched.com/event/58a6a2f2f583464e45f7db30afd26624">workshop 3B</a> and add that to your schedule.</p>
-<p><img src="images/cloud-overview.png" style="width:250px; float:right;"> Welcome to the NOAA Fisheries workshop focused on geospatial analysis using ocean ‘big data’. Today, we are focused on using data from NASA <a href="https://www.earthdata.nasa.gov/">EarthData</a> but the skills you will learn are transferable to other ways that you might get earth data (e.g., NESDIS, NCEI, ERDDAP servers, Copernicus).</p>
-<p>This workshop is focused on those who are brand new to working with earth data in the cloud and with geospatial packages. R users will be introduced to the <code>earthdatalogin</code>, <code>terra</code> and <code>sf</code> packages, while Python users will be introduced to the <code>earthaccess</code> and <code>xarray</code> packages. This workshop will also introduce working with <a href="https://jupyter.org/hub">JupyterHubs</a>. We will use both Jupyter Lab (Python) and RStudio (R) within our JupyterHub.</p>
-<section id="topics-for-may-15-2024" class="level2">
-<h2 class="anchored" data-anchor-id="topics-for-may-15-2024">Topics for May 15, 2024</h2>
+<p>Register for the EDM Workshop: Go to <a href="https://2024noaaedmw.sched.com/">website</a> with password EnterpriseData2024 Once registered you can navigate to Workshop 3B <a href="https://2024noaaedmw.sched.com/event/1auQ5/3b-introduction-to-using-earth-data-in-the-cloud-for-scientific-workflows-180min-part-i">Part I</a> and <a href="https://2024noaaedmw.sched.com/event/1auQi/3b-introduction-to-using-earth-data-in-the-cloud-for-scientific-workflows-180min-part-ii">Part II</a> and add them to your schedule. A couple prerequisites if you want to follow along with our tutorials during the workshop on our JupyterHub:</p>
 <ul>
-<li>Introduction to working with earth data in the cloud and NASA Earth Data</li>
-<li>Orientation on our JupyterHub</li>
-<li>Tutorial 1: Searching for resources in NASA Earthdata</li>
-<li>Tutorial 2: Plotting and subsetting earth data</li>
-<li>Tutorial 3: Masking and aggregating your earth data within a region (shapefiles)</li>
+<li>Provide us your GitHub user name: <a href="https://forms.gle/9R1oavEw3mxWFmaF7" class="uri">https://forms.gle/9R1oavEw3mxWFmaF7</a></li>
+<li>Questions? Submit questions here and we will get back to you: <a href="https://forms.gle/LeWQVUHhhJ5sz1CJ7" class="uri">https://forms.gle/LeWQVUHhhJ5sz1CJ7</a></li>
 </ul>
-</section>
+<p>Note, access to our JupyterHub is restricted to those with a NOAA email. <em>What if I am non-NOAA?</em> You can watch or follow along on Google Colab. <em>What if I don’t have a GitHub user name?</em> You can sign up for a user name at www.github.com, just watch, or follow along on Google Colab.</p>
+<p><img src="images/cloud-overview.png" style="width:250px; float:right;"> Welcome to the NOAA Fisheries workshop focused on geospatial analysis using ocean ‘big data’. Today, we are focused on using data from NASA <a href="https://www.earthdata.nasa.gov/">EarthData</a> but the skills you will learn are transferable to other ways that you might get earth data (e.g., NESDIS, NCEI, ERDDAP servers, Copernicus).</p>
+<p>This workshop is focused on those who are brand new to working with earth data in the cloud and with geospatial packages. You will be introduced to cloud access to earth data via Python (first hour) and R (second hour). This workshop will also introduce working with <a href="https://jupyter.org/hub">JupyterHubs</a>. We will Jupyter Lab (Python) and RStudio (R) within our JupyterHub.</p>
+<p><a href="schedule.html">SCHEDULE</a> (see nav bar to left)</p>
 <section id="resources" class="level2">
 <h2 class="anchored" data-anchor-id="resources">Resources</h2>
 <ul>

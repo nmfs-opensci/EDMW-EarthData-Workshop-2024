@@ -3,20 +3,22 @@ title: "EDMW 2024 - Workshop 3B"
 subtitle: "Introduction to using earth data in the cloud for scientific workflows"
 ---
 
-Register (free and virtual) for the EDM Workshop: Go to [website](https://2024noaaedmw.sched.com/) with password EnterpriseData2024  Once registered you can navigate to [workshop 3B](https://2024noaaedmw.sched.com/event/58a6a2f2f583464e45f7db30afd26624) and add that to your schedule.
+Register for the EDM Workshop: Go to [website](https://2024noaaedmw.sched.com/) with password EnterpriseData2024  Once registered you can navigate to Workshop 3B [Part I](https://2024noaaedmw.sched.com/event/1auQ5/3b-introduction-to-using-earth-data-in-the-cloud-for-scientific-workflows-180min-part-i) and [Part II](https://2024noaaedmw.sched.com/event/1auQi/3b-introduction-to-using-earth-data-in-the-cloud-for-scientific-workflows-180min-part-ii) and add them to your schedule. A couple prerequisites if you want to follow along with our tutorials during the workshop on our JupyterHub:
+
+* Provide us your GitHub user name:  <https://forms.gle/9R1oavEw3mxWFmaF7>
+* Questions? Submit questions here and we will get back to you: <https://forms.gle/LeWQVUHhhJ5sz1CJ7>
+
+Note, access to our JupyterHub is restricted to those with a NOAA email. *What if I am non-NOAA?* You can watch or follow along on Google Colab. *What if I don’t have a GitHub user name?* You can sign up for a user name at www.github.com, just watch, or follow along on 
+Google Colab. 
+
+
 
 <img src="images/cloud-overview.png" style="width:250px; float:right;">
 Welcome to the NOAA Fisheries workshop focused on geospatial analysis using ocean 'big data'. Today, we are focused on using data from NASA [EarthData](https://www.earthdata.nasa.gov/) but the skills you will learn are transferable to other ways that you might get earth data (e.g., NESDIS, NCEI, ERDDAP servers, Copernicus).
 
-This workshop is focused on those who are brand new to working with earth data in the cloud and with geospatial packages. R users will be introduced to the `earthdatalogin`, `terra` and `sf` packages, while Python users will be introduced to the `earthaccess` and `xarray` packages.  This workshop will also introduce working with [JupyterHubs](https://jupyter.org/hub). We will use both Jupyter Lab (Python) and RStudio (R) within our JupyterHub. 
+This workshop is focused on those who are brand new to working with earth data in the cloud and with geospatial packages. You will be introduced to cloud access to earth data via Python (first hour) and R (second hour). This workshop will also introduce working with [JupyterHubs](https://jupyter.org/hub). We will Jupyter Lab (Python) and RStudio (R) within our JupyterHub. 
 
-## Topics for May 15, 2024
-
-* Introduction to working with earth data in the cloud and NASA Earth Data
-* Orientation on our JupyterHub
-* Tutorial 1: Searching for resources in NASA Earthdata
-* Tutorial 2: Plotting and subsetting earth data
-* Tutorial 3: Masking and aggregating your earth data within a region (shapefiles)
+[SCHEDULE](schedule.html) (see nav bar to left)
 
 ## Resources
 

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>2024 EDMW Workshop 3B - Set-up - To work on JupyterHub</title>
+<title>2024 EDMW Workshop 3B - Set-up</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,7 +30,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./content/02-rstudio.html" rel="next">
-<link href="./team.html" rel="prev">
+<link href="./schedule.html" rel="prev">
 <link href="./images/favicon-16x16.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -124,7 +124,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome</a></li><li class="breadcrumb-item"><a href="./setup.html">Set-up - To work on JupyterHub</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome</a></li><li class="breadcrumb-item"><a href="./setup.html">Set-up</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -158,8 +158,14 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./schedule.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Schedule</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./setup.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Set-up - To work on JupyterHub</span></a>
+ <span class="menu-text">Set-up</span></a>
   </div>
 </li>
           <li class="sidebar-item sidebar-item-section">
@@ -285,7 +291,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tutorials/r/3-extract-satellite-data-within-boundary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Mask and Aggregate</span></a>
+ <span class="menu-text">Mask to a shapefile</span></a>
   </div>
 </li>
       </ul>
@@ -314,7 +320,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tutorials/python/3-extract-satellite-data-within-boundary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Mask and Aggregate</span></a>
+ <span class="menu-text">Mask to a shapefile</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorials/python/4-data-cubes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Monthly and seasonal means</span></a>
   </div>
 </li>
       </ul>
@@ -340,8 +352,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#github-username-required-to-get-on-jupyterhub" id="toc-github-username-required-to-get-on-jupyterhub" class="nav-link active" data-scroll-target="#github-username-required-to-get-on-jupyterhub">GitHub username (required to get on JupyterHub)</a></li>
-  <li><a href="#get-on-the-jupyterhub-if-you-want-to-follow-along" id="toc-get-on-the-jupyterhub-if-you-want-to-follow-along" class="nav-link" data-scroll-target="#get-on-the-jupyterhub-if-you-want-to-follow-along">Get on the JupyterHub (if you want to follow along)</a></li>
+  <li><a href="#access-to-the-jupyterhub" id="toc-access-to-the-jupyterhub" class="nav-link active" data-scroll-target="#access-to-the-jupyterhub">Access to the JupyterHub</a></li>
   <li><a href="#earthdata-login-account-optional" id="toc-earthdata-login-account-optional" class="nav-link" data-scroll-target="#earthdata-login-account-optional">Earthdata Login account (optional)</a></li>
   </ul>
 <div class="toc-actions"><ul class="collapse"><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/edit/main/setup.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/setup.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
@@ -358,9 +369,9 @@ function googleTranslateElementInit() {
 
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome</a></li><li class="breadcrumb-item"><a href="./setup.html">Set-up - To work on JupyterHub</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome</a></li><li class="breadcrumb-item"><a href="./setup.html">Set-up</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Set-up - To work on JupyterHub</h1>
+<h1 class="title">Set-up</h1>
 </div>
 
 
@@ -377,23 +388,34 @@ function googleTranslateElementInit() {
 </header>
 
 
-<p>If you want to follow along, you can also see <a href="content/02-local-setup-r.html">setup - R</a> and <a href="content/02-local-setup-python.html">setup - Python</a> to attempt local set up on your computer.</p>
-<section id="github-username-required-to-get-on-jupyterhub" class="level2">
-<h2 class="anchored" data-anchor-id="github-username-required-to-get-on-jupyterhub">GitHub username (required to get on JupyterHub)</h2>
+<p>We will be using a JupyterHub for the workshop.</p>
+<ul>
+<li><a href="https://dhub.opensci.live/" class="uri">https://dhub.opensci.live/</a></li>
+<li>Click Start Server</li>
+<li>Open terminal, type to get the tutorials</li>
+</ul>
+<pre><code>cd ~
+git clone https://github.com/nmfs-opensci/EDMW-3B-tutorials</code></pre>
+<p>You can also see <a href="content/02-local-setup-r.html">setup - R</a> and <a href="content/02-local-setup-python.html">setup - Python</a> to aset up on your computer but be aware that GDAL installation is problemmatic.</p>
+<section id="access-to-the-jupyterhub" class="level2">
+<h2 class="anchored" data-anchor-id="access-to-the-jupyterhub">Access to the JupyterHub</h2>
+<section id="github-username" class="level3">
+<h3 class="anchored" data-anchor-id="github-username">GitHub username</h3>
 <ul>
 <li>Create a GitHub account (if you don’t already have one) at <a href="https://github.com" class="uri">https://github.com</a>. Advice for choosing a GitHub username: this is a professional username that you will use in work settings. GitHub accounts are not anonymous; this is for sharing work. Using your real name is common.</li>
 <li>Write down your username and password; you will need to log in during the course!</li>
 <li>Here is <a href="https://www.youtube.com/watch?v=nHXw4mGoqiE">a video</a> showing the whole process</li>
 </ul>
 </section>
-<section id="get-on-the-jupyterhub-if-you-want-to-follow-along" class="level2">
-<h2 class="anchored" data-anchor-id="get-on-the-jupyterhub-if-you-want-to-follow-along">Get on the JupyterHub (if you want to follow along)</h2>
+<section id="get-on-jupyterhub" class="level3">
+<h3 class="anchored" data-anchor-id="get-on-jupyterhub">Get on JupyterHub</h3>
 <p>Once you have submitted your GitHub username and have been accepted as a member of the DaskHub team on the nmfs-opensci organization, you can log-into the JupyterHub.</p>
 <p><a href="https://dhub.opensci.live/" class="uri">https://dhub.opensci.live/</a></p>
 <ul>
 <li><p><strong>Choose the default Py-R base geospatial image</strong>. <a href="https://youtu.be/o99jZWHqKi8">Watch a video</a> of the login process and basic JupyterHub orientation.</p></li>
 <li><p>home directory is yours and no one else can see it. To share files, you can connect to a GitHub repository or use the <code>shared</code> directory. Everyone can read and write to this directory. Please don’t delete content that is not your own.</p></li>
 </ul>
+</section>
 </section>
 <section id="earthdata-login-account-optional" class="level2">
 <h2 class="anchored" data-anchor-id="earthdata-login-account-optional">Earthdata Login account (optional)</h2>
@@ -962,8 +984,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./team.html" class="pagination-link" aria-label="Our Team">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Our Team</span>
+      <a href="./schedule.html" class="pagination-link" aria-label="Schedule">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Schedule</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

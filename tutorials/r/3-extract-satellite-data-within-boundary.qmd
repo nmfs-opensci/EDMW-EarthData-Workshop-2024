@@ -1,6 +1,7 @@
 ---
 title: Extract data within a boundary
-author: 'NOAA CoastWatch, NOAA Openscapes'
+original author: NOAA CoastWatch
+modifications by: NMFS Openscapes
 ---
 
 ::: {.callout-note title="Learning Objectives"}
@@ -60,7 +61,7 @@ library(ggplot2)
 The shapefile for the Longhurst marine provinces includes a list of regions.\
 For this exercise, we will only use the boundary of one province, the Gulf Stream region ("GFST").
 
-```{r read province boundaries from shapefiles}
+```{r read_province_boundaries}
 # Set directory path for shapefile
 dir_path <- '../resources/longhurst_v4_2010/'
 
@@ -87,7 +88,7 @@ earthdatalogin::edl_netrc()
 
 Then, define your search and cropping criteria
 
-```{r}
+```{r get_results}
 # Dataset unique name
 short_name <- 'AVHRR_OI-NCEI-L4-GLOB-v2.1'
 
@@ -113,15 +114,18 @@ There are `r length(results)` files.
 
 ## Apply shapefiles as mask to satellite data
 
-```{r}
+```{r get_first_result}
 # Select the first result
 ras <- terra::rast(results[1], vsi = TRUE)
 
 # Extract SST from the multi-layer raster data
 ras_sst <- ras[["analysed_sst"]]
+```
 
+Convert shape to SpatVector.
+```{r get_shapes}
 # Vectorize shapes
-shp <- vect(shapes)
+shp <- terra::vect(shapes)
 
 # Get boundaries for GFST
 GFST <- shp[shp$ProvCode == "GFST",]
@@ -151,37 +155,62 @@ We will construct a data cube to compute monthly average for sea surface tempera
 To minimize data loading times, the first 10 results, which correspond to approximately two months 
 of data, will be used for this exercise.
 
-Select the SST results for end of January and beginning of February. 
-```{r}
+Select the first 10 SST results (end of January and beginning of February). 
+```{r get_first_ten}
 ras_all <- terra::rast(results[c(25:35)], vsi = TRUE)
 ```
 
+Select SST data. The trim and mask operations are memory intensive and we want to select only the layer we will be working with.
+```{r select_sst}
+rc_sst <- ras_all["analysed_sst",]
+```
+
+Crop to the GFST boundaries.
+```{r crop_to_boundary}
+rc_sst <- terra::crop(rc_sst, GFST)
+```
+
 Trim the SST data to the boundaries of GFST. 
-```{r}
-rc_all <- terra::mask(ras_all, GFST)
+```{r mask_boundary}
+rc_sst <- terra::mask(rc_sst, GFST)
 ```
 
-Select SST data. 
-```{r}
-rc_sst <- rc_all["analysed_sst", ]
-```
 
-Calculate monthly SST means. 
+Calculate mean SST over the entire time series and map it
 ```{r get_means}
+
+# Compute mean over 12 time layers
+raster_mean <- terra::mean(rc_sst, na.rm=TRUE)
+
+# Map mean SST 
+plot(raster_mean)
+
+# Map only the GFST area
+plot(terra::crop(raster_mean, GFST))
+
+
+```
+
+
+Calculate monthly mean SST means across raster (lat, lon). 
+```{r get_monthly_means}
+
 # Function to convert times to year-month format
 year_month <- function(x) {
   format(as.Date(time(x), format="%Y-%m-%d"), "%Y-%m")
 }
 
-# Convert time to Year-month format for aggregation
+# Format time to Year-month for monthly aggregation 
 ym <- year_month(rc_sst)
 
 # Compute raster mean grouped by Year-month
 monthly_mean_rast <- terra::tapp(rc_sst, ym, fun = mean)
 
 # Compute mean across raster grouped by Year-month
-monthly_means <- global(monthly_mean_rast, fun = mean, na.rm=TRUE)
+monthly_means <- terra::global(monthly_mean_rast, fun = mean, na.rm=TRUE)
+
 ```
+
 
 ## Convert raster into data frame
 
@@ -195,7 +224,7 @@ monthly_means_df$year_month <- sub("X", "", rownames(monthly_means_df))
 
 ## Plot monthly mean of sea surface temperature within GFST province
 
-```{r}
+```{r plot_monthly_mean}
 ggplot(data = monthly_means_df, aes(x = year_month, y = mean, group = 1)) +
   geom_line() +
   geom_point() +
@@ -210,5 +239,5 @@ If you get the following error:
 
 > Warning: Opening a /vsi file with the netCDF driver requires Linux userfaultfd to be available. Or you may set the GDAL_SKIP=netCDF configuration option to force the use of the HDF5 driver. (GDAL error 1)Error: [rast] file does not exist: /vsicurl/https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20191231120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc
 
-[insert solve]
+Then go back and run the authentication code at the top.
 :::
