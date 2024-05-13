@@ -1479,5 +1479,18 @@
       "Tutorials in R",
       "Subset and Crop"
     ]
+  },
+  {
+    "objectID": "content/02-local-setup-python.html",
+    "href": "content/02-local-setup-python.html",
+    "title": "Setting up on your computer - Python users",
+    "section": "",
+    "text": "The easiest way to run the Python tutorials locally is to use a Docker container. A Dockerfile is included in the repo for this purpose. You’ll need containerization software such as Docker Desktop or Podman installed.\nFirst clone the GitHub repo to your local computer. Using a command line terminal, navigate to a directory where you wish to download the repo, then:\ngit clone https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024.git\nMake sure Docker or Podman is running, then build the container:\ndocker build -t \"pygeospatial:Dockerfile\" .\n\n\n\n\n\n\nTip\n\n\n\nIf you’re using Podman, simply replace docker with podman in this command and any that follow.\n\n\nThe -t flag assigns a tag to the container. This can be anything; here it is “pygeospatial:Dockerfile”. This step may take awhile the first time you run it. It is downloading a pre-configured image from NMFS Open Science Docker Stack, setting up the Python environment, then copying the EDMW EarthData Workshop repo contents into the container.\nWhen the build finishes, run the container:\ndocker run -p 8888:8888 pygeospatial:Dockerfile\nAt the end of the printout in the terminal window, you will see instructions for how to access the server (To access the server...). Copy and paste either of the URLs into a web browser. You should be greeted with a JupyterLab dashboard as in the live demo. The Python tutorials are in the python directory.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Local set-up - Python"
+    ]
   }
 ]
