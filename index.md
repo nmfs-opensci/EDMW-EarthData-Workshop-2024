@@ -24,6 +24,7 @@ This workshop is focused on those who are brand new to working with earth data i
 
 * [CoastWatch GitHub organization](https://github.com/coastwatch-training) for many more training modules for working with satellite data in Python and R
 * [NASA EarthData Cloudbook](https://nasa-openscapes.github.io/earthdata-cloud-cookbook/) for many tutorials on using satellite data in Python and R and NASA Earth Data
+* [Project Pythia](https://cookbooks.projectpythia.org/)
 * [NMFS Friday HackHours](https://nmfs-opensci.github.io/NOAAHackDays/)
 
 ## Thank you for inspiration and content!

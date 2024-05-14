@@ -576,7 +576,7 @@
     "href": "content/02-local-setup-r.html",
     "title": "Setting up on your computer - R users",
     "section": "",
-    "text": "Here are instructions for installing on your own computer.\nInstall the development version of earthdatalogin and update terra.\ndevtools::install_github(\"boettiger-lab/earthdatalogin\")\ninstall.packages(\"terra\")\ninstall.packages(\"rstac\")\ninstall.packages(\"gdalcubes\")\ninstall.packages(\"here\")\n\nlibrary(\"earthdatalogin\")\nlibrary(\"terra\")\nlibrary(\"rstac\")\nlibrary(\"gdalcubes\")\nlibrary(\"here\")\nYou will need GDAL installed. See these instructions if you do not have it installed: https://developers.planet.com/docs/integrations/qgis/install-qgis-gdal/\nYou may need to install terra and sf from source to get them to use the latest GDAL installation.\ninstall.packages(\"terra\", type = \"source\")\ninstall.packages(\"sf\", type = \"source\")\nsf::sf_extSoftVersion()\nThe environment we are using today is the py-rocket-geospatial image. This is part of work on a Data Science Docker Stack for NOAA Fisheries.",
+    "text": "The easiest way to run the R tutorials locally is to use the Docker container py-rocket-geospatial; this is the environment that is being used in the JupyterHub. You’ll need containerization software such as Docker Desktop or Podman installed.",
     "crumbs": [
       "JupyterHub",
       "Welcome",
@@ -585,11 +585,37 @@
     ]
   },
   {
-    "objectID": "content/02-local-setup-r.html#load-packages",
-    "href": "content/02-local-setup-r.html#load-packages",
+    "objectID": "content/02-local-setup-r.html#start-the-docker-image",
+    "href": "content/02-local-setup-r.html#start-the-docker-image",
     "title": "Setting up on your computer - R users",
-    "section": "Load packages",
-    "text": "Load packages\n\n# Function to check if pkgs are installed, and install any missing pkgs\npkgTest &lt;- function(x)\n{\n  if (!require(x,character.only = TRUE))\n  {\n    install.packages(x,dep=TRUE,repos='http://cran.us.r-project.org')\n    if(!require(x,character.only = TRUE)) stop(x, \" :Package not found\")\n  }\n}\n\n# Create list of required packages\nlist.of.packages &lt;- c(\n  \"earthdatalogin\", \"terra\", \"rstac\", \"gdalcubes\", \"here\", \"sf\", \"dplyr\", \"stars\", \"tmap\", \n  \"rerddap\", \"plotdap\", \"parsedate\", \"ggplot2\", \"rerddapXtracto\",\n  \"date\", \"maps\", \"mapdata\", \"RColorBrewer\",\"viridis\")\n\n# Create list of installed packages\npkges = installed.packages()[,\"Package\"]\n\n# Install and load all required pkgs\nfor (pk in list.of.packages) {\n  pkgTest(pk)\n}\n\nLoading required package: earthdatalogin\n\n\nLoading required package: terra\n\n\nterra 1.7.71\n\n\nLoading required package: rstac\n\n\nLoading required package: gdalcubes\n\n\n\nAttaching package: 'gdalcubes'\n\n\nThe following objects are masked from 'package:terra':\n\n    animate, crop, size\n\n\nLoading required package: here\n\n\nhere() starts at /home/jovyan/EDMW-EarthData-Workshop-2024\n\n\nLoading required package: sf\n\n\nLinking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE\n\n\nLoading required package: dplyr\n\n\n\nAttaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:terra':\n\n    intersect, union\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union\n\n\nLoading required package: stars\n\n\nLoading required package: abind\n\n\nLoading required package: tmap\n\n\n\nAttaching package: 'tmap'\n\n\nThe following object is masked from 'package:datasets':\n\n    rivers\n\n\nLoading required package: rerddap\n\n\nRegistered S3 method overwritten by 'hoardr':\n  method           from\n  print.cache_info httr\n\n\nLoading required package: plotdap\n\n\nLoading required package: parsedate\n\n\nLoading required package: ggplot2\n\n\nLoading required package: rerddapXtracto\n\n\nLoading required package: date\n\n\nLoading required package: maps\n\n\nLoading required package: mapdata\n\n\nLoading required package: RColorBrewer\n\n\nLoading required package: viridis\n\n\nLoading required package: viridisLite\n\n\n\nAttaching package: 'viridis'\n\n\nThe following object is masked from 'package:maps':\n\n    unemp\n\nsessionInfo()\n\nR version 4.4.0 (2024-04-24)\nPlatform: x86_64-pc-linux-gnu\nRunning under: Ubuntu 22.04.4 LTS\n\nMatrix products: default\nBLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 \nLAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0\n\nlocale:\n [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       \n [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   \n [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          \n[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   \n\ntime zone: Etc/UTC\ntzcode source: system (glibc)\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base     \n\nother attached packages:\n [1] viridis_0.6.5           viridisLite_0.4.2       RColorBrewer_1.1-3     \n [4] mapdata_2.3.1           maps_3.4.2              date_1.2-42            \n [7] rerddapXtracto_1.2.0    ggplot2_3.5.1           parsedate_1.3.1        \n[10] plotdap_1.0.3           rerddap_1.1.0           tmap_3.99.9001         \n[13] stars_0.6-5             abind_1.4-5             dplyr_1.1.4            \n[16] sf_1.0-16               here_1.0.1              gdalcubes_0.7.0        \n[19] rstac_1.0.0             terra_1.7-71            earthdatalogin_0.0.2.99\n\nloaded via a namespace (and not attached):\n [1] tidyselect_1.2.1        fastmap_1.1.1           lazyeval_0.2.2         \n [4] leaflegend_1.2.0        leaflet_2.2.2           XML_3.99-0.16.1        \n [7] digest_0.6.35           lifecycle_1.0.4         magrittr_2.0.3         \n[10] compiler_4.4.0          rlang_1.1.3             tools_4.4.0            \n[13] utf8_1.2.4              yaml_2.3.8              data.table_1.15.4      \n[16] knitr_1.46              htmlwidgets_1.6.4       sp_2.1-4               \n[19] classInt_0.4-10         curl_5.2.1              xml2_1.3.6             \n[22] KernSmooth_2.23-22      httpcode_0.3.0          withr_3.0.0            \n[25] purrr_1.0.2             leafsync_0.1.0          grid_4.4.0             \n[28] fansi_1.0.6             cols4all_0.7-1          e1071_1.7-14           \n[31] leafem_0.2.3            colorspace_2.1-0        spacesXYZ_1.3-0        \n[34] scales_1.3.0            dichromat_2.0-0.1       crul_1.4.2             \n[37] cli_3.6.2               rmarkdown_2.26          crayon_1.5.2           \n[40] generics_0.1.3          rstudioapi_0.16.0       httr_1.4.7             \n[43] tmaptools_3.1-1         ncdf4_1.22              DBI_1.2.2              \n[46] proxy_0.4-27            parallel_4.4.0          base64enc_0.1-3        \n[49] vctrs_0.6.5             jsonlite_1.8.8          jpeg_0.1-10            \n[52] crosstalk_1.2.1         tidyr_1.3.1             units_0.8-5            \n[55] glue_1.7.0              lwgeom_0.2-14           codetools_0.2-20       \n[58] leaflet.providers_2.0.0 gtable_0.3.5            raster_3.6-26          \n[61] munsell_0.5.1           tibble_3.2.1            pillar_1.9.0           \n[64] rappdirs_0.3.3          htmltools_0.5.8.1       R6_2.5.1               \n[67] hoardr_0.5.4            rprojroot_2.0.4         evaluate_0.23          \n[70] lattice_0.22-6          png_0.1-8               class_7.3-22           \n[73] Rcpp_1.0.12             gridExtra_2.3           widgetframe_0.3.1      \n[76] xfun_0.43               pkgconfig_2.0.3",
+    "section": "Start the docker image",
+    "text": "Start the docker image\nMake sure Docker or Podman is running (open the Desktop application), then run the container:\nWindows, Linux or Intel-chip Mac:\ndocker run -p 8888:8888  --cap-add SYS_PTRACE --security-opt seccomp=unconfined  ghcr.io/nmfs-opensci/container-images/py-rocket-geospatial:latest\nApple-chip Mac (probably will not work):\ndocker run -p 8888:8888 --platform linux/amd64  --cap-add SYS_PTRACE --security-opt seccomp=unconfined  ghcr.io/nmfs-opensci/container-images/py-rocket-geospatial:latest\n\n\n\n\n\n\nTip\n\n\n\nIf you’re using Podman, simply replace docker with podman in this command and any that follow.\n\n\nAfter docker run there will be a long printout in the terminal window, you will see instructions for how to access the server (To access the server...). Copy and paste either of the URLs into a web browser. You should be greeted with a JupyterLab dashboard as in the live demo.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Local set-up - R"
+    ]
+  },
+  {
+    "objectID": "content/02-local-setup-r.html#clone-the-tutorials",
+    "href": "content/02-local-setup-r.html#clone-the-tutorials",
+    "title": "Setting up on your computer - R users",
+    "section": "Clone the tutorials",
+    "text": "Clone the tutorials\nClone and then cd into the repo. Open a terminal and run\ncd ~\ngit clone https://github.com/nmfs-opensci/EDMW-3B-tutorials\nThe Python tutorials are in the tutorials/python directory.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Local set-up - R"
+    ]
+  },
+  {
+    "objectID": "content/02-local-setup-r.html#connect-your-local-files-to-image",
+    "href": "content/02-local-setup-r.html#connect-your-local-files-to-image",
+    "title": "Setting up on your computer - R users",
+    "section": "Connect your local files to image",
+    "text": "Connect your local files to image\nClone and then cd into the repo. Open a terminal and run\ngit clone https://github.com/nmfs-opensci/EDMW-3B-tutorials\ncd EDMW-3B-tutorials\nWindows, Linux or Intel-chip Mac:\ndocker run -p 8888:8888  --cap-add SYS_PTRACE --security-opt seccomp=unconfined -v /$(pwd):/home/jovyan/ ghcr.io/nmfs-opensci/container-images/py-rocket-geospatial:latest",
     "crumbs": [
       "JupyterHub",
       "Welcome",
@@ -1023,6 +1049,71 @@
     ]
   },
   {
+    "objectID": "content/02-local-setup-python.html",
+    "href": "content/02-local-setup-python.html",
+    "title": "Setting up on your computer - Python users",
+    "section": "",
+    "text": "The easiest way to run the Python tutorials locally is to use the Docker container py-rocket-geospatial; this is the environment that is being used in the JupyterHub. You’ll need containerization software such as Docker Desktop or Podman installed.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Local set-up - Python"
+    ]
+  },
+  {
+    "objectID": "content/02-local-setup-python.html#start-the-docker-image",
+    "href": "content/02-local-setup-python.html#start-the-docker-image",
+    "title": "Setting up on your computer - Python users",
+    "section": "Start the docker image",
+    "text": "Start the docker image\nMake sure Docker or Podman is running (open the Desktop application), then run the container:\nWindows, Linux or Intel-chip Mac:\ndocker run -p 8888:8888  ghcr.io/nmfs-opensci/container-images/py-rocket-geospatial:latest\nApple-chip Mac:\ndocker run -p 8888:8888 --platform linux/amd64 ghcr.io/nmfs-opensci/container-images/py-rocket-geospatial:latest\n\n\n\n\n\n\nTip\n\n\n\nIf you’re using Podman, simply replace docker with podman in this command and any that follow.\n\n\nAfter docker run there will be a long printout in the terminal window, you will see instructions for how to access the server (To access the server...). Copy and paste either of the URLs into a web browser. You should be greeted with a JupyterLab dashboard as in the live demo.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Local set-up - Python"
+    ]
+  },
+  {
+    "objectID": "content/02-local-setup-python.html#clone-the-tutorials",
+    "href": "content/02-local-setup-python.html#clone-the-tutorials",
+    "title": "Setting up on your computer - Python users",
+    "section": "Clone the tutorials",
+    "text": "Clone the tutorials\nClone and then cd into the repo. Open a terminal and run\ncd ~\ngit clone https://github.com/nmfs-opensci/EDMW-3B-tutorials\nThe Python tutorials are in the tutorials/python directory.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Local set-up - Python"
+    ]
+  },
+  {
+    "objectID": "content/02-local-setup-python.html#running-r",
+    "href": "content/02-local-setup-python.html#running-r",
+    "title": "Setting up on your computer - Python users",
+    "section": "Running R",
+    "text": "Running R\nNote if you also want to run the R tutorials, see the instructions for R set-up. The docker run command is slightly different.",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Local set-up - Python"
+    ]
+  },
+  {
+    "objectID": "content/02-local-setup-python.html#connect-your-local-files-to-image",
+    "href": "content/02-local-setup-python.html#connect-your-local-files-to-image",
+    "title": "Setting up on your computer - Python users",
+    "section": "Connect your local files to image",
+    "text": "Connect your local files to image\nClone and then cd into the repo. Open a terminal and run\ngit clone https://github.com/nmfs-opensci/EDMW-3B-tutorials\ncd EDMW-3B-tutorials\nWindows, Linux or Intel-chip Mac:\ndocker run -p 8888:8888 -v /$(pwd):/home/jovyan/ ghcr.io/nmfs-opensci/container-images/py-rocket-geospatial:latest",
+    "crumbs": [
+      "JupyterHub",
+      "Welcome",
+      "Orientation",
+      "Local set-up - Python"
+    ]
+  },
+  {
     "objectID": "content/02-rstudio.html#open-rstudio-in-the-jupyterhub",
     "href": "content/02-rstudio.html#open-rstudio-in-the-jupyterhub",
     "title": "RStudio - R",
@@ -1142,7 +1233,7 @@
     "href": "index.html#resources",
     "title": "EDMW 2024 - Workshop 3B",
     "section": "Resources",
-    "text": "Resources\n\nCoastWatch GitHub organization for many more training modules for working with satellite data in Python and R\nNASA EarthData Cloudbook for many tutorials on using satellite data in Python and R and NASA Earth Data\nNMFS Friday HackHours",
+    "text": "Resources\n\nCoastWatch GitHub organization for many more training modules for working with satellite data in Python and R\nNASA EarthData Cloudbook for many tutorials on using satellite data in Python and R and NASA Earth Data\nProject Pythia\nNMFS Friday HackHours",
     "crumbs": [
       "JupyterHub",
       "Welcome"

@@ -2,4 +2,52 @@
 title: Setting up on your computer - Python users
 ---
 
+The easiest way to run the Python tutorials locally is to use the Docker container `py-rocket-geospatial`; this is the environment that is being used in the JupyterHub. You'll need containerization software such as [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Podman](https://podman.io/) installed.
 
+
+## Start the docker image
+
+Make sure Docker or Podman is running (open the Desktop application), then run the container:
+
+Windows, Linux or Intel-chip Mac:
+```bash
+docker run -p 8888:8888  ghcr.io/nmfs-opensci/container-images/py-rocket-geospatial:latest
+```
+
+Apple-chip Mac:
+```bash
+docker run -p 8888:8888 --platform linux/amd64 ghcr.io/nmfs-opensci/container-images/py-rocket-geospatial:latest
+```
+
+::: {.callout-tip}
+If you're using Podman, simply replace `docker` with `podman` in this command and any that follow.
+:::
+
+After `docker run` there will be a long printout in the terminal window, you will see instructions for how to access the server (`To access the server...`). Copy and paste either of the URLs into a web browser. You should be greeted with a JupyterLab dashboard as in the live demo. 
+
+## Clone the tutorials
+
+Clone and then cd into the repo. Open a terminal and run
+```bash
+cd ~
+git clone https://github.com/nmfs-opensci/EDMW-3B-tutorials
+```
+
+The Python tutorials are in the `tutorials/python` directory.
+
+## Running R
+
+*Note if you also want to run the R tutorials, see the instructions for R set-up. The `docker run` command is slightly different.*
+
+## Connect your local files to image
+
+Clone and then cd into the repo. Open a terminal and run
+```bash
+git clone https://github.com/nmfs-opensci/EDMW-3B-tutorials
+cd EDMW-3B-tutorials
+```
+
+Windows, Linux or Intel-chip Mac:
+```bash
+docker run -p 8888:8888 -v /$(pwd):/home/jovyan/ ghcr.io/nmfs-opensci/container-images/py-rocket-geospatial:latest
+```

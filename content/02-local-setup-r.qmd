@@ -2,64 +2,48 @@
 title: Setting up on your computer - R users
 ---
 
-Here are instructions for installing on your own computer.
+The easiest way to run the R tutorials locally is to use the Docker container `py-rocket-geospatial`; this is the environment that is being used in the JupyterHub. You'll need containerization software such as [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Podman](https://podman.io/) installed.
 
-Install the development version of earthdatalogin and update terra.
+## Start the docker image
 
-```{r eval=FALSE}
-devtools::install_github("boettiger-lab/earthdatalogin")
-install.packages("terra")
-install.packages("rstac")
-install.packages("gdalcubes")
-install.packages("here")
+Make sure Docker or Podman is running (open the Desktop application), then run the container:
 
-library("earthdatalogin")
-library("terra")
-library("rstac")
-library("gdalcubes")
-library("here")
+Windows, Linux or Intel-chip Mac:
+```bash
+docker run -p 8888:8888  --cap-add SYS_PTRACE --security-opt seccomp=unconfined  ghcr.io/nmfs-opensci/container-images/py-rocket-geospatial:latest
 ```
 
-You will need GDAL installed. See these instructions if you do not have it installed:  https://developers.planet.com/docs/integrations/qgis/install-qgis-gdal/
-
-> At NOAA Fisheries Alaska Fisheries Science Center, @EmilyMarkowitz-NOAA did not need IT support to install GDAL!
-
-You may need to install `terra` and `sf` from source to get them to use the latest GDAL installation. 
-
-```{r eval=FALSE}
-install.packages("terra", type = "source")
-install.packages("sf", type = "source")
-sf::sf_extSoftVersion()
+Apple-chip Mac (probably will not work):
+```bash
+docker run -p 8888:8888 --platform linux/amd64  --cap-add SYS_PTRACE --security-opt seccomp=unconfined  ghcr.io/nmfs-opensci/container-images/py-rocket-geospatial:latest
 ```
 
-The environment we are using today is the `py-rocket-geospatial` image. This is part of work on a [Data Science Docker Stack](https://github.com/nmfs-opensci/container-images) for NOAA Fisheries.
+::: {.callout-tip}
+If you're using Podman, simply replace `docker` with `podman` in this command and any that follow.
+:::
 
-## Load packages
+After `docker run` there will be a long printout in the terminal window, you will see instructions for how to access the server (`To access the server...`). Copy and paste either of the URLs into a web browser. You should be greeted with a JupyterLab dashboard as in the live demo. 
 
-```{r}
-# Function to check if pkgs are installed, and install any missing pkgs
-pkgTest <- function(x)
-{
-  if (!require(x,character.only = TRUE))
-  {
-    install.packages(x,dep=TRUE,repos='http://cran.us.r-project.org')
-    if(!require(x,character.only = TRUE)) stop(x, " :Package not found")
-  }
-}
+## Clone the tutorials
 
-# Create list of required packages
-list.of.packages <- c(
-  "earthdatalogin", "terra", "rstac", "gdalcubes", "here", "sf", "dplyr", "stars", "tmap", 
-  "rerddap", "plotdap", "parsedate", "ggplot2", "rerddapXtracto",
-  "date", "maps", "mapdata", "RColorBrewer","viridis")
+Clone and then cd into the repo. Open a terminal and run
+```bash
+cd ~
+git clone https://github.com/nmfs-opensci/EDMW-3B-tutorials
+```
 
-# Create list of installed packages
-pkges = installed.packages()[,"Package"]
+The Python tutorials are in the `tutorials/python` directory.
 
-# Install and load all required pkgs
-for (pk in list.of.packages) {
-  pkgTest(pk)
-}
 
-sessionInfo()
+## Connect your local files to image
+
+Clone and then cd into the repo. Open a terminal and run
+```bash
+git clone https://github.com/nmfs-opensci/EDMW-3B-tutorials
+cd EDMW-3B-tutorials
+```
+
+Windows, Linux or Intel-chip Mac:
+```bash
+docker run -p 8888:8888  --cap-add SYS_PTRACE --security-opt seccomp=unconfined -v /$(pwd):/home/jovyan/ ghcr.io/nmfs-opensci/container-images/py-rocket-geospatial:latest
 ```
