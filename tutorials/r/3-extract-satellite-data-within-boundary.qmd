@@ -66,7 +66,7 @@ For this exercise, we will only use the boundary of one province, the Gulf Strea
 dir_path <- '../resources/longhurst_v4_2010/'
 
 # Import shape files (Longhurst coordinates)
-shapes <- read_sf(dsn = dir_path, layer = "Longhurst_world_v4_2010")
+shapes <- sf::read_sf(dsn = dir_path, layer = "Longhurst_world_v4_2010")
 
 # Example List of all the province names
 shapes$ProvCode
@@ -74,8 +74,8 @@ shapes$ProvCode
 # Get boundary coordinates for Gulf Stream region (GFST)
 GFST <- shapes[shapes$ProvCode == "GFST",]
 
-xcoord <- st_coordinates(GFST)[,1]
-ycoord <- st_coordinates(GFST)[,2]
+xcoord <- sf::st_coordinates(GFST)[,1]
+ycoord <- sf::st_coordinates(GFST)[,2]
 ```
 
 ## Search data from NASA Earthdata with the dataset unique name and coordinates/dates
@@ -99,7 +99,7 @@ bbox <- c(xmin=min(xcoord), ymin=min(ycoord), xmax=max(xcoord), ymax=max(ycoord)
 tbox <- c("2020-01-01", "2020-04-01")
 
 # Search data that match the boundaries and time range
-results <- edl_search(
+results <- earthdatalogin::edl_search(
   short_name = short_name,
   version = "2.1",
   temporal = tbox,
@@ -122,7 +122,7 @@ ras <- terra::rast(results[1], vsi = TRUE)
 ras_sst <- ras[["analysed_sst"]]
 ```
 
-Convert shape to SpatVector.
+Convert shape to SpatVector for `terra`.
 ```{r get_shapes}
 # Vectorize shapes
 shp <- terra::vect(shapes)
@@ -143,7 +143,7 @@ plot(GFST,col='red')
 
 Mask SST with the GFST boundaries and plot.
 ```{r mask_SST}
-masked_rc <- mask(ras_sst, GFST)
+masked_rc <- terra::mask(ras_sst, GFST)
 
 # Visualize the SST in GFST Province and crop to the GFST extent
 plot(masked_rc, ext = GFST)
@@ -176,53 +176,53 @@ rc_sst <- terra::mask(rc_sst, GFST)
 ```
 
 
-Calculate mean SST over the entire time series and map it
+Calculate mean SST over the entire time series (10 days) and map it.
 ```{r get_means}
-
-# Compute mean over 12 time layers
 raster_mean <- terra::mean(rc_sst, na.rm=TRUE)
-
-# Map mean SST 
-plot(raster_mean)
-
-# Map only the GFST area
-plot(terra::crop(raster_mean, GFST))
-
-
 ```
 
+Plot the mean SST.
+```{r}
+plot(raster_mean)
+```
 
-Calculate monthly mean SST means across raster (lat, lon). 
+### Calculate monthly mean SST means across rasters
+
+First create a function to convert times to year-month format. This will create a vector that shows which datas are in which month-year.
+
 ```{r get_monthly_means}
-
-# Function to convert times to year-month format
 year_month <- function(x) {
   format(as.Date(time(x), format="%Y-%m-%d"), "%Y-%m")
 }
-
-# Format time to Year-month for monthly aggregation 
 ym <- year_month(rc_sst)
-
-# Compute raster mean grouped by Year-month
-monthly_mean_rast <- terra::tapp(rc_sst, ym, fun = mean)
-
-# Compute mean across raster grouped by Year-month
-monthly_means <- terra::global(monthly_mean_rast, fun = mean, na.rm=TRUE)
-
+ym
 ```
 
+Compute raster mean grouped by Year-month. `tapp` is the `terra` equivalent of `tapply` and allow you to apply a function to groups of raster time layers. This allows you to do temporal aggregation. Use `?tapp` to learn about this function.
+```{r}
+monthly_mean_rast <- terra::tapp(rc_sst, ym, fun = mean)
+monthly_mean_rast
+```
 
-## Convert raster into data frame
+Compute mean across raster grouped by Year-month. `global()` applies a function to the entire raster. Use `?global` to learn about this function.
+```{r monthly_means}
+monthly_means <- terra::global(monthly_mean_rast, fun = mean, na.rm=TRUE)
+monthly_means
+```
+
+### Convert to data frame
+
+We convert to a data frame to plot time series.
 
 ```{r ras_to_df}
 # Convert raster into data.frame
 monthly_means_df <- as.data.frame(monthly_means)
 
-# Convert year_month to a column
+# Create a year_month column
 monthly_means_df$year_month <- sub("X", "", rownames(monthly_means_df))
 ```
 
-## Plot monthly mean of sea surface temperature within GFST province
+### Plot monthly mean of sea surface temperature within GFST province
 
 ```{r plot_monthly_mean}
 ggplot(data = monthly_means_df, aes(x = year_month, y = mean, group = 1)) +

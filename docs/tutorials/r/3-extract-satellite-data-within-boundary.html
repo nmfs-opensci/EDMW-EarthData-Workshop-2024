@@ -395,8 +395,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#search-data-from-nasa-earthdata-with-the-dataset-unique-name-and-coordinatesdates" id="toc-search-data-from-nasa-earthdata-with-the-dataset-unique-name-and-coordinatesdates" class="nav-link" data-scroll-target="#search-data-from-nasa-earthdata-with-the-dataset-unique-name-and-coordinatesdates">Search data from NASA Earthdata with the dataset unique name and coordinates/dates</a></li>
   <li><a href="#apply-shapefiles-as-mask-to-satellite-data" id="toc-apply-shapefiles-as-mask-to-satellite-data" class="nav-link" data-scroll-target="#apply-shapefiles-as-mask-to-satellite-data">Apply shapefiles as mask to satellite data</a></li>
   <li><a href="#compute-monthly-average-of-sst" id="toc-compute-monthly-average-of-sst" class="nav-link" data-scroll-target="#compute-monthly-average-of-sst">Compute monthly average of SST</a></li>
-  <li><a href="#convert-raster-into-data-frame" id="toc-convert-raster-into-data-frame" class="nav-link" data-scroll-target="#convert-raster-into-data-frame">Convert raster into data frame</a></li>
-  <li><a href="#plot-monthly-mean-of-sea-surface-temperature-within-gfst-province" id="toc-plot-monthly-mean-of-sea-surface-temperature-within-gfst-province" class="nav-link" data-scroll-target="#plot-monthly-mean-of-sea-surface-temperature-within-gfst-province">Plot monthly mean of sea surface temperature within GFST province</a></li>
   <li><a href="#troubleshooting" id="toc-troubleshooting" class="nav-link" data-scroll-target="#troubleshooting">Troubleshooting</a></li>
   </ul>
 <div class="toc-actions"><ul class="collapse"><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/edit/main/tutorials/r/3-extract-satellite-data-within-boundary.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/tutorials/r/3-extract-satellite-data-within-boundary.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
@@ -496,7 +494,7 @@ For this exercise, we will only use the boundary of one province, the Gulf Strea
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dir_path <span class="ot">&lt;-</span> <span class="st">'../resources/longhurst_v4_2010/'</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Import shape files (Longhurst coordinates)</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>shapes <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(<span class="at">dsn =</span> dir_path, <span class="at">layer =</span> <span class="st">"Longhurst_world_v4_2010"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>shapes <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="at">dsn =</span> dir_path, <span class="at">layer =</span> <span class="st">"Longhurst_world_v4_2010"</span>)</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Example List of all the province names</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>shapes<span class="sc">$</span>ProvCode</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -511,8 +509,8 @@ For this exercise, we will only use the boundary of one province, the Gulf Strea
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get boundary coordinates for Gulf Stream region (GFST)</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>GFST <span class="ot">&lt;-</span> shapes[shapes<span class="sc">$</span>ProvCode <span class="sc">==</span> <span class="st">"GFST"</span>,]</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>xcoord <span class="ot">&lt;-</span> <span class="fu">st_coordinates</span>(GFST)[,<span class="dv">1</span>]</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>ycoord <span class="ot">&lt;-</span> <span class="fu">st_coordinates</span>(GFST)[,<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>xcoord <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_coordinates</span>(GFST)[,<span class="dv">1</span>]</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>ycoord <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_coordinates</span>(GFST)[,<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="search-data-from-nasa-earthdata-with-the-dataset-unique-name-and-coordinatesdates" class="level2">
@@ -533,7 +531,7 @@ For this exercise, we will only use the boundary of one province, the Gulf Strea
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>tbox <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"2020-01-01"</span>, <span class="st">"2020-04-01"</span>)</span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Search data that match the boundaries and time range</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">edl_search</span>(</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> earthdatalogin<span class="sc">::</span><span class="fu">edl_search</span>(</span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">short_name =</span> short_name,</span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="st">"2.1"</span>,</span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">temporal =</span> tbox,</span>
@@ -557,7 +555,7 @@ For this exercise, we will only use the boundary of one province, the Gulf Strea
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract SST from the multi-layer raster data</span></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>ras_sst <span class="ot">&lt;-</span> ras[[<span class="st">"analysed_sst"</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Convert shape to SpatVector.</p>
+<p>Convert shape to SpatVector for <code>terra</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vectorize shapes</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>shp <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">vect</span>(shapes)</span>
@@ -589,7 +587,7 @@ For this exercise, we will only use the boundary of one province, the Gulf Strea
 </div>
 <p>Mask SST with the GFST boundaries and plot.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>masked_rc <span class="ot">&lt;-</span> <span class="fu">mask</span>(ras_sst, GFST)</span>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>masked_rc <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">mask</span>(ras_sst, GFST)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize the SST in GFST Province and crop to the GFST extent</span></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(masked_rc, <span class="at">ext =</span> GFST)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -621,59 +619,81 @@ For this exercise, we will only use the boundary of one province, the Gulf Strea
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>rc_sst <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">mask</span>(rc_sst, GFST)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Calculate mean SST over the entire time series and map it</p>
+<p>Calculate mean SST over the entire time series (10 days) and map it.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute mean over 12 time layers</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>raster_mean <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">mean</span>(rc_sst, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Map mean SST </span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(raster_mean)</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Map only the GFST area</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(terra<span class="sc">::</span><span class="fu">crop</span>(raster_mean, GFST))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>raster_mean <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">mean</span>(rc_sst, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Plot the mean SST.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(raster_mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="3-extract-satellite-data-within-boundary_files/figure-html/get_means-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="3-extract-satellite-data-within-boundary_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Calculate monthly mean SST means across raster (lat, lon).</p>
+<section id="calculate-monthly-mean-sst-means-across-rasters" class="level3">
+<h3 class="anchored" data-anchor-id="calculate-monthly-mean-sst-means-across-rasters">Calculate monthly mean SST means across rasters</h3>
+<p>First create a function to convert times to year-month format. This will create a vector that shows which datas are in which month-year.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to convert times to year-month format</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>year_month <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">format</span>(<span class="fu">as.Date</span>(<span class="fu">time</span>(x), <span class="at">format=</span><span class="st">"%Y-%m-%d"</span>), <span class="st">"%Y-%m"</span>)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Format time to Year-month for monthly aggregation </span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>ym <span class="ot">&lt;-</span> <span class="fu">year_month</span>(rc_sst)</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute raster mean grouped by Year-month</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>monthly_mean_rast <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">tapp</span>(rc_sst, ym, <span class="at">fun =</span> mean)</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute mean across raster grouped by Year-month</span></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>monthly_means <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">global</span>(monthly_mean_rast, <span class="at">fun =</span> mean, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>year_month <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">format</span>(<span class="fu">as.Date</span>(<span class="fu">time</span>(x), <span class="at">format=</span><span class="st">"%Y-%m-%d"</span>), <span class="st">"%Y-%m"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>ym <span class="ot">&lt;-</span> <span class="fu">year_month</span>(rc_sst)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>ym</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "2020-01" "2020-01" "2020-01" "2020-01" "2020-01" "2020-01" "2020-01"
+ [8] "2020-01" "2020-02" "2020-02" "2020-02"</code></pre>
+</div>
+</div>
+<p>Compute raster mean grouped by Year-month. <code>tapp</code> is the <code>terra</code> equivalent of <code>tapply</code> and allow you to apply a function to groups of raster time layers. This allows you to do temporal aggregation. Use <code>?tapp</code> to learn about this function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>monthly_mean_rast <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">tapp</span>(rc_sst, ym, <span class="at">fun =</span> mean)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>monthly_mean_rast</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+dimensions  : 40, 120, 2  (nrow, ncol, nlyr)
+resolution  : 0.25, 0.25  (x, y)
+extent      : -73.5, -43.5, 33.5, 43.5  (xmin, xmax, ymin, ymax)
+coord. ref. : lon/lat WGS 84 
+source(s)   : memory
+names       : X2020.01, X2020.02 
+min values  : 277.0425, 276.9367 
+max values  : 297.1500, 296.9033 </code></pre>
+</div>
+</div>
+<p>Compute mean across raster grouped by Year-month. <code>global()</code> applies a function to the entire raster. Use <code>?global</code> to learn about this function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>monthly_means <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">global</span>(monthly_mean_rast, <span class="at">fun =</span> mean, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>monthly_means</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             mean
+X2020.01 289.3776
+X2020.02 289.0583</code></pre>
+</div>
 </div>
 </section>
-<section id="convert-raster-into-data-frame" class="level2">
-<h2 class="anchored" data-anchor-id="convert-raster-into-data-frame">Convert raster into data frame</h2>
+<section id="convert-to-data-frame" class="level3">
+<h3 class="anchored" data-anchor-id="convert-to-data-frame">Convert to data frame</h3>
+<p>We convert to a data frame to plot time series.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert raster into data.frame</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>monthly_means_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(monthly_means)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert year_month to a column</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>monthly_means_df<span class="sc">$</span>year_month <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"X"</span>, <span class="st">""</span>, <span class="fu">rownames</span>(monthly_means_df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert raster into data.frame</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>monthly_means_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(monthly_means)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a year_month column</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>monthly_means_df<span class="sc">$</span>year_month <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"X"</span>, <span class="st">""</span>, <span class="fu">rownames</span>(monthly_means_df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="plot-monthly-mean-of-sea-surface-temperature-within-gfst-province" class="level2">
-<h2 class="anchored" data-anchor-id="plot-monthly-mean-of-sea-surface-temperature-within-gfst-province">Plot monthly mean of sea surface temperature within GFST province</h2>
+<section id="plot-monthly-mean-of-sea-surface-temperature-within-gfst-province" class="level3">
+<h3 class="anchored" data-anchor-id="plot-monthly-mean-of-sea-surface-temperature-within-gfst-province">Plot monthly mean of sea surface temperature within GFST province</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> monthly_means_df, <span class="fu">aes</span>(<span class="at">x =</span> year_month, <span class="at">y =</span> mean, <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Year.Month"</span>) <span class="sc">+</span> </span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Mean SST (F)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> monthly_means_df, <span class="fu">aes</span>(<span class="at">x =</span> year_month, <span class="at">y =</span> mean, <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Year.Month"</span>) <span class="sc">+</span> </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Mean SST (F)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -682,6 +702,7 @@ For this exercise, we will only use the boundary of one province, the Gulf Strea
 </div>
 </div>
 </div>
+</section>
 </section>
 <section id="troubleshooting" class="level2">
 <h2 class="anchored" data-anchor-id="troubleshooting">Troubleshooting</h2>

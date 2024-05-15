@@ -69,7 +69,7 @@
     "href": "tutorials/r/3-extract-satellite-data-within-boundary.html#load-boundary-coordinates",
     "title": "Extract data within a boundary",
     "section": "Load boundary coordinates",
-    "text": "Load boundary coordinates\nThe shapefile for the Longhurst marine provinces includes a list of regions.\nFor this exercise, we will only use the boundary of one province, the Gulf Stream region (“GFST”).\n\n# Set directory path for shapefile\ndir_path &lt;- '../resources/longhurst_v4_2010/'\n\n# Import shape files (Longhurst coordinates)\nshapes &lt;- read_sf(dsn = dir_path, layer = \"Longhurst_world_v4_2010\")\n\n# Example List of all the province names\nshapes$ProvCode\n\n [1] \"BPLR\" \"ARCT\" \"SARC\" \"NADR\" \"GFST\" \"NASW\" \"NATR\" \"WTRA\" \"ETRA\" \"SATL\"\n[11] \"NECS\" \"CNRY\" \"GUIN\" \"GUIA\" \"NWCS\" \"MEDI\" \"CARB\" \"NASE\" \"BRAZ\" \"FKLD\"\n[21] \"BENG\" \"MONS\" \"ISSG\" \"EAFR\" \"REDS\" \"ARAB\" \"INDE\" \"INDW\" \"AUSW\" \"BERS\"\n[31] \"PSAE\" \"PSAW\" \"KURO\" \"NPPF\" \"NPSW\" \"TASM\" \"SPSG\" \"NPTG\" \"PNEC\" \"PEQD\"\n[41] \"WARM\" \"ARCH\" \"ALSK\" \"CCAL\" \"CAMR\" \"CHIL\" \"CHIN\" \"SUND\" \"AUSE\" \"NEWZ\"\n[51] \"SSTC\" \"SANT\" \"ANTA\" \"APLR\"\n\n# Get boundary coordinates for Gulf Stream region (GFST)\nGFST &lt;- shapes[shapes$ProvCode == \"GFST\",]\n\nxcoord &lt;- st_coordinates(GFST)[,1]\nycoord &lt;- st_coordinates(GFST)[,2]",
+    "text": "Load boundary coordinates\nThe shapefile for the Longhurst marine provinces includes a list of regions.\nFor this exercise, we will only use the boundary of one province, the Gulf Stream region (“GFST”).\n\n# Set directory path for shapefile\ndir_path &lt;- '../resources/longhurst_v4_2010/'\n\n# Import shape files (Longhurst coordinates)\nshapes &lt;- sf::read_sf(dsn = dir_path, layer = \"Longhurst_world_v4_2010\")\n\n# Example List of all the province names\nshapes$ProvCode\n\n [1] \"BPLR\" \"ARCT\" \"SARC\" \"NADR\" \"GFST\" \"NASW\" \"NATR\" \"WTRA\" \"ETRA\" \"SATL\"\n[11] \"NECS\" \"CNRY\" \"GUIN\" \"GUIA\" \"NWCS\" \"MEDI\" \"CARB\" \"NASE\" \"BRAZ\" \"FKLD\"\n[21] \"BENG\" \"MONS\" \"ISSG\" \"EAFR\" \"REDS\" \"ARAB\" \"INDE\" \"INDW\" \"AUSW\" \"BERS\"\n[31] \"PSAE\" \"PSAW\" \"KURO\" \"NPPF\" \"NPSW\" \"TASM\" \"SPSG\" \"NPTG\" \"PNEC\" \"PEQD\"\n[41] \"WARM\" \"ARCH\" \"ALSK\" \"CCAL\" \"CAMR\" \"CHIL\" \"CHIN\" \"SUND\" \"AUSE\" \"NEWZ\"\n[51] \"SSTC\" \"SANT\" \"ANTA\" \"APLR\"\n\n# Get boundary coordinates for Gulf Stream region (GFST)\nGFST &lt;- shapes[shapes$ProvCode == \"GFST\",]\n\nxcoord &lt;- sf::st_coordinates(GFST)[,1]\nycoord &lt;- sf::st_coordinates(GFST)[,2]",
     "crumbs": [
       "JupyterHub",
       "Tutorials",
@@ -82,7 +82,7 @@
     "href": "tutorials/r/3-extract-satellite-data-within-boundary.html#search-data-from-nasa-earthdata-with-the-dataset-unique-name-and-coordinatesdates",
     "title": "Extract data within a boundary",
     "section": "Search data from NASA Earthdata with the dataset unique name and coordinates/dates",
-    "text": "Search data from NASA Earthdata with the dataset unique name and coordinates/dates\nFirst, connect to NASA Earthdata with no credentials\n\nearthdatalogin::edl_netrc()\n\nThen, define your search and cropping criteria\n\n# Dataset unique name\nshort_name &lt;- 'AVHRR_OI-NCEI-L4-GLOB-v2.1'\n\n# Set boundaries based on the shapefile\nbbox &lt;- c(xmin=min(xcoord), ymin=min(ycoord), xmax=max(xcoord), ymax=max(ycoord)) \n\n# Set time range\ntbox &lt;- c(\"2020-01-01\", \"2020-04-01\")\n\n# Search data that match the boundaries and time range\nresults &lt;- edl_search(\n  short_name = short_name,\n  version = \"2.1\",\n  temporal = tbox,\n  bounding_box = paste(bbox, collapse = \",\")\n)\n\n# Check number of files \nlength(results)\n\n[1] 93\n\n\nThere are 93 files.",
+    "text": "Search data from NASA Earthdata with the dataset unique name and coordinates/dates\nFirst, connect to NASA Earthdata with no credentials\n\nearthdatalogin::edl_netrc()\n\nThen, define your search and cropping criteria\n\n# Dataset unique name\nshort_name &lt;- 'AVHRR_OI-NCEI-L4-GLOB-v2.1'\n\n# Set boundaries based on the shapefile\nbbox &lt;- c(xmin=min(xcoord), ymin=min(ycoord), xmax=max(xcoord), ymax=max(ycoord)) \n\n# Set time range\ntbox &lt;- c(\"2020-01-01\", \"2020-04-01\")\n\n# Search data that match the boundaries and time range\nresults &lt;- earthdatalogin::edl_search(\n  short_name = short_name,\n  version = \"2.1\",\n  temporal = tbox,\n  bounding_box = paste(bbox, collapse = \",\")\n)\n\n# Check number of files \nlength(results)\n\n[1] 93\n\n\nThere are 93 files.",
     "crumbs": [
       "JupyterHub",
       "Tutorials",
@@ -95,7 +95,7 @@
     "href": "tutorials/r/3-extract-satellite-data-within-boundary.html#apply-shapefiles-as-mask-to-satellite-data",
     "title": "Extract data within a boundary",
     "section": "Apply shapefiles as mask to satellite data",
-    "text": "Apply shapefiles as mask to satellite data\n\n# Select the first result\nras &lt;- terra::rast(results[1], vsi = TRUE)\n\n# Extract SST from the multi-layer raster data\nras_sst &lt;- ras[[\"analysed_sst\"]]\n\nConvert shape to SpatVector.\n\n# Vectorize shapes\nshp &lt;- terra::vect(shapes)\n\n# Get boundaries for GFST\nGFST &lt;- shp[shp$ProvCode == \"GFST\",]\n\nPlot the SST data.\n\nplot(ras_sst)\n\n\n\n\n\n\n\n\nPlot GFST boundaries from shapefile.\n\nplot(GFST,col='red')\n\n\n\n\n\n\n\n\nMask SST with the GFST boundaries and plot.\n\nmasked_rc &lt;- mask(ras_sst, GFST)\n\n# Visualize the SST in GFST Province and crop to the GFST extent\nplot(masked_rc, ext = GFST)",
+    "text": "Apply shapefiles as mask to satellite data\n\n# Select the first result\nras &lt;- terra::rast(results[1], vsi = TRUE)\n\n# Extract SST from the multi-layer raster data\nras_sst &lt;- ras[[\"analysed_sst\"]]\n\nConvert shape to SpatVector for terra.\n\n# Vectorize shapes\nshp &lt;- terra::vect(shapes)\n\n# Get boundaries for GFST\nGFST &lt;- shp[shp$ProvCode == \"GFST\",]\n\nPlot the SST data.\n\nplot(ras_sst)\n\n\n\n\n\n\n\n\nPlot GFST boundaries from shapefile.\n\nplot(GFST,col='red')\n\n\n\n\n\n\n\n\nMask SST with the GFST boundaries and plot.\n\nmasked_rc &lt;- terra::mask(ras_sst, GFST)\n\n# Visualize the SST in GFST Province and crop to the GFST extent\nplot(masked_rc, ext = GFST)",
     "crumbs": [
       "JupyterHub",
       "Tutorials",
@@ -108,33 +108,7 @@
     "href": "tutorials/r/3-extract-satellite-data-within-boundary.html#compute-monthly-average-of-sst",
     "title": "Extract data within a boundary",
     "section": "Compute monthly average of SST",
-    "text": "Compute monthly average of SST\nWe will construct a data cube to compute monthly average for sea surface temperature data within the boundary. To minimize data loading times, the first 10 results, which correspond to approximately two months of data, will be used for this exercise.\nSelect the first 10 SST results (end of January and beginning of February).\n\nras_all &lt;- terra::rast(results[c(25:35)], vsi = TRUE)\n\nSelect SST data. The trim and mask operations are memory intensive and we want to select only the layer we will be working with.\n\nrc_sst &lt;- ras_all[\"analysed_sst\",]\n\nCrop to the GFST boundaries.\n\nrc_sst &lt;- terra::crop(rc_sst, GFST)\n\nTrim the SST data to the boundaries of GFST.\n\nrc_sst &lt;- terra::mask(rc_sst, GFST)\n\nCalculate mean SST over the entire time series and map it\n\n# Compute mean over 12 time layers\nraster_mean &lt;- terra::mean(rc_sst, na.rm=TRUE)\n\n# Map mean SST \nplot(raster_mean)\n\n# Map only the GFST area\nplot(terra::crop(raster_mean, GFST))\n\n\n\n\n\n\n\n\nCalculate monthly mean SST means across raster (lat, lon).\n\n# Function to convert times to year-month format\nyear_month &lt;- function(x) {\n  format(as.Date(time(x), format=\"%Y-%m-%d\"), \"%Y-%m\")\n}\n\n# Format time to Year-month for monthly aggregation \nym &lt;- year_month(rc_sst)\n\n# Compute raster mean grouped by Year-month\nmonthly_mean_rast &lt;- terra::tapp(rc_sst, ym, fun = mean)\n\n# Compute mean across raster grouped by Year-month\nmonthly_means &lt;- terra::global(monthly_mean_rast, fun = mean, na.rm=TRUE)",
-    "crumbs": [
-      "JupyterHub",
-      "Tutorials",
-      "Tutorials in R",
-      "Mask to a shapefile"
-    ]
-  },
-  {
-    "objectID": "tutorials/r/3-extract-satellite-data-within-boundary.html#convert-raster-into-data-frame",
-    "href": "tutorials/r/3-extract-satellite-data-within-boundary.html#convert-raster-into-data-frame",
-    "title": "Extract data within a boundary",
-    "section": "Convert raster into data frame",
-    "text": "Convert raster into data frame\n\n# Convert raster into data.frame\nmonthly_means_df &lt;- as.data.frame(monthly_means)\n\n# Convert year_month to a column\nmonthly_means_df$year_month &lt;- sub(\"X\", \"\", rownames(monthly_means_df))",
-    "crumbs": [
-      "JupyterHub",
-      "Tutorials",
-      "Tutorials in R",
-      "Mask to a shapefile"
-    ]
-  },
-  {
-    "objectID": "tutorials/r/3-extract-satellite-data-within-boundary.html#plot-monthly-mean-of-sea-surface-temperature-within-gfst-province",
-    "href": "tutorials/r/3-extract-satellite-data-within-boundary.html#plot-monthly-mean-of-sea-surface-temperature-within-gfst-province",
-    "title": "Extract data within a boundary",
-    "section": "Plot monthly mean of sea surface temperature within GFST province",
-    "text": "Plot monthly mean of sea surface temperature within GFST province\n\nggplot(data = monthly_means_df, aes(x = year_month, y = mean, group = 1)) +\n  geom_line() +\n  geom_point() +\n  xlab(\"Year.Month\") + \n  ylab(\"Mean SST (F)\")",
+    "text": "Compute monthly average of SST\nWe will construct a data cube to compute monthly average for sea surface temperature data within the boundary. To minimize data loading times, the first 10 results, which correspond to approximately two months of data, will be used for this exercise.\nSelect the first 10 SST results (end of January and beginning of February).\n\nras_all &lt;- terra::rast(results[c(25:35)], vsi = TRUE)\n\nSelect SST data. The trim and mask operations are memory intensive and we want to select only the layer we will be working with.\n\nrc_sst &lt;- ras_all[\"analysed_sst\",]\n\nCrop to the GFST boundaries.\n\nrc_sst &lt;- terra::crop(rc_sst, GFST)\n\nTrim the SST data to the boundaries of GFST.\n\nrc_sst &lt;- terra::mask(rc_sst, GFST)\n\nCalculate mean SST over the entire time series (10 days) and map it.\n\nraster_mean &lt;- terra::mean(rc_sst, na.rm=TRUE)\n\nPlot the mean SST.\n\nplot(raster_mean)\n\n\n\n\n\n\n\n\n\nCalculate monthly mean SST means across rasters\nFirst create a function to convert times to year-month format. This will create a vector that shows which datas are in which month-year.\n\nyear_month &lt;- function(x) {\n  format(as.Date(time(x), format=\"%Y-%m-%d\"), \"%Y-%m\")\n}\nym &lt;- year_month(rc_sst)\nym\n\n [1] \"2020-01\" \"2020-01\" \"2020-01\" \"2020-01\" \"2020-01\" \"2020-01\" \"2020-01\"\n [8] \"2020-01\" \"2020-02\" \"2020-02\" \"2020-02\"\n\n\nCompute raster mean grouped by Year-month. tapp is the terra equivalent of tapply and allow you to apply a function to groups of raster time layers. This allows you to do temporal aggregation. Use ?tapp to learn about this function.\n\nmonthly_mean_rast &lt;- terra::tapp(rc_sst, ym, fun = mean)\nmonthly_mean_rast\n\nclass       : SpatRaster \ndimensions  : 40, 120, 2  (nrow, ncol, nlyr)\nresolution  : 0.25, 0.25  (x, y)\nextent      : -73.5, -43.5, 33.5, 43.5  (xmin, xmax, ymin, ymax)\ncoord. ref. : lon/lat WGS 84 \nsource(s)   : memory\nnames       : X2020.01, X2020.02 \nmin values  : 277.0425, 276.9367 \nmax values  : 297.1500, 296.9033 \n\n\nCompute mean across raster grouped by Year-month. global() applies a function to the entire raster. Use ?global to learn about this function.\n\nmonthly_means &lt;- terra::global(monthly_mean_rast, fun = mean, na.rm=TRUE)\nmonthly_means\n\n             mean\nX2020.01 289.3776\nX2020.02 289.0583\n\n\n\n\nConvert to data frame\nWe convert to a data frame to plot time series.\n\n# Convert raster into data.frame\nmonthly_means_df &lt;- as.data.frame(monthly_means)\n\n# Create a year_month column\nmonthly_means_df$year_month &lt;- sub(\"X\", \"\", rownames(monthly_means_df))\n\n\n\nPlot monthly mean of sea surface temperature within GFST province\n\nggplot(data = monthly_means_df, aes(x = year_month, y = mean, group = 1)) +\n  geom_line() +\n  geom_point() +\n  xlab(\"Year.Month\") + \n  ylab(\"Mean SST (F)\")",
     "crumbs": [
       "JupyterHub",
       "Tutorials",
@@ -1233,7 +1207,7 @@
     "href": "index.html#resources",
     "title": "EDMW 2024 - Workshop 3B",
     "section": "Resources",
-    "text": "Resources\n\nCoastWatch GitHub organization for many more training modules for working with satellite data in Python and R\nNASA EarthData Cloudbook for many tutorials on using satellite data in Python and R and NASA Earth Data\nProject Pythia\nNMFS Friday HackHours",
+    "text": "Resources\n\nCoastWatch GitHub organization for many more training modules for working with satellite data in Python and R\nNASA EarthData Cloudbook for many tutorials on using satellite data in Python and R and NASA Earth Data\nProject Pythia\nIOOS Python Cookbooks\nNMFS Friday HackHours",
     "crumbs": [
       "JupyterHub",
       "Welcome"
