@@ -26,6 +26,7 @@ This workshop is focused on those who are brand new to working with earth data i
 * [NASA EarthData Cloudbook](https://nasa-openscapes.github.io/earthdata-cloud-cookbook/) for many tutorials on using satellite data in Python and R and NASA Earth Data
 * [Project Pythia](https://cookbooks.projectpythia.org/)
 * [NMFS Friday HackHours](https://nmfs-opensci.github.io/NOAAHackDays/)
+* [IOOS CodeLab](https://ioos.github.io/ioos_code_lab/content/intro.html) collection of tutorials and examples of how to access and utilize the many IOOS technologies and data sources available.
 
 ## Thank you for inspiration and content!
 
