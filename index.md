@@ -27,6 +27,7 @@ This workshop is focused on those who are brand new to working with earth data i
 * [Project Pythia](https://cookbooks.projectpythia.org/)
 * [IOOS Python Cookbooks](https://ioos.github.io/ioos_code_lab/content/code_gallery/gallery.html)
 * [NMFS Friday HackHours](https://nmfs-opensci.github.io/NOAAHackDays/)
+* [IOOS CodeLab](https://ioos.github.io/ioos_code_lab/content/intro.html) collection of tutorials and examples of how to access and utilize the many IOOS technologies and data sources available.
 
 ## Thank you for inspiration and content!
 
