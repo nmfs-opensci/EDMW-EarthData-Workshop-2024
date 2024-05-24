@@ -1,7 +1,6 @@
 ---
 title: Extract data within a boundary
-original author: NOAA CoastWatch
-modifications by: NMFS Openscapes
+author: 'NOAA CoastWatch, NOAA Openscapes'
 ---
 
 ::: {.callout-note title="Learning Objectives"}
@@ -61,12 +60,12 @@ library(ggplot2)
 The shapefile for the Longhurst marine provinces includes a list of regions.\
 For this exercise, we will only use the boundary of one province, the Gulf Stream region ("GFST").
 
-```{r read_province_boundaries}
+```{r read province boundaries from shapefiles}
 # Set directory path for shapefile
 dir_path <- '../resources/longhurst_v4_2010/'
 
 # Import shape files (Longhurst coordinates)
-shapes <- sf::read_sf(dsn = dir_path, layer = "Longhurst_world_v4_2010")
+shapes <- read_sf(dsn = dir_path, layer = "Longhurst_world_v4_2010")
 
 # Example List of all the province names
 shapes$ProvCode
@@ -74,8 +73,8 @@ shapes$ProvCode
 # Get boundary coordinates for Gulf Stream region (GFST)
 GFST <- shapes[shapes$ProvCode == "GFST",]
 
-xcoord <- sf::st_coordinates(GFST)[,1]
-ycoord <- sf::st_coordinates(GFST)[,2]
+xcoord <- st_coordinates(GFST)[,1]
+ycoord <- st_coordinates(GFST)[,2]
 ```
 
 ## Search data from NASA Earthdata with the dataset unique name and coordinates/dates
@@ -88,7 +87,7 @@ earthdatalogin::edl_netrc()
 
 Then, define your search and cropping criteria
 
-```{r get_results}
+```{r}
 # Dataset unique name
 short_name <- 'AVHRR_OI-NCEI-L4-GLOB-v2.1'
 
@@ -99,7 +98,7 @@ bbox <- c(xmin=min(xcoord), ymin=min(ycoord), xmax=max(xcoord), ymax=max(ycoord)
 tbox <- c("2020-01-01", "2020-04-01")
 
 # Search data that match the boundaries and time range
-results <- earthdatalogin::edl_search(
+results <- edl_search(
   short_name = short_name,
   version = "2.1",
   temporal = tbox,
@@ -114,18 +113,15 @@ There are `r length(results)` files.
 
 ## Apply shapefiles as mask to satellite data
 
-```{r get_first_result}
+```{r}
 # Select the first result
 ras <- terra::rast(results[1], vsi = TRUE)
 
 # Extract SST from the multi-layer raster data
 ras_sst <- ras[["analysed_sst"]]
-```
 
-Convert shape to SpatVector for `terra`.
-```{r get_shapes}
 # Vectorize shapes
-shp <- terra::vect(shapes)
+shp <- vect(shapes)
 
 # Get boundaries for GFST
 GFST <- shp[shp$ProvCode == "GFST",]
@@ -143,7 +139,7 @@ plot(GFST,col='red')
 
 Mask SST with the GFST boundaries and plot.
 ```{r mask_SST}
-masked_rc <- terra::mask(ras_sst, GFST)
+masked_rc <- mask(ras_sst, GFST)
 
 # Visualize the SST in GFST Province and crop to the GFST extent
 plot(masked_rc, ext = GFST)
@@ -155,76 +151,51 @@ We will construct a data cube to compute monthly average for sea surface tempera
 To minimize data loading times, the first 10 results, which correspond to approximately two months 
 of data, will be used for this exercise.
 
-Select the first 10 SST results (end of January and beginning of February). 
-```{r get_first_ten}
+Select the SST results for end of January and beginning of February. 
+```{r}
 ras_all <- terra::rast(results[c(25:35)], vsi = TRUE)
 ```
 
-Select SST data. The trim and mask operations are memory intensive and we want to select only the layer we will be working with.
-```{r select_sst}
-rc_sst <- ras_all["analysed_sst",]
-```
-
-Crop to the GFST boundaries.
-```{r crop_to_boundary}
-rc_sst <- terra::crop(rc_sst, GFST)
-```
-
 Trim the SST data to the boundaries of GFST. 
-```{r mask_boundary}
-rc_sst <- terra::mask(rc_sst, GFST)
-```
-
-
-Calculate mean SST over the entire time series (10 days) and map it.
-```{r get_means}
-raster_mean <- terra::mean(rc_sst, na.rm=TRUE)
-```
-
-Plot the mean SST.
 ```{r}
-plot(raster_mean)
+rc_all <- terra::mask(ras_all, GFST)
 ```
 
-### Calculate monthly mean SST means across rasters
+Select SST data. 
+```{r}
+rc_sst <- rc_all["analysed_sst", ]
+```
 
-First create a function to convert times to year-month format. This will create a vector that shows which datas are in which month-year.
-
-```{r get_monthly_means}
+Calculate monthly SST means. 
+```{r get_means}
+# Function to convert times to year-month format
 year_month <- function(x) {
   format(as.Date(time(x), format="%Y-%m-%d"), "%Y-%m")
 }
+
+# Convert time to Year-month format for aggregation
 ym <- year_month(rc_sst)
-ym
-```
 
-Compute raster mean grouped by Year-month. `tapp` is the `terra` equivalent of `tapply` and allow you to apply a function to groups of raster time layers. This allows you to do temporal aggregation. Use `?tapp` to learn about this function.
-```{r}
+# Compute raster mean grouped by Year-month
 monthly_mean_rast <- terra::tapp(rc_sst, ym, fun = mean)
-monthly_mean_rast
+
+# Compute mean across raster grouped by Year-month
+monthly_means <- global(monthly_mean_rast, fun = mean, na.rm=TRUE)
 ```
 
-Compute mean across raster grouped by Year-month. `global()` applies a function to the entire raster. Use `?global` to learn about this function.
-```{r monthly_means}
-monthly_means <- terra::global(monthly_mean_rast, fun = mean, na.rm=TRUE)
-monthly_means
-```
-
-### Convert to data frame
-
-We convert to a data frame to plot time series.
+## Convert raster into data frame
 
 ```{r ras_to_df}
 # Convert raster into data.frame
 monthly_means_df <- as.data.frame(monthly_means)
 
-# Create a year_month column
+# Convert year_month to a column
 monthly_means_df$year_month <- sub("X", "", rownames(monthly_means_df))
 ```
 
-### Plot monthly mean of sea surface temperature within GFST province
+## Plot monthly mean of sea surface temperature within GFST province
 
-```{r plot_monthly_mean}
+```{r}
 ggplot(data = monthly_means_df, aes(x = year_month, y = mean, group = 1)) +
   geom_line() +
   geom_point() +
@@ -239,5 +210,5 @@ If you get the following error:
 
 > Warning: Opening a /vsi file with the netCDF driver requires Linux userfaultfd to be available. Or you may set the GDAL_SKIP=netCDF configuration option to force the use of the HDF5 driver. (GDAL error 1)Error: [rast] file does not exist: /vsicurl/https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20191231120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc
 
-Then go back and run the authentication code at the top.
+[insert solve]
 :::
