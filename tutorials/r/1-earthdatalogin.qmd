@@ -27,7 +27,7 @@ For more on `earthdatalogin` visit the [`earthdatalogin` GitHub](https://github.
 
 An Earthdata Login account is required to access data from NASA Earthdata. Please visit <https://urs.earthdata.nasa.gov> to register as a new user and manage your Earthdata Login account. This account is free to create and only takes a moment to set up.  
 
-You will need earthdatalogin 0.0.2.99 (dev version)
+You will need the R package earthdatalogin with version 0.0.2.99 (dev version) or later.
 
 ## Load Required Packages
 
