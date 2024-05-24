@@ -1,7 +1,7 @@
 
 ## EDMW 2024 - Workshop 3B: Introduction to using earth data in the cloud for scientific workflows
 
-**Instructors**: Eli Holmes (NWFSC), Sunny Hospital (CoastWatch), Matt Grossi (SEFSC), Emily Markowitz (AFSC) / NOAA Fisheries Open Science.
+**Instructors**: Eli Holmes (NWFSC), Sunny Hospital (CoastWatch), Matt Grossi (SEFSC), Emily Markowitz (AFSC), Songzhi Liu (CoastWatch), Dan Pendleton (NEFSC) / NOAA Fisheries Open Science.
 
 ### Overview
 
