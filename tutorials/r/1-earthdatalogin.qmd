@@ -27,6 +27,8 @@ For more on `earthdatalogin` visit the [`earthdatalogin` GitHub](https://github.
 
 An Earthdata Login account is required to access data from NASA Earthdata. Please visit <https://urs.earthdata.nasa.gov> to register as a new user and manage your Earthdata Login account. This account is free to create and only takes a moment to set up.  
 
+You will need earthdatalogin 0.0.2.99 (dev version)
+
 ## Load Required Packages
 
 We are using the JupyterHub and all necessary packages are already installed for you.
@@ -37,6 +39,7 @@ netCDF files. Using a Docker image (and Python) is often less aggravating.*
 
 
 ```{r}
+# devtools::install_github("boettiger-lab/earthdatalogin")
 library(earthdatalogin)
 library(terra)
 ```
@@ -184,8 +187,12 @@ If you get the following error:
 
 > Error: [rast] file does not exist: /vsicurl/https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc
 
-It is likely because you do not have the End User Licence Agreement (EULA)/permissions to use that data set or are not properly logged in using `earthdatalogin::edl_netrc()`. Another reason may be that your
-GDAL installation is not properly handling `netCDF` files.
+The following are possible problems:
+
+* you are not logged in using `earthdatalogin::edl_netrc()`. Try running the code again.
+* you inadvertantly installed `terra` from source. Try deleting the package via the 'x' inthe package tab and reinstalling.
+* you do not have the End User Licence Agreement (EULA)/permissions to use that data set. Go to https://urs.earthdata.nasa.gov/home, log in and then go to the EULA tab.
+* GDAL installation is not properly handling `netCDF` files. That is hard. You may be out of luck.
 :::
 
 Also try this example script from the `?earthdatalogin::edl_netrc` documentation that uses a `.tif` file instead of `.netCDF`. 

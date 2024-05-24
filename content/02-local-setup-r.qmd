@@ -2,7 +2,29 @@
 title: Setting up on your computer - R users
 ---
 
-The easiest way to run the R tutorials locally is to use the Docker container `py-rocket-geospatial`; this is the environment that is being used in the JupyterHub. You'll need containerization software such as [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Podman](https://podman.io/) installed.
+# Running locally
+
+If you are set up locally to run R and have tidyverse installed, then for most of the tutorials, you only need to install `earthdatalogin` and `terra` with 
+
+```
+devtools::install_github("boettiger-lab/earthdatalogin")
+install.packages("terra")
+```
+
+RStudio should alert you if there are other packages that you need to install.
+
+# Running from Posit Cloud
+
+The standard [Posit Cloud](https://posit.cloud/) has most of the packages you will need. For most of the tutorials, you only need to install `earthdatalogin` and `terra` with 
+
+```
+devtools::install_github("boettiger-lab/earthdatalogin")
+install.packages("terra")
+```
+
+# Running from a Docker file
+
+If you don't have RStudio or R installed, the easiest way to run the R tutorials locally is to use the Docker container `py-rocket-geospatial`; this is the environment that is being used in the JupyterHub. You'll need containerization software such as [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Podman](https://podman.io/) installed.
 
 ## Start the docker image
 

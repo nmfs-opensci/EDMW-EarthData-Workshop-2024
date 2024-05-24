@@ -2,7 +2,15 @@
 title: Setting up on your computer - Python users
 ---
 
-The easiest way to run the Python tutorials locally is to use the Docker container `py-rocket-geospatial`; this is the environment that is being used in the JupyterHub. You'll need containerization software such as [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Podman](https://podman.io/) installed.
+# Running from Google Colab
+
+The standard [Google Colab](https://colab.research.google.com/) has most of the packages you will need. For most of the tutorials, you only need to install `earthaccess` with 
+
+`!pip install earthaccess`
+
+# Running from a Docker file
+
+The easiest way to run the Python tutorials locally is to use the Docker container `py-rocket-geospatial`; this has JupyterLab and the conda environment that is being used in the JupyterHub. You'll need containerization software such as [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Podman](https://podman.io/) installed.
 
 
 ## Start the docker image
