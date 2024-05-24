@@ -381,9 +381,12 @@ function googleTranslateElementInit() {
 </header>
 
 
-<p><img src="../images/cloud-overview.png" class="img-fluid"></p>
+<p><img src="../images/cloud-overview.png" class="img-fluid"> Today we are working with a JupyterHub in Azure, while the data we are accessing is on AWS us-west-2. This means we cannot really do the lower right option of ‘cloud native’ computing. If our JupyterHub were on AWS us-west-2, then we could direct connect to the S3 buckets and it would be as if we had downloaded the data. We can effectively “attach” a cloud drive with petabytes of data to our virtual machine.</p>
+<p>Today we will be showing how to “stream cloud data without downloads”. Because we are on Azure and the data are in S3 us-west-2 buckets, we have to use “https” access. Be aware that <em>https access without downloads is painfully slow on cloud-ignorant netCDF files</em>. Of course, downloads of large datasets is also painfully slow. This is one of the reasons why providing cloud-optimized data formats is so important.</p>
+<p>JupyterHubs (and virtual machines) can be easily spun up on any cloud provider and computing is cheap (storage is expensive). You do not need to install the compute environments. The common workflow is to run a provided docker image with <code>docker run</code>.</p>
+<hr>
 <p>Lecture on NASA earth data in the cloud by Michele Thornton (NASA Openscapes) <a href="https://www.youtube.com/watch?v=E5Dpeap16hU">Video</a></p>
-<div class="quarto-video"><iframe data-external="1" src="https://www.youtube.com/embed/E5Dpeap16hU" width="250" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<div class="quarto-video"><iframe data-external="1" src="https://www.youtube.com/embed/E5Dpeap16hU" width="400" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
 
 
 

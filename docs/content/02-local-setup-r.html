@@ -386,9 +386,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#start-the-docker-image" id="toc-start-the-docker-image" class="nav-link active" data-scroll-target="#start-the-docker-image">Start the docker image</a></li>
+  <li><a href="#running-locally" id="toc-running-locally" class="nav-link active" data-scroll-target="#running-locally">Running locally</a></li>
+  <li><a href="#running-from-posit-cloud" id="toc-running-from-posit-cloud" class="nav-link" data-scroll-target="#running-from-posit-cloud">Running from Posit Cloud</a></li>
+  <li><a href="#running-from-a-docker-file" id="toc-running-from-a-docker-file" class="nav-link" data-scroll-target="#running-from-a-docker-file">Running from a Docker file</a>
+  <ul class="collapse">
+  <li><a href="#start-the-docker-image" id="toc-start-the-docker-image" class="nav-link" data-scroll-target="#start-the-docker-image">Start the docker image</a></li>
   <li><a href="#clone-the-tutorials" id="toc-clone-the-tutorials" class="nav-link" data-scroll-target="#clone-the-tutorials">Clone the tutorials</a></li>
   <li><a href="#connect-your-local-files-to-image" id="toc-connect-your-local-files-to-image" class="nav-link" data-scroll-target="#connect-your-local-files-to-image">Connect your local files to image</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul class="collapse"><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/edit/main/content/02-local-setup-r.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/content/02-local-setup-r.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
     </div>
@@ -423,14 +428,29 @@ function googleTranslateElementInit() {
 </header>
 
 
-<p>The easiest way to run the R tutorials locally is to use the Docker container <code>py-rocket-geospatial</code>; this is the environment that is being used in the JupyterHub. You’ll need containerization software such as <a href="https://www.docker.com/products/docker-desktop/">Docker Desktop</a> or <a href="https://podman.io/">Podman</a> installed.</p>
+<section id="running-locally" class="level1">
+<h1>Running locally</h1>
+<p>If you are set up locally to run R and have tidyverse installed, then for most of the tutorials, you only need to install <code>earthdatalogin</code> and <code>terra</code> with</p>
+<pre><code>devtools::install_github("boettiger-lab/earthdatalogin")
+install.packages("terra")</code></pre>
+<p>RStudio should alert you if there are other packages that you need to install.</p>
+</section>
+<section id="running-from-posit-cloud" class="level1">
+<h1>Running from Posit Cloud</h1>
+<p>The standard <a href="https://posit.cloud/">Posit Cloud</a> has most of the packages you will need. For most of the tutorials, you only need to install <code>earthdatalogin</code> and <code>terra</code> with</p>
+<pre><code>devtools::install_github("boettiger-lab/earthdatalogin")
+install.packages("terra")</code></pre>
+</section>
+<section id="running-from-a-docker-file" class="level1">
+<h1>Running from a Docker file</h1>
+<p>If you don’t have RStudio or R installed, the easiest way to run the R tutorials locally is to use the Docker container <code>py-rocket-geospatial</code>; this is the environment that is being used in the JupyterHub. You’ll need containerization software such as <a href="https://www.docker.com/products/docker-desktop/">Docker Desktop</a> or <a href="https://podman.io/">Podman</a> installed.</p>
 <section id="start-the-docker-image" class="level2">
 <h2 class="anchored" data-anchor-id="start-the-docker-image">Start the docker image</h2>
 <p>Make sure Docker or Podman is running (open the Desktop application), then run the container:</p>
 <p>Windows, Linux or Intel-chip Mac:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-p</span> 8888:8888  <span class="at">--cap-add</span> SYS_PTRACE <span class="at">--security-opt</span> seccomp=unconfined  ghcr.io/nmfs-opensci/container-images/py-rocket-geospatial:latest</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-p</span> 8888:8888  <span class="at">--cap-add</span> SYS_PTRACE <span class="at">--security-opt</span> seccomp=unconfined  ghcr.io/nmfs-opensci/container-images/py-rocket-geospatial:latest</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Apple-chip Mac (probably will not work):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-p</span> 8888:8888 <span class="at">--platform</span> linux/amd64  <span class="at">--cap-add</span> SYS_PTRACE <span class="at">--security-opt</span> seccomp=unconfined  ghcr.io/nmfs-opensci/container-images/py-rocket-geospatial:latest</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-p</span> 8888:8888 <span class="at">--platform</span> linux/amd64  <span class="at">--cap-add</span> SYS_PTRACE <span class="at">--security-opt</span> seccomp=unconfined  ghcr.io/nmfs-opensci/container-images/py-rocket-geospatial:latest</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -449,19 +469,20 @@ Tip
 <section id="clone-the-tutorials" class="level2">
 <h2 class="anchored" data-anchor-id="clone-the-tutorials">Clone the tutorials</h2>
 <p>Clone and then cd into the repo. Open a terminal and run</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/nmfs-opensci/EDMW-3B-tutorials</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/nmfs-opensci/EDMW-3B-tutorials</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The Python tutorials are in the <code>tutorials/python</code> directory.</p>
 </section>
 <section id="connect-your-local-files-to-image" class="level2">
 <h2 class="anchored" data-anchor-id="connect-your-local-files-to-image">Connect your local files to image</h2>
 <p>Clone and then cd into the repo. Open a terminal and run</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/nmfs-opensci/EDMW-3B-tutorials</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> EDMW-3B-tutorials</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/nmfs-opensci/EDMW-3B-tutorials</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> EDMW-3B-tutorials</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Windows, Linux or Intel-chip Mac:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-p</span> 8888:8888  <span class="at">--cap-add</span> SYS_PTRACE <span class="at">--security-opt</span> seccomp=unconfined <span class="at">-v</span> /<span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span>:/home/jovyan/ ghcr.io/nmfs-opensci/container-images/py-rocket-geospatial:latest</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-p</span> 8888:8888  <span class="at">--cap-add</span> SYS_PTRACE <span class="at">--security-opt</span> seccomp=unconfined <span class="at">-v</span> /<span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span>:/home/jovyan/ ghcr.io/nmfs-opensci/container-images/py-rocket-geospatial:latest</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

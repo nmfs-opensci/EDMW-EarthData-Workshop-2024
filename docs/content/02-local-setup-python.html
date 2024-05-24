@@ -386,10 +386,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#start-the-docker-image" id="toc-start-the-docker-image" class="nav-link active" data-scroll-target="#start-the-docker-image">Start the docker image</a></li>
+  <li><a href="#running-from-google-colab" id="toc-running-from-google-colab" class="nav-link active" data-scroll-target="#running-from-google-colab">Running from Google Colab</a></li>
+  <li><a href="#running-from-a-docker-file" id="toc-running-from-a-docker-file" class="nav-link" data-scroll-target="#running-from-a-docker-file">Running from a Docker file</a>
+  <ul class="collapse">
+  <li><a href="#start-the-docker-image" id="toc-start-the-docker-image" class="nav-link" data-scroll-target="#start-the-docker-image">Start the docker image</a></li>
   <li><a href="#clone-the-tutorials" id="toc-clone-the-tutorials" class="nav-link" data-scroll-target="#clone-the-tutorials">Clone the tutorials</a></li>
   <li><a href="#running-r" id="toc-running-r" class="nav-link" data-scroll-target="#running-r">Running R</a></li>
   <li><a href="#connect-your-local-files-to-image" id="toc-connect-your-local-files-to-image" class="nav-link" data-scroll-target="#connect-your-local-files-to-image">Connect your local files to image</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul class="collapse"><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/edit/main/content/02-local-setup-python.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/nmfs-opensci/EDMW-EarthData-Workshop-2024/blob/main/content/02-local-setup-python.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
     </div>
@@ -424,7 +428,14 @@ function googleTranslateElementInit() {
 </header>
 
 
-<p>The easiest way to run the Python tutorials locally is to use the Docker container <code>py-rocket-geospatial</code>; this is the environment that is being used in the JupyterHub. You’ll need containerization software such as <a href="https://www.docker.com/products/docker-desktop/">Docker Desktop</a> or <a href="https://podman.io/">Podman</a> installed.</p>
+<section id="running-from-google-colab" class="level1">
+<h1>Running from Google Colab</h1>
+<p>The standard <a href="https://colab.research.google.com/">Google Colab</a> has most of the packages you will need. For most of the tutorials, you only need to install <code>earthaccess</code> with</p>
+<p><code>!pip install earthaccess</code></p>
+</section>
+<section id="running-from-a-docker-file" class="level1">
+<h1>Running from a Docker file</h1>
+<p>The easiest way to run the Python tutorials locally is to use the Docker container <code>py-rocket-geospatial</code>; this has JupyterLab and the conda environment that is being used in the JupyterHub. You’ll need containerization software such as <a href="https://www.docker.com/products/docker-desktop/">Docker Desktop</a> or <a href="https://podman.io/">Podman</a> installed.</p>
 <section id="start-the-docker-image" class="level2">
 <h2 class="anchored" data-anchor-id="start-the-docker-image">Start the docker image</h2>
 <p>Make sure Docker or Podman is running (open the Desktop application), then run the container:</p>
@@ -467,6 +478,7 @@ Tip
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-p</span> 8888:8888 <span class="at">-v</span> /<span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span>:/home/jovyan/ ghcr.io/nmfs-opensci/container-images/py-rocket-geospatial:latest</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

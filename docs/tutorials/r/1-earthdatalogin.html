@@ -469,14 +469,16 @@ Learning Objectives
 <section id="prerequisites" class="level2">
 <h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
 <p>An Earthdata Login account is required to access data from NASA Earthdata. Please visit <a href="https://urs.earthdata.nasa.gov" class="uri">https://urs.earthdata.nasa.gov</a> to register as a new user and manage your Earthdata Login account. This account is free to create and only takes a moment to set up.</p>
+<p>You will need the R package earthdatalogin with version 0.0.2.99 (dev version) or later.</p>
 </section>
 <section id="load-required-packages" class="level2">
 <h2 class="anchored" data-anchor-id="load-required-packages">Load Required Packages</h2>
 <p>We are using the JupyterHub and all necessary packages are already installed for you.</p>
 <p><em>Note: See the set-up tab (in left nav bar) for instructions on getting set up on your own computer, but be aware that it is common to run into trouble getting GDAL set up properly to handle netCDF files. Using a Docker image (and Python) is often less aggravating.</em></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(earthdatalogin)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># devtools::install_github("boettiger-lab/earthdatalogin")</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(earthdatalogin)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>terra 1.7.71</code></pre>
 </div>
@@ -663,7 +665,13 @@ Troubleshooting
 <blockquote class="blockquote">
 <p>Error: [rast] file does not exist: /vsicurl/https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-protected/AVHRR_OI-NCEI-L4-GLOB-v2.1/20200115120000-NCEI-L4_GHRSST-SSTblend-AVHRR_OI-GLOB-v02.0-fv02.1.nc</p>
 </blockquote>
-<p>It is likely because you do not have the End User Licence Agreement (EULA)/permissions to use that data set or are not properly logged in using <code>earthdatalogin::edl_netrc()</code>. Another reason may be that your GDAL installation is not properly handling <code>netCDF</code> files.</p>
+<p>The following are possible problems:</p>
+<ul>
+<li>you are not logged in using <code>earthdatalogin::edl_netrc()</code>. Try running the code again.</li>
+<li>you inadvertantly installed <code>terra</code> from source. Try deleting the package via the ‘x’ inthe package tab and reinstalling.</li>
+<li>you do not have the End User Licence Agreement (EULA)/permissions to use that data set. Go to https://urs.earthdata.nasa.gov/home, log in and then go to the EULA tab.</li>
+<li>GDAL installation is not properly handling <code>netCDF</code> files. That is hard. You may be out of luck.</li>
+</ul>
 </div>
 </div>
 <p>Also try this example script from the <code>?earthdatalogin::edl_netrc</code> documentation that uses a <code>.tif</code> file instead of <code>.netCDF</code>.</p>
