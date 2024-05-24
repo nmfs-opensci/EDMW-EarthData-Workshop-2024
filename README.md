@@ -1,6 +1,8 @@
 
 ## EDMW 2024 - Workshop 3B: Introduction to using earth data in the cloud for scientific workflows
 
+**Instructors**: Eli Holmes (NWFSC), Sunny Hospital (CoastWatch), Matt Grossi (SEFSC), Emily Markowitz (AFSC) / NOAA Fisheries Open Science.
+
 ### Overview
 
 Earth science data is increasingly available from the cloud and due to the size of many of these dataset (Tb and Pb in some cases), data workflows are transitioning to workflows that involve programmatic access with either cloud-native analysis or server-side processing . In this workshop, participants will take part in hands-on tutorials on working with earth data in the cloud with Python and/or R using a JupyterHub (cloud computing platform) provisioned for geospatial analysis. Participants will learn the basics of searching cloud resources via SpatioTemporal Asset Catalogs (STAC) and NASA Earth Data via Common Metadata Repository (CMR). Participants will go through tutorials to learn how to incorporate earth data into their science projects via cloud-native and server-side workflows. Participants will also be exposed to the Python and R suite of geospatial packages for gridded and other spatial data.
